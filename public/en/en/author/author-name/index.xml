@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Author Name on Example</title>
+    <link>http://localhost:1313/hugo-brewm/en/en/author/author-name/</link>
+    <description>Recent Posts in Author Name on Example</description>
+    <generator>Hugo 0.147.0</generator>
+    <language>en</language>
+    <managingEditor>Author Name</managingEditor>
+    
+      <webMaster>Author Name</webMaster>
+    <lastBuildDate>Wed, 07 May 2025 16:48:58 -0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/hugo-brewm/en/en/author/author-name/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gambar on Example</title>
+    <link>http://localhost:1313/hugo-brewm/en/tags/gambar/</link>
+    <description>Recent Posts in Gambar on Example</description>
+    <generator>Hugo 0.147.0</generator>
+    <language>en</language>
+    <managingEditor>Author Name</managingEditor>
+    
+      <webMaster>Author Name</webMaster>
+    <lastBuildDate>Wed, 07 May 2025 16:48:58 -0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/hugo-brewm/en/tags/gambar/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Menambahkan Gambar Sampul dan Artikel Audio</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-sampul-dan-audio/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-sampul-dan-audio/</guid>
+      <description></description>
+      <enclosure url="https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_and_styrofoam_%E2%80%93_electrostatic_charge_%28235112299%29.jpg" length="0" type="image/jpeg" />
+    </item>
+  </channel>
+</rss>

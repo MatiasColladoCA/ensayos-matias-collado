@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Example</title>
+    <link>http://localhost:1313/hugo-brewm/en/</link>
+    <description>Recent Posts on Example</description>
+    <generator>Hugo 0.147.0</generator>
+    <language>en</language>
+    <managingEditor>Author Name</managingEditor>
+    
+      <webMaster>Author Name</webMaster>
+    <lastBuildDate>Wed, 07 May 2025 16:48:58 -0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/hugo-brewm/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Authoring Cover Images and Audio Articles</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/authoring-cover-images-and-audio-article/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/authoring-cover-images-and-audio-article/</guid>
+      <description></description>
+      <enclosure url="https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_and_styrofoam_%E2%80%93_electrostatic_charge_%28235112299%29.jpg" length="0" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Menambahkan Gambar Sampul dan Artikel Audio</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-sampul-dan-audio/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-sampul-dan-audio/</guid>
+      <description></description>
+      <enclosure url="https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_and_styrofoam_%E2%80%93_electrostatic_charge_%28235112299%29.jpg" length="0" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Authoring Terms Entry</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/authoring-terms-entry/</link>
+      <pubDate>Mon, 03 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/authoring-terms-entry/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Authoring The Redaction History</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/authoring-redaction-history/</link>
+      <pubDate>Mon, 03 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/authoring-redaction-history/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Mengatur Entri `Terms`</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-entri-terms/</link>
+      <pubDate>Mon, 03 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-entri-terms/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Mengatur Riwayat Redaksi</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-riwayat-redaksi/</link>
+      <pubDate>Mon, 03 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-riwayat-redaksi/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Configure Discussion</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/configure-discussion/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/configure-discussion/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Configure Homepage Slides</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/configure-slides/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/configure-slides/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Configure Logo and Accent Color</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/configure-logo-and-accent-color/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/configure-logo-and-accent-color/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Configure Main Footer</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/configure-main-footer/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/configure-main-footer/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Configure Menu</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/configure-menu/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/configure-menu/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Configure Pagefind</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/configure-pagefind/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/configure-pagefind/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Markdown Test</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/markdown-test/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/markdown-test/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Menambahkan Diskusi</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-diskusi/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-diskusi/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Mengatur Logo dan Aksen Warna</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-logo-dan-aksen-warna/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-logo-dan-aksen-warna/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Mengatur Menu</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-menu/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-menu/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Mengatur Pagefind</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-pagefind/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-pagefind/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Mengatur Slide Beranda</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-slide/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/mengatur-slide/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Tes Markdown</title>
+      <link>http://localhost:1313/hugo-brewm/en/id/pos/tes-markdown/</link>
+      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/id/pos/tes-markdown/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>Hugo-Tufte Features compatibility</title>
+      <link>http://localhost:1313/hugo-brewm/en/en/post/tufte-features/</link>
+      <pubDate>Sat, 20 Feb 2016 13:56:01 -0800</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/hugo-brewm/en/en/post/tufte-features/</guid>
+      <description></description>
+      
+    </item>
+  </channel>
+</rss>
