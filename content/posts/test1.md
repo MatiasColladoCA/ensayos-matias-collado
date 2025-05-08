@@ -1,5 +1,5 @@
 ---
-title: "CHANGED Authoring Cover Images and Audio Articles"
+title: "Test1"
 date: 2025-02-22
 description: "A guide on adding cover images and audio articles"
 draft: false

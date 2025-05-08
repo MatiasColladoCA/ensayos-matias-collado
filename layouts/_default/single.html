@@ -112,7 +112,7 @@
     </article>
     <hr class="hide" style="margin: 1in 0;">
     <div id="contentinfo" class="pagewidth" role="contentinfo" data-pagefind-ignore="all">
-        {{- if $isPost }}
+        <!-- {{- if $isPost }}
             {{- if or .Params.related site.Params.posts.related }}
                 {{ partial "post/related.html" . }}
             {{- end }}
@@ -126,7 +126,7 @@
         {{- end }}
         {{- if site.Params.posts.share }}
             {{ partial "nav.html" (dict "navID" "share" "page" .) }}
-        {{- end }}
+        {{- end }} -->
     </div>
     {{ if not site.Params.comments.disabled -}}
         {{- $toot := or .Params.toot .Params.mastodon .Params.mstd .Params.comment }}

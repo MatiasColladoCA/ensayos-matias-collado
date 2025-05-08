@@ -4,6 +4,7 @@ title: 'Pin'
 params:
     headless: true
     target: 'https://github.com/foxihd/hugo-brewm'
+
 ---
 
 This is a slide with `{{</* pin */>}}` shortcode.

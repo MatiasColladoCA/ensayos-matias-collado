@@ -8,7 +8,12 @@ params:
     target: 'https://github.com/foxihd/hugo-brewm'
 ---
 
-Texto lateral izquierdo. Texto lateral izquierdo Texto lateral izquierdo Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo.  Texto lateral izquierdo. Texto lateral izquierdo.Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo.  Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo. Texto lateral izquierdo.
+***Introducción***
+====================
+ 1. La página contiene los ensayos en la pestana ensayos.
 
-Lee más acerca de qué es este proyecto entrando en la [Presentación del Blog](/about/presentacion/)
-For a minimalist home page without a slide and flowlines, see the [Indonesian homepage](https:///hugo-brewm/id/).
+ 2. Podes comentar con una cuenta gratuita de Github, tecnología de control de versiones y repositorios esencial para almacenar comentarios y cambios.
+ 
+ 3. Cada ensayo tiene su propia sección de comentarios. 4. Podes ver los comentarios en la página de Github de este sitio web.
+
+Lee más acerca de qué es este proyecto entrando en la [Presentación del Blog](/about/presentacion/).

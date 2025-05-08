@@ -59,7 +59,7 @@ languageCode = "es-AR"
         ## Enable code fence highlighting
         codeFences = true
         ## Lines to highlight
-        hl_Lines = ""
+        # hl_Lines = ""
         ## Starting line number
         lineNoStart = 1
         ## Show line numbers
@@ -171,7 +171,7 @@ languageCode = "es-AR"
     ## Home page display settings
     [params.home]
         ## Enable slide carousel
-        disableSlide = true
+        disableSlide = false
         ## Enable taxonomy listing carousel
         disableListing = false
         ## Select taxonomy listing to be featured
@@ -237,3 +237,5 @@ languageCode = "es-AR"
         # schema = true
         ## JsonLD (cannot validate permalink)
         # jsonLD = true
+    [params.pin]
+        enable = false

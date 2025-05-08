@@ -41,6 +41,10 @@
         img {max-width: 86vw;}
     </style>
     <!-- list.html [head] -->
+        <style>
+            body{margin:auto!important;max-width:2560px!important}body>footer.pagewidth,body>header.pagewidth{padding:0 calc(1.5rem + 1ex)}body>aside.carousel{position:sticky;position:-webkit-sticky;left:0;float:left;padding:1rem;width:38vw;height:var(--vbody)}body>main#home{height:var(--vbody);min-height:unset;overflow-y:auto}body>main#home>aside#list-tags{top:0;right:0;margin:1rem auto;width:calc(100% - var(--golden-ratio))}#home #top{padding:0 1rem}#home #list-posts{padding:1rem;width:var(--golden-ratio)}div[role="feed"]{padding:0 1ex}.carousel .feed-item,#home .feed-item,hr.ldots{width:unset}#main-footer>.pagewidth{padding:0 1ex}#i18n-menu>.on-plank,#more-menu>.on-plank,#duckduckgo,.pagefind-ui{margin-right:1rem}#has-search-fallback.pagewidth{padding-right:1rem}#grain{display:none}@media only screen and (max-width:960px){body>footer,body>header{background:var(--bg)}body>aside.carousel{float:unset;padding:0;width:unset}body>main#home{height:unset;overflow-y:unset}aside + main#home{margin-top:var(--vhead)}body>main#home>aside#list-tags{top:var(--vhead)}}@media only screen and (max-width:640px){#main-footer>.pagewidth{padding:0 calc(var(--void) / 2)}body>main#home>aside#list-tags,#home #list-posts{margin:var(--bigskip) auto;padding:0 var(--void);width:var(--golden-ratio)}div[role="feed"]{padding:0}.form.on-plank,.pagefind-ui{margin-right:1ex}}
+            .carousel__viewport__slide__cover{flex:1 1 40%;padding:1.5rem 0 5rem 1.5rem;height:100%;max-height:1024px}.carousel__viewport__slide__content{margin-bottom:auto;padding:0 2rem;width:100%;max-height:calc(100% - 5rem);overflow-y:auto}.carousel__viewport__slide__content h1.section-title{margin:0!important;padding:var(--smallskip) 0 1ex;font:italic var(--Large) var(--rm),serif}.carousel__viewport__slide__content h2{font-size:var(--large)}.carousel__viewport__slide__content h3{font-size:var(--normalsize)}.carousel__viewport__slide__content p{max-width:var(--canonic)}.carousel__viewport__slide__content .footnotes p{max-width:unset}.carousel__viewport__slide__cover + .carousel__viewport__slide__content{flex:1 1 60%;margin-bottom:5rem}.carousel__viewport__slide__cover + .carousel__viewport__slide__content p{width:unset}.carousel__viewport__slide__cover img{border-radius:1ex;width:100%;height:100%;object-fit:cover}.carousel__viewport__slide>nav a{text-transform:uppercase;letter-spacing:.1em;color:var(--fg)}@media only screen and (max-width:960px){aside.carousel{width:unset}}@media only screen and (max-width:640px){.carousel__nav{right:0;bottom:0;background:var(--bg);width:100%}aside .carousel__viewport{height:calc(100% - 3.7rem)}.carousel__viewport__slide>.carousel__nav{position:sticky;position:-webkit-sticky;width:100%}aside .carousel__viewport>div,aside .carousel__viewport>section,aside .carousel__viewport__slide{flex-direction:column;justify-content:end;height:100%;overflow-y:auto}.carousel__viewport__slide__cover{padding:unset;height:unset}.carousel__viewport__slide__cover img{position:absolute;left:0;border-radius:1ex;padding:1rem;max-width:100%;height:100%}.carousel__viewport__slide__content{padding:1rem 2rem;max-height:unset}.carousel__viewport__slide__cover + .carousel__viewport__slide__content{flex:unset;z-index:0;margin:1rem 2rem 2rem;border-radius:1ex;background:var(--bg);padding:1rem;width:auto}.carousel__viewport__slide__cover + .carousel__viewport__slide__content.white{background:none;color:#fff}.carousel__viewport__slide__cover + .carousel__viewport__slide__content.black{background:none;color:#000}.carousel__nav>ul.rounded{padding:1ex;width:100%;text-align:right}}
+        </style>
 </head>
 <body >
     <!-- header.html -->
@@ -126,6 +130,302 @@
     </details>
 </header>
     
+        <!-- carousel.html -->
+        <aside class="carousel">
+                <nav class="carousel__nav" aria-label="slides">
+                    <ul class="rounded invert" role="presentation">
+                            <li>
+                                <a href="#slide-1" role="button" aria-controls="slide-1">
+                                    <span>Presentación</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#slide-2" role="button" aria-controls="slide-2">
+                                    <span>Hugo Release News</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#slide-3" role="button" aria-controls="slide-3">
+                                    <span>Pin</span>
+                                </a>
+                            </li>
+                    </ul>
+                </nav>
+
+            <div class="carousel__viewport">
+                    <section id="slide-1" class="carousel__viewport__slide"
+                        aria-labelledby="slide-1__heading">
+                        <div class="carousel__viewport__slide__cover">
+                            <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/28.svg"
+                                alt="" >
+                        </div>
+                        <div class="carousel__viewport__slide__content ">
+                                <h1 id="slide-1__heading" class="section-title">Presentación</h1>
+                            <div>
+                                    <h1 id="introducción"><em><strong>Introducción</strong></em></h1>
+<ol>
+<li>
+<p>La página contiene los ensayos en la pestana ensayos.</p>
+</li>
+<li>
+<p>Podes comentar con una cuenta gratuita de Github, tecnología de control de versiones y repositorios esencial para almacenar comentarios y cambios.</p>
+</li>
+<li>
+<p>Cada ensayo tiene su propia sección de comentarios. 4. Podes ver los comentarios en la página de Github de este sitio web.</p>
+</li>
+</ol>
+<p>Lee más acerca de qué es este proyecto entrando en la <a href="./about/presentacion/">Presentación del Blog</a>.</p>
+
+                            </div>
+                        </div>
+                    </section>
+                    <section id="slide-2" class="carousel__viewport__slide"
+                        aria-labelledby="slide-2__heading">
+                        <div class="carousel__viewport__slide__content ">
+                                <h1 id="slide-2__heading" class="section-title">Hugo Release News</h1>
+                            <div>
+                                    <p>This is a slide with RSS feed.</p>
+
+        <div role="feed" aria-busy="false">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Tue, 06 May 2025 12:18:23 &#43;0000">Tue, 06 May 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.147.2"><h1>Release v0.147.2</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.147.2" aria-label="Release v0.147.2"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Thu, 01 May 2025 14:18:24 &#43;0000">Thu, 01 May 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.147.1"><h1>Release v0.147.1</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.147.1" aria-label="Release v0.147.1"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Fri, 25 Apr 2025 17:17:15 &#43;0000">Fri, 25 Apr 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.147.0"><h1>Release v0.147.0</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.147.0" aria-label="Release v0.147.0"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Tue, 22 Apr 2025 17:48:01 &#43;0000">Tue, 22 Apr 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.146.7"><h1>Release v0.146.7</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.146.7" aria-label="Release v0.146.7"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Sun, 20 Apr 2025 11:33:00 &#43;0000">Sun, 20 Apr 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.146.6"><h1>Release v0.146.6</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.146.6" aria-label="Release v0.146.6"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Tue, 15 Apr 2025 18:23:20 &#43;0000">Tue, 15 Apr 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.146.5"><h1>Release v0.146.5</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.146.5" aria-label="Release v0.146.5"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Mon, 14 Apr 2025 13:26:40 &#43;0000">Mon, 14 Apr 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.146.4"><h1>Release v0.146.4</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.146.4" aria-label="Release v0.146.4"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Sat, 12 Apr 2025 17:38:10 &#43;0000">Sat, 12 Apr 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.146.3"><h1>Release v0.146.3</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.146.3" aria-label="Release v0.146.3"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Fri, 11 Apr 2025 17:40:22 &#43;0000">Fri, 11 Apr 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.146.2"><h1>Release v0.146.2</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.146.2" aria-label="Release v0.146.2"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article><hr class="ldots" role="presentation" aria-hidden="true">
+                <article class="feed-item">
+                    <hgroup>
+                        <div><div><time datetime="Thu, 10 Apr 2025 16:59:43 &#43;0000">Thu, 10 Apr 2025</time></div>
+                        </div>
+                        <a href="https://github.com/gohugoio/hugo/releases/tag/v0.146.1"><h1>Release v0.146.1</h1></a>
+                    </hgroup>
+                    <a class="underline" href="https://github.com/gohugoio/hugo/releases/tag/v0.146.1" aria-label="Release v0.146.1"></a>
+                    
+                    <section >
+                        <div class="par"></div>
+                    </section>
+                </article>
+        </div>
+
+                            </div>
+                        </div>
+                    </section>
+                    <section id="slide-3" class="carousel__viewport__slide"
+                        aria-labelledby="slide-3__heading">
+                        <div class="carousel__viewport__slide__content ">
+                                <h1 id="slide-3__heading" class="section-title">Pin</h1>
+                            <div>
+                                    <p>This is a slide with <code>{{&lt; pin &gt;}}</code> shortcode.</p>
+<h2 id="pin-it-as-showcase-example">Pin it as Showcase (Example)</h2>
+<p>Section with <code>Pin</code> shortcode.
+The item order is column-based.
+If images are not square, the layout will displayed as masonry style.</p>
+<p><div class="column pin">
+
+
+        <figure>
+            <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/1.svg" alt="Item 1" loading="lazy">
+                <figcaption>
+                    Item 1
+                </figcaption>
+        </figure>
+
+
+        <figure>
+            <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/2.svg" alt="Item 2" loading="lazy">
+                <figcaption>
+                    Item 2
+                </figcaption>
+        </figure>
+
+
+        <figure>
+            <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/3.svg" alt="Item 3" loading="lazy">
+                <figcaption>
+                    Item 3
+                </figcaption>
+        </figure>
+
+
+        <figure>
+            <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/4.svg" alt="Item 4" loading="lazy">
+                <figcaption>
+                    Item 4
+                </figcaption>
+        </figure>
+
+
+        <figure>
+            <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/5.svg" alt="Item 5" loading="lazy">
+                <figcaption>
+                    Item 5
+                </figcaption>
+        </figure>
+
+
+        <figure>
+            <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/6.svg" alt="Item 6" loading="lazy">
+                <figcaption>
+                    Item 6
+                </figcaption>
+        </figure>
+
+</div></p>
+<h2 id="pin-it-as-catalogue-example">Pin it as Catalogue (Example)</h2>
+<p><code>{{&lt; pin &gt;}}</code> shortcode with <code>quote</code> parameter.</p>
+<p><div class="column pin">
+
+
+        <a href="#my-ecommerce" class="has-img has-aria-label has-quote"
+             aria-label="Item 1">
+            <div><s>$299</s> $199</div>
+             <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/7.svg" alt="Item 1" loading="lazy">
+        </a>
+
+
+        <a href="#my-ecommerce" class="has-img has-aria-label has-quote"
+             aria-label="Item 2">
+            <div><s>$399</s> $299</div>
+             <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/8.svg" alt="Item 2" loading="lazy">
+        </a>
+
+
+        <a href="#my-ecommerce" class="has-img has-aria-label has-quote"
+             aria-label="Item 3">
+            <div>Get Quote</div>
+             <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/9.svg" alt="Item 3" loading="lazy">
+        </a>
+
+
+        <a href="#my-ecommerce" class="has-img has-aria-label has-quote"
+             aria-label="Item 4">
+            <div><s>$299</s> $199</div>
+             <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/10.svg" alt="Item 4" loading="lazy">
+        </a>
+
+
+        <a href="#my-ecommerce" class="has-img has-aria-label has-quote"
+             aria-label="Item 5">
+            <div><s>$399</s> $299</div>
+             <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/11.svg" alt="Item 5" loading="lazy">
+        </a>
+
+
+        <a href="#my-ecommerce" class="has-img has-aria-label has-quote"
+             aria-label="Item 6">
+            <div>Out of stock</div>
+             <img src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/12.svg" alt="Item 6" loading="lazy">
+        </a>
+
+</div></p>
+
+                            </div>
+                        </div>
+                    </section>
+            </div>
+        </aside>
     <!-- [main] baseof.html -->
     <main id="home">
         <!-- main/header.html -->
@@ -139,7 +439,7 @@
             <!-- taxonomies.html -->
         <ul class="carousel__viewport" role="presentation">
             
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/14.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/7.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/authoring/"
                             aria-label="Category:Authoring"
                             data-post-counter="1"
@@ -147,7 +447,7 @@
                             <span>Authoring</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/16.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/3.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/ciencia/"
                             aria-label="Category:Ciencia"
                             data-post-counter="1"
@@ -155,7 +455,7 @@
                             <span>Ciencia</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/17.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/5.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/epistemolog%C3%ADa/"
                             aria-label="Category:Epistemología"
                             data-post-counter="1"
@@ -163,7 +463,7 @@
                             <span>Epistemología</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/19.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/3.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/filosof%C3%ADa/"
                             aria-label="Category:Filosofía"
                             data-post-counter="1"
@@ -171,7 +471,7 @@
                             <span>Filosofía</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/1.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/21.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/introspecci%C3%B3n/"
                             aria-label="Category:Introspección"
                             data-post-counter="1"
@@ -187,7 +487,7 @@
                             <span>Lógica</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/9.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/4.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/metaf%C3%ADsica/"
                             aria-label="Category:Metafísica"
                             data-post-counter="1"
@@ -195,7 +495,7 @@
                             <span>Metafísica</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/9.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/15.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/ontolog%C3%ADa/"
                             aria-label="Category:Ontología"
                             data-post-counter="1"
@@ -203,7 +503,7 @@
                             <span>Ontología</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/12.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/3.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/pol%C3%ADtica/"
                             aria-label="Category:Política"
                             data-post-counter="1"
@@ -211,7 +511,7 @@
                             <span>Política</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/5.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/7.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/psicolog%C3%ADa/"
                             aria-label="Category:Psicología"
                             data-post-counter="1"
@@ -219,7 +519,7 @@
                             <span>Psicología</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/5.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/14.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/sociedad/"
                             aria-label="Category:Sociedad"
                             data-post-counter="1"
@@ -227,7 +527,7 @@
                             <span>Sociedad</span>
                         </a>
                     </li>
-                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/18.svg);">
+                    <li  style="background-image:url(https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/12.svg);">
                         <a href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/categories/%C3%A9tica/"
                             aria-label="Category:Ética"
                             data-post-counter="1"
@@ -412,9 +712,43 @@
                     <div role="feed" aria-busy="false">
                         <article class="feed-item"
         aria-posinset="1"
-        aria-setsize="2"
+        aria-setsize="3"
         aria-labelledby="title-1"
         aria-describedby="desc-1">
+        <hgroup>
+            <div>
+                <span><span>Matías Collado</span>
+                </span>
+                
+                <!-- timestamp.html-->
+    <div >
+        <time class="doc-publish-date" datetime="2025-05-08T01:48:02-03:00" data-time-label="Published on">May 8, 2025</time>
+    </div>
+            </div>
+            <a href="./about/presentacion/" tabindex="-1">
+                <h1 id="title-1">Presentación</h1>
+            </a>
+        </hgroup>
+        <a class="underline" href="./about/presentacion/" aria-label="Presentación"></a>
+        
+        <section class="has-cover">
+                <img class="flowlines" src="https://raw.githubusercontent.com/foxihd/hugo-et-hd/master/static/svg/flowlines/20.svg" alt="" style="object-position: 13% 11%" loading="lazy">
+            <div class="par" id="desc-1">Soy Matías Collado. Estudiante de software y, por vocación profunda, estudiante de todo lo que despierte mi curiosidad: ciencia, filosofía, psicología, historia, antropología, tecnología, arte, literatura, música y todo aquello que invite a comprender mejor el mundo y la mente humana. Tengo 25 años, y llevo adelante proyectos que no solo busquen el crecimiento personal, sino también —en la medida en que el tiempo y la fortuna me lo permitan— aportar positivamente a la humanidad.
+
+            </div>
+        </section>
+        <footer>
+            <span class="readingTime">3 min read
+            </span>
+            
+                <div class="baselineskip" role="presentation"></div>
+        </footer>
+    </article><hr class="ldots" role="presentation" aria-hidden="true">
+                        <article class="feed-item"
+        aria-posinset="2"
+        aria-setsize="3"
+        aria-labelledby="title-2"
+        aria-describedby="desc-2">
         <hgroup>
             <div>
                 <span><span>Author Name</span>
@@ -427,19 +761,20 @@
                 </span>
                 
                 <!-- timestamp.html-->
-    <div >
+    <div class="date-has-label">
         <time class="doc-publish-date" datetime="2025-02-22T00:00:00&#43;00:00" data-time-label="Published on">February 22, 2025</time>
+            <time class="doc-lastmod-date" datetime="2025-05-08T13:57:13-03:00" data-time-label="Modified on">May 8, 2025</time>
     </div>
             </div>
             <a href="./post/changed-authoring-cover-images-and-audio-article/" tabindex="-1">
-                <h1 id="title-1">CHANGED Authoring Cover Images and Audio Articles</h1>
+                <h1 id="title-2">CHANGED Authoring Cover Images and Audio Articles</h1>
             </a>
         </hgroup>
         <a class="underline" href="./post/changed-authoring-cover-images-and-audio-article/" aria-label="CHANGED Authoring Cover Images and Audio Articles"></a>
         
         <section class="has-cover">
                 <img src=https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_and_styrofoam_%E2%80%93_electrostatic_charge_%28235112299%29.jpg alt="Cat named Cooper with styrofoam on his fur due to electrostatic charge." loading="lazy">
-            <div class="par" id="desc-1">A guide on adding cover images and audio articles
+            <div class="par" id="desc-2">A guide on adding cover images and audio articles
             </div>
         </section>
         <footer>
@@ -459,10 +794,10 @@
         </footer>
     </article><hr class="ldots" role="presentation" aria-hidden="true">
                         <article class="feed-item"
-        aria-posinset="2"
-        aria-setsize="2"
-        aria-labelledby="title-2"
-        aria-describedby="desc-2">
+        aria-posinset="3"
+        aria-setsize="3"
+        aria-labelledby="title-3"
+        aria-describedby="desc-3">
         <hgroup>
             <div>
                 <span><span>Author Name</span>
@@ -484,19 +819,20 @@
                 </span>
                 
                 <!-- timestamp.html-->
-    <div >
+    <div class="date-has-label">
         <time class="doc-publish-date" datetime="2025-02-22T00:00:00&#43;00:00" data-time-label="Published on">February 22, 2025</time>
+            <time class="doc-lastmod-date" datetime="2025-05-08T13:57:13-03:00" data-time-label="Modified on">May 8, 2025</time>
     </div>
             </div>
             <a href="./posts/test1/" tabindex="-1">
-                <h1 id="title-2">CHANGED Authoring Cover Images and Audio Articles</h1>
+                <h1 id="title-3">Test1</h1>
             </a>
         </hgroup>
-        <a class="underline" href="./posts/test1/" aria-label="CHANGED Authoring Cover Images and Audio Articles"></a>
+        <a class="underline" href="./posts/test1/" aria-label="Test1"></a>
         
         <section class="has-cover">
                 <img src=https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_and_styrofoam_%E2%80%93_electrostatic_charge_%28235112299%29.jpg alt="Cat named Cooper with styrofoam on his fur due to electrostatic charge." loading="lazy">
-            <div class="par" id="desc-2">A guide on adding cover images and audio articles
+            <div class="par" id="desc-3">A guide on adding cover images and audio articles
             </div>
         </section>
         <footer>

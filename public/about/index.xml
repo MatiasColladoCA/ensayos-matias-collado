@@ -9,7 +9,16 @@
     <managingEditor>Author Name</managingEditor>
     
       <webMaster>Author Name</webMaster>
-    <lastBuildDate>Thu, 08 May 2025 13:36:40 -0300</lastBuildDate>
+    <lastBuildDate>Thu, 08 May 2025 20:58:32 -0300</lastBuildDate>
     <atom:link href="http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/about/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Presentación</title>
+      <link>http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/about/presentacion/</link>
+      <pubDate>Thu, 08 May 2025 01:48:02 -0300</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/about/presentacion/</guid>
+      <description></description>
+      
+    </item>
   </channel>
 </rss>
