@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pos on Example</title>
+    <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/es/id/pos-ignore/</link>
+    <description>[i18n] recent [i18n] in Pos [i18n] on Example</description>
+    <generator>Hugo 0.147.0</generator>
+    <language>es</language>
+    <managingEditor>Author Name</managingEditor>
+    
+      <webMaster>Author Name</webMaster>
+    <lastBuildDate>Thu, 08 May 2025 02:16:38 -0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/es/id/pos-ignore/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

@@ -2,75 +2,111 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Example</title>
-    <link>http://localhost:1313/hugo-brewm/en/categories/</link>
+    <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/</link>
     <description>Recent Posts in Categories on Example</description>
     <generator>Hugo 0.147.0</generator>
-    <language>en</language>
+    <language>es-AR</language>
     <managingEditor>Author Name</managingEditor>
     
       <webMaster>Author Name</webMaster>
-    <lastBuildDate>Wed, 07 May 2025 16:48:58 -0300</lastBuildDate>
-    <atom:link href="http://localhost:1313/hugo-brewm/en/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 08 May 2025 02:26:09 -0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Authoring</title>
-      <link>http://localhost:1313/hugo-brewm/en/categories/authoring/</link>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/authoring/</link>
       <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
       <author>Author Name</author>
-      <guid>http://localhost:1313/hugo-brewm/en/categories/authoring/</guid>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/authoring/</guid>
       <description></description>
       
     </item>
     <item>
-      <title>Configuration</title>
-      <link>http://localhost:1313/hugo-brewm/en/categories/configuration/</link>
-      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <title>C1</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c1/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
       <author>Author Name</author>
-      <guid>http://localhost:1313/hugo-brewm/en/categories/configuration/</guid>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c1/</guid>
       <description></description>
       
     </item>
     <item>
-      <title>Homepage</title>
-      <link>http://localhost:1313/hugo-brewm/en/categories/homepage/</link>
-      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <title>C10</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c10/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
       <author>Author Name</author>
-      <guid>http://localhost:1313/hugo-brewm/en/categories/homepage/</guid>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c10/</guid>
       <description></description>
       
     </item>
     <item>
-      <title>Test</title>
-      <link>http://localhost:1313/hugo-brewm/en/categories/test/</link>
-      <pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate>
+      <title>C2</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c2/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
       <author>Author Name</author>
-      <guid>http://localhost:1313/hugo-brewm/en/categories/test/</guid>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c2/</guid>
       <description></description>
       
     </item>
     <item>
-      <title>Katex</title>
-      <link>http://localhost:1313/hugo-brewm/en/categories/katex/</link>
-      <pubDate>Sat, 20 Feb 2016 13:56:01 -0800</pubDate>
+      <title>C3</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c3/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
       <author>Author Name</author>
-      <guid>http://localhost:1313/hugo-brewm/en/categories/katex/</guid>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c3/</guid>
       <description></description>
       
     </item>
     <item>
-      <title>Latex</title>
-      <link>http://localhost:1313/hugo-brewm/en/categories/latex/</link>
-      <pubDate>Sat, 20 Feb 2016 13:56:01 -0800</pubDate>
+      <title>C4</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c4/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
       <author>Author Name</author>
-      <guid>http://localhost:1313/hugo-brewm/en/categories/latex/</guid>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c4/</guid>
       <description></description>
       
     </item>
     <item>
-      <title>Tufte-Css</title>
-      <link>http://localhost:1313/hugo-brewm/en/categories/tufte-css/</link>
-      <pubDate>Sat, 20 Feb 2016 13:56:01 -0800</pubDate>
+      <title>C5</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c5/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
       <author>Author Name</author>
-      <guid>http://localhost:1313/hugo-brewm/en/categories/tufte-css/</guid>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c5/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>C6</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c6/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c6/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>C7</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c7/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c7/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>C8</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c8/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c8/</guid>
+      <description></description>
+      
+    </item>
+    <item>
+      <title>C9</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c9/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c9/</guid>
       <description></description>
       
     </item>

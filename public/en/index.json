@@ -1,549 +1,299 @@
 
 {
     "nodes": [{
-                "id": "e1ae299811a029cda2a5693cf0eb427e",
-                "title": "Authoring Cover Images and Audio Articles",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/authoring-cover-images-and-audio-article/",
+                "id": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
+                "title": "CHANGED Authoring Cover Images and Audio Articles",
+                "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/post/changed-authoring-cover-images-and-audio-article/",
                 "type": "post"
             },{
-                "id": "c2b5fb24f8bba25bef7722065a170635",
-                "title": "Menambahkan Gambar Sampul dan Artikel Audio",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/mengatur-sampul-dan-audio/",
-                "type": "post"
-            },{
-                "id": "a63bdde037c73ab0c8fc312854a6c2b7",
-                "title": "Authoring Terms Entry",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/authoring-terms-entry/",
-                "type": "post"
-            },{
-                "id": "995647d92890440f672306d7f9896747",
-                "title": "Authoring The Redaction History",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/authoring-redaction-history/",
-                "type": "post"
-            },{
-                "id": "449efa6ffc5d56c4a41694741bda767e",
-                "title": "Mengatur Entri `Terms`",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/mengatur-entri-terms/",
-                "type": "post"
-            },{
-                "id": "59cf651772d90de0c0e7752b4d5322f6",
-                "title": "Mengatur Riwayat Redaksi",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/mengatur-riwayat-redaksi/",
-                "type": "post"
-            },{
-                "id": "0e0f75647844a9fa3ba46aaa6511131e",
-                "title": "Configure Discussion",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/configure-discussion/",
-                "type": "post"
-            },{
-                "id": "5aa8a3b55ea223ec52e09c10f1f8e39c",
-                "title": "Configure Homepage Slides",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/configure-slides/",
-                "type": "post"
-            },{
-                "id": "fffbe7e26426d9fbd4613c4d8214eb8b",
-                "title": "Configure Logo and Accent Color",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/configure-logo-and-accent-color/",
-                "type": "post"
-            },{
-                "id": "713bf5fa5bbf56729aa22b864a8c206f",
-                "title": "Configure Main Footer",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/configure-main-footer/",
-                "type": "post"
-            },{
-                "id": "c859487b51fda4cc2597f820615392b5",
-                "title": "Configure Menu",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/configure-menu/",
-                "type": "post"
-            },{
-                "id": "0a77ea12779d20971dd9e3f9bae0be69",
-                "title": "Configure Pagefind",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/configure-pagefind/",
-                "type": "post"
-            },{
-                "id": "ee01b8e734da6f7091ed95315730e1b0",
-                "title": "Markdown Test",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/markdown-test/",
-                "type": "post"
-            },{
-                "id": "7a9bd2e035ce26c1c49265e7582cb541",
-                "title": "Menambahkan Diskusi",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/mengatur-diskusi/",
-                "type": "post"
-            },{
-                "id": "a59da5059467a28d182d0f42bf5f212b",
-                "title": "Mengatur Logo dan Aksen Warna",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/mengatur-logo-dan-aksen-warna/",
-                "type": "post"
-            },{
-                "id": "6285ed8d2a1a83df21f7e63371d557a8",
-                "title": "Mengatur Menu",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/mengatur-menu/",
-                "type": "post"
-            },{
-                "id": "42780e49ce3c58711326b012c4ab3207",
-                "title": "Mengatur Pagefind",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/mengatur-pagefind/",
-                "type": "post"
-            },{
-                "id": "6fe4eb979584583df9cc814c9fdaf095",
-                "title": "Mengatur Slide Beranda",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/mengatur-slide/",
-                "type": "post"
-            },{
-                "id": "c0c5c672116f5a6a59b4ebed0c948233",
-                "title": "Tes Markdown",
-                "permalink": "http://localhost:1313/hugo-brewm/en/id/pos/tes-markdown/",
-                "type": "post"
-            },{
-                "id": "14377eca56661a3b0c30e92d20f1745f",
-                "title": "Hugo-Tufte Features compatibility",
-                "permalink": "http://localhost:1313/hugo-brewm/en/en/post/tufte-features/",
+                "id": "4336a7935499affe64b0ac083e4dab4f",
+                "title": "CHANGED Authoring Cover Images and Audio Articles",
+                "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/posts/test1/",
                 "type": "post"
             },
                         {
                             "id": "categories-authoring",
                             "title": "Authoring",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/categories/authoring/",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/authoring/",
                             "type": "categories"
                         },
                         {
-                            "id": "categories-configuration",
-                            "title": "Configuration",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/categories/configuration/",
+                            "id": "categories-c1",
+                            "title": "C1",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c1/",
                             "type": "categories"
                         },
                         {
-                            "id": "categories-homepage",
-                            "title": "Homepage",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/categories/homepage/",
+                            "id": "categories-c10",
+                            "title": "C10",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c10/",
                             "type": "categories"
                         },
                         {
-                            "id": "categories-katex",
-                            "title": "Katex",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/categories/katex/",
+                            "id": "categories-c2",
+                            "title": "C2",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c2/",
                             "type": "categories"
                         },
                         {
-                            "id": "categories-latex",
-                            "title": "Latex",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/categories/latex/",
+                            "id": "categories-c3",
+                            "title": "C3",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c3/",
                             "type": "categories"
                         },
                         {
-                            "id": "categories-test",
-                            "title": "Test",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/categories/test/",
+                            "id": "categories-c4",
+                            "title": "C4",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c4/",
                             "type": "categories"
                         },
                         {
-                            "id": "categories-tufte-css",
-                            "title": "Tufte-Css",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/categories/tufte-css/",
+                            "id": "categories-c5",
+                            "title": "C5",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c5/",
                             "type": "categories"
                         },
                         {
-                            "id": "tags-accent",
-                            "title": "Accent",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/accent/",
-                            "type": "tags"
+                            "id": "categories-c6",
+                            "title": "C6",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c6/",
+                            "type": "categories"
+                        },
+                        {
+                            "id": "categories-c7",
+                            "title": "C7",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c7/",
+                            "type": "categories"
+                        },
+                        {
+                            "id": "categories-c8",
+                            "title": "C8",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c8/",
+                            "type": "categories"
+                        },
+                        {
+                            "id": "categories-c9",
+                            "title": "C9",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/categories/c9/",
+                            "type": "categories"
                         },
                         {
                             "id": "tags-alt",
                             "title": "Alt",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/alt/",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/alt/",
                             "type": "tags"
                         },
                         {
                             "id": "tags-audio",
                             "title": "Audio",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/audio/",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/audio/",
                             "type": "tags"
                         },
                         {
                             "id": "tags-authoring",
                             "title": "Authoring",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/authoring/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-color",
-                            "title": "Color",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/color/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-configuration",
-                            "title": "Configuration",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/configuration/",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/authoring/",
                             "type": "tags"
                         },
                         {
                             "id": "tags-content",
                             "title": "Content",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/content/",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/content/",
                             "type": "tags"
                         },
                         {
                             "id": "tags-cover",
                             "title": "Cover",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/cover/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-discussion",
-                            "title": "Discussion",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/discussion/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-footer",
-                            "title": "Footer",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/footer/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-gambar",
-                            "title": "Gambar",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/gambar/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-history",
-                            "title": "History",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/history/",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/cover/",
                             "type": "tags"
                         },
                         {
                             "id": "tags-images",
                             "title": "Images",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/images/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-konten",
-                            "title": "Konten",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/konten/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-logo",
-                            "title": "Logo",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/logo/",
-                            "type": "tags"
-                        },
-                        {
-                            "id": "tags-markdown",
-                            "title": "Markdown",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/markdown/",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/images/",
                             "type": "tags"
                         },
                         {
                             "id": "tags-media",
                             "title": "Media",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/media/",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/media/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-menu",
-                            "title": "Menu",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/menu/",
+                            "id": "tags-tag1",
+                            "title": "Tag1",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag1/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-pagefind",
-                            "title": "Pagefind",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/pagefind/",
+                            "id": "tags-tag10",
+                            "title": "Tag10",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag10/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-redaction",
-                            "title": "Redaction",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/redaction/",
+                            "id": "tags-tag2",
+                            "title": "Tag2",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag2/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-redaksi",
-                            "title": "Redaksi",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/redaksi/",
+                            "id": "tags-tag3",
+                            "title": "Tag3",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag3/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-riwayat",
-                            "title": "Riwayat",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/riwayat/",
+                            "id": "tags-tag4",
+                            "title": "Tag4",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag4/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-sampul",
-                            "title": "Sampul",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/sampul/",
+                            "id": "tags-tag5",
+                            "title": "Tag5",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag5/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-slide",
-                            "title": "Slide",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/slide/",
+                            "id": "tags-tag6",
+                            "title": "Tag6",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag6/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-taxonomy",
-                            "title": "Taxonomy",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/taxonomy/",
+                            "id": "tags-tag7",
+                            "title": "Tag7",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag7/",
                             "type": "tags"
                         },
                         {
-                            "id": "tags-terms",
-                            "title": "Terms",
-                            "permalink": "http://localhost:1313/hugo-brewm/en/tags/terms/",
+                            "id": "tags-tag8",
+                            "title": "Tag8",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag8/",
+                            "type": "tags"
+                        },
+                        {
+                            "id": "tags-tag9",
+                            "title": "Tag9",
+                            "permalink": "http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/tags/tag9/",
                             "type": "tags"
                         },
     ],
     "links": [
             
                     {
-                        "source": "e1ae299811a029cda2a5693cf0eb427e",
+                        "source": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
                         "target": "categories-authoring",
                     },
                     {
-                        "source": "e1ae299811a029cda2a5693cf0eb427e",
+                        "source": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
                         "target": "tags-authoring",
                     },
                     {
-                        "source": "e1ae299811a029cda2a5693cf0eb427e",
+                        "source": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
                         "target": "tags-content",
                     },
                     {
-                        "source": "e1ae299811a029cda2a5693cf0eb427e",
+                        "source": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
                         "target": "tags-media",
                     },
                     {
-                        "source": "e1ae299811a029cda2a5693cf0eb427e",
+                        "source": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
                         "target": "tags-audio",
                     },
                     {
-                        "source": "e1ae299811a029cda2a5693cf0eb427e",
+                        "source": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
                         "target": "tags-cover",
                     },
                     {
-                        "source": "e1ae299811a029cda2a5693cf0eb427e",
+                        "source": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
                         "target": "tags-images",
                     },
                     {
-                        "source": "e1ae299811a029cda2a5693cf0eb427e",
+                        "source": "e45bd8aa6afe1a1f4986e1f2d385d9c1",
                         "target": "tags-alt",
                     },
             
                     {
-                        "source": "c2b5fb24f8bba25bef7722065a170635",
-                        "target": "tags-authoring",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c1",
                     },
                     {
-                        "source": "c2b5fb24f8bba25bef7722065a170635",
-                        "target": "tags-konten",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c2",
                     },
                     {
-                        "source": "c2b5fb24f8bba25bef7722065a170635",
-                        "target": "tags-media",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c3",
                     },
                     {
-                        "source": "c2b5fb24f8bba25bef7722065a170635",
-                        "target": "tags-audio",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c4",
                     },
                     {
-                        "source": "c2b5fb24f8bba25bef7722065a170635",
-                        "target": "tags-sampul",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c5",
                     },
                     {
-                        "source": "c2b5fb24f8bba25bef7722065a170635",
-                        "target": "tags-gambar",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c6",
                     },
                     {
-                        "source": "c2b5fb24f8bba25bef7722065a170635",
-                        "target": "tags-alt",
-                    },
-            
-                    {
-                        "source": "a63bdde037c73ab0c8fc312854a6c2b7",
-                        "target": "categories-authoring",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c7",
                     },
                     {
-                        "source": "a63bdde037c73ab0c8fc312854a6c2b7",
-                        "target": "tags-authoring",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c8",
                     },
                     {
-                        "source": "a63bdde037c73ab0c8fc312854a6c2b7",
-                        "target": "tags-cover",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c9",
                     },
                     {
-                        "source": "a63bdde037c73ab0c8fc312854a6c2b7",
-                        "target": "tags-taxonomy",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "categories-c10",
                     },
                     {
-                        "source": "a63bdde037c73ab0c8fc312854a6c2b7",
-                        "target": "tags-terms",
-                    },
-            
-                    {
-                        "source": "995647d92890440f672306d7f9896747",
-                        "target": "categories-authoring",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag1",
                     },
                     {
-                        "source": "995647d92890440f672306d7f9896747",
-                        "target": "tags-authoring",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag2",
                     },
                     {
-                        "source": "995647d92890440f672306d7f9896747",
-                        "target": "tags-redaction",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag3",
                     },
                     {
-                        "source": "995647d92890440f672306d7f9896747",
-                        "target": "tags-history",
-                    },
-            
-                    {
-                        "source": "449efa6ffc5d56c4a41694741bda767e",
-                        "target": "tags-authoring",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag4",
                     },
                     {
-                        "source": "449efa6ffc5d56c4a41694741bda767e",
-                        "target": "tags-cover",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag5",
                     },
                     {
-                        "source": "449efa6ffc5d56c4a41694741bda767e",
-                        "target": "tags-taxonomy",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag6",
                     },
                     {
-                        "source": "449efa6ffc5d56c4a41694741bda767e",
-                        "target": "tags-terms",
-                    },
-            
-                    {
-                        "source": "59cf651772d90de0c0e7752b4d5322f6",
-                        "target": "tags-authoring",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag7",
                     },
                     {
-                        "source": "59cf651772d90de0c0e7752b4d5322f6",
-                        "target": "tags-redaksi",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag8",
                     },
                     {
-                        "source": "59cf651772d90de0c0e7752b4d5322f6",
-                        "target": "tags-riwayat",
-                    },
-            
-                    {
-                        "source": "0e0f75647844a9fa3ba46aaa6511131e",
-                        "target": "categories-configuration",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag9",
                     },
                     {
-                        "source": "0e0f75647844a9fa3ba46aaa6511131e",
-                        "target": "tags-configuration",
-                    },
-                    {
-                        "source": "0e0f75647844a9fa3ba46aaa6511131e",
-                        "target": "tags-discussion",
-                    },
-            
-                    {
-                        "source": "5aa8a3b55ea223ec52e09c10f1f8e39c",
-                        "target": "categories-homepage",
-                    },
-                    {
-                        "source": "5aa8a3b55ea223ec52e09c10f1f8e39c",
-                        "target": "tags-configuration",
-                    },
-                    {
-                        "source": "5aa8a3b55ea223ec52e09c10f1f8e39c",
-                        "target": "tags-slide",
-                    },
-            
-                    {
-                        "source": "fffbe7e26426d9fbd4613c4d8214eb8b",
-                        "target": "categories-configuration",
-                    },
-                    {
-                        "source": "fffbe7e26426d9fbd4613c4d8214eb8b",
-                        "target": "tags-configuration",
-                    },
-                    {
-                        "source": "fffbe7e26426d9fbd4613c4d8214eb8b",
-                        "target": "tags-logo",
-                    },
-                    {
-                        "source": "fffbe7e26426d9fbd4613c4d8214eb8b",
-                        "target": "tags-color",
-                    },
-                    {
-                        "source": "fffbe7e26426d9fbd4613c4d8214eb8b",
-                        "target": "tags-accent",
-                    },
-            
-                    {
-                        "source": "713bf5fa5bbf56729aa22b864a8c206f",
-                        "target": "categories-configuration",
-                    },
-                    {
-                        "source": "713bf5fa5bbf56729aa22b864a8c206f",
-                        "target": "tags-configuration",
-                    },
-                    {
-                        "source": "713bf5fa5bbf56729aa22b864a8c206f",
-                        "target": "tags-footer",
-                    },
-            
-                    {
-                        "source": "c859487b51fda4cc2597f820615392b5",
-                        "target": "categories-configuration",
-                    },
-                    {
-                        "source": "c859487b51fda4cc2597f820615392b5",
-                        "target": "tags-configuration",
-                    },
-                    {
-                        "source": "c859487b51fda4cc2597f820615392b5",
-                        "target": "tags-menu",
-                    },
-            
-                    {
-                        "source": "0a77ea12779d20971dd9e3f9bae0be69",
-                        "target": "categories-configuration",
-                    },
-                    {
-                        "source": "0a77ea12779d20971dd9e3f9bae0be69",
-                        "target": "tags-configuration",
-                    },
-                    {
-                        "source": "0a77ea12779d20971dd9e3f9bae0be69",
-                        "target": "tags-pagefind",
-                    },
-            
-                    {
-                        "source": "ee01b8e734da6f7091ed95315730e1b0",
-                        "target": "categories-test",
-                    },
-                    {
-                        "source": "ee01b8e734da6f7091ed95315730e1b0",
-                        "target": "tags-markdown",
-                    },
-            
-            
-            
-            
-            
-            
-            
-                    {
-                        "source": "14377eca56661a3b0c30e92d20f1745f",
-                        "target": "categories-katex",
-                    },
-                    {
-                        "source": "14377eca56661a3b0c30e92d20f1745f",
-                        "target": "categories-latex",
-                    },
-                    {
-                        "source": "14377eca56661a3b0c30e92d20f1745f",
-                        "target": "categories-tufte-css",
+                        "source": "4336a7935499affe64b0ac083e4dab4f",
+                        "target": "tags-tag10",
                     },
     ],
 }

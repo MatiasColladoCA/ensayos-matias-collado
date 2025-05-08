@@ -1,7 +1,8 @@
 ## Base URL for the site
-baseURL = 'https://foxihd.github.io/hugo-brewm/'
+# baseURL = 'https://foxihd.github.io/hugo-brewm/'
+baseURL = 'https://github.com/MatiasColladoCA/ensayos-matias-collado/'
 ## Site title
-title = 'Example'
+title = 'Ensayos - Matías Collado'
 ## Use hugo-brewm theme
 theme = 'hugo-brewm'
 ## Enable Git information for pages, (e.g. lastMod date information)
@@ -9,19 +10,28 @@ enableGitInfo = true
 ## Convert all URLs to absolute URLs
 canonifyURLs = true
 ## Default language for content
-defaultContentLanguage = 'en'
+# defaultContentLanguage = 'es'
 ## Put default language in subdirectory
-defaultContentLanguageInSubdir = true
+defaultContentLanguageInSubdir = false
 ## Show placeholder for missing translations
 enableMissingTranslationPlaceholders = true
 ## Use sections for main menu
 # sectionPagesMenu = 'main'
 ## Files to ignore when building site
-ignoreFiles = [ '\.redacted', '\.old','\.bak', '\.tmp', '\.swp', '\.DS_Store']
+ignoreFiles = [ '\.i18n', '\.en', '\.redacted', '\.old','\.bak', '\.tmp', '\.swp', '\.DS_Store']
 ## Errors to ignore in logs
 # ignoreLogs = ['err-youtube-remote']
 ## Generate a robots.txt
 enableRobotsTXT = true
+
+relativeURLs = true
+
+languageCode = "es-AR"
+
+# [languages]
+# #   languageName = "English"
+#   contentDir = "content/"
+#   disableLanguageSwitching = true # ← Evita el /en/ en las URLs
 
 ## Front matter field configurations
 [frontmatter]
@@ -161,7 +171,7 @@ enableRobotsTXT = true
     ## Home page display settings
     [params.home]
         ## Enable slide carousel
-        disableSlide = false
+        disableSlide = true
         ## Enable taxonomy listing carousel
         disableListing = false
         ## Select taxonomy listing to be featured

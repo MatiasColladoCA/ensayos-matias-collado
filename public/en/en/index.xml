@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Example</title>
-    <link>http://localhost:1313/hugo-brewm/en/en/</link>
+    <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/en/</link>
     <description>Recent Posts on Example</description>
     <generator>Hugo 0.147.0</generator>
     <language>en</language>
     <managingEditor>Author Name</managingEditor>
     
       <webMaster>Author Name</webMaster>
-    <lastBuildDate>Wed, 07 May 2025 16:48:58 -0300</lastBuildDate>
-    <atom:link href="http://localhost:1313/hugo-brewm/en/en/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 08 May 2025 02:13:12 -0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/en/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: http://localhost:1313/hugo-brewm/sitemap.xml
+Sitemap: http://localhost:1313/MatiasColladoCA/ensayos-matias-collado/sitemap.xml
