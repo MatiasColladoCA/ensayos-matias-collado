@@ -17,7 +17,7 @@ hugo_*.log
 /cache/
 / hugo_bin/         # si usas algún script que descargue Hugo localmente
 .gitmodules        # opcional, si no usas submódulos
-themes/*/node_modules/  # si algunos temas incluyen esto
+# themes/*/node_modules/  # si algunos temas incluyen esto
 
 # Entorno local
 .env
