@@ -6,3 +6,84 @@ public/
 /themes/hugo-brewm/
 ./public/
 
+# Carpetas generadas por Hugo
+/public/
+/resources/_gen/
+/assets/css/
+/assets/js/
+/dist/
+
+# Archivos temporales
+hugo_*.log
+/cache/
+/ hugo_bin/         # si usas algún script que descargue Hugo localmente
+.gitmodules        # opcional, si no usas submódulos
+themes/*/node_modules/  # si algunos temas incluyen esto
+
+# Entorno local
+.env
+.env.local
+.env.development
+.env.production
+
+# IDE / editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+*.temp
+*.bak
+*.orig
+*.pyc
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Carpeta de módulos de Hugo (si usas Hugo Modules)
+go.mod
+go.sum
+module/
+
+# Archivos de despliegue automático
+README.md      # opcional: si generas README automáticamente
+*.zip
+*.tar.gz
+*.7z
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+
+# Vim
+.swp
+.swo
+.swn
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.AppleDouble
+.LSOverride
+Icon?
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+.fseventsd
+
+# Windows
+$RECYCLE.BIN/
+Desktop.ini
+ehthumbs.db
+Thumbs.db
