@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Example</title>
+    <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/</link>
+    <description>Recent Posts on Example</description>
+    <generator>Hugo 0.147.0</generator>
+    <language>es-AR</language>
+    <managingEditor>Author Name</managingEditor>
+    
+      <webMaster>Author Name</webMaster>
+    <lastBuildDate>Thu, 08 May 2025 02:26:09 -0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CHANGED Authoring Cover Images and Audio Articles</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/post/changed-authoring-cover-images-and-audio-article/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/post/changed-authoring-cover-images-and-audio-article/</guid>
+      <description>&lt;h2 id=&#34;hero-section--greeter&#34;&gt;Hero Section / Greeter&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;This exampleSite is deployed on Github Pages within it&amp;rsquo;s theme repository.&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;</description>
+      <enclosure url="https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_and_styrofoam_%E2%80%93_electrostatic_charge_%28235112299%29.jpg" length="0" type="image/jpeg" />
+    </item>
+    <item>
+      <title>CHANGED Authoring Cover Images and Audio Articles</title>
+      <link>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/posts/test1/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <author>Author Name</author>
+      <guid>http://localhost:1313/MatiasColladoCA/investigaciones-matias-collado/en/posts/test1/</guid>
+      <description>&lt;h2 id=&#34;hero-section--greeter&#34;&gt;Hero Section / Greeter&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;This exampleSite is deployed on Github Pages within it&amp;rsquo;s theme repository.&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;</description>
+      <enclosure url="https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_and_styrofoam_%E2%80%93_electrostatic_charge_%28235112299%29.jpg" length="0" type="image/jpeg" />
+    </item>
+  </channel>
+</rss>
