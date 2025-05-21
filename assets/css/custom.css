@@ -1,0 +1,57 @@
+:root {
+     /* default contrast  */
+    --ac-light: #36c;
+    --fg-light: #111;
+    --bg-light: #f9f9fb; 
+    --midtone: gray;
+    --fg-dark: #f5f3ef;
+    --bg-dark: #260312; /* modcolor nav-var */
+    --ac-dark: #fa0;
+    
+     /* less contrast  */
+    --ac-light-less: var(--ac-light);
+    --fg-light-less: #13253d;
+    --bg-light-less: #e7e2e2; 
+    --midtone-less: #7d8490;
+    --fg-dark-less: #e7e2e2;
+    --bg-dark-less: #13253d;
+    --ac-dark-less: var(--ac-dark);
+
+     /* more contrast  */
+    --ac-light-more: var(--ac-light);
+    --fg-light-more: #000;
+    --bg-light-more: #fff;
+    --midtone-more: gray;
+    --fg-dark-more: #fff;
+    --bg-dark-more: #000;
+    --ac-dark-more: var(--ac-dark);
+}
+/* 
+:root {
+    /* default contrast - Royal Wine Theme */
+    /* --ac-light: #d83f54;       Rojo vino brillante */
+    /* --fg-light: #fe0000;      Negro profundo para texto sobre fondo claro */
+    /* --bg-light: #fff0f6;      Rosado suave como fondo claro */
+    /* --midtone: #9e2a4b;       Vino / bordeaux para separadores o bloques */
+    /* --fg-dark: #f5f3ef;       Blanco roto para texto principal */
+    /* --bg-dark: #2f0417;       Fondo negro profundo */
+    /* --ac-dark: #ffaa44;       Dorado o ámbar para destacados (realza el vino) */
+
+    /* less contrast - Royal Wine Theme */
+    /* --ac-light-less: var(--ac-light); */
+    /* --fg-light-less: #d60e9e;     Morado oscuro para textos en fondos claros bajos en contraste */
+    /* --bg-light-less: #f0e6eb;       Gris rosado claro */
+    /* --midtone-less: #b3597a; */
+    /* --fg-dark-less: #e0d6db;       Blanco grisáceo */
+    /* --bg-dark-less: #f400bf;       Vino oscuro */
+    /* --ac-dark-less: var(--ac-dark); */
+
+    /* more contrast - Royal Wine Theme */
+    /* --ac-light-more: var(--ac-light); */
+    /* --fg-light-more: #ff0000; */
+    /* --bg-light-more: #fff; */
+    /* --midtone-more: #9e2a4b; */
+    /* --fg-dark-more: #fff; */
+    /* --bg-dark-more: #ff0000; */
+    /* --ac-dark-more: var(--ac-dark); */
+/* } */

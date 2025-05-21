@@ -1,0 +1,7 @@
+.hugo_build.lock
+.public/
+public/
+/public/
+.public
+/themes/hugo-brewm/
+./public/
