@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://github.com/MatiasColladoCA/ensayos-matias-collado/sitemap.xml

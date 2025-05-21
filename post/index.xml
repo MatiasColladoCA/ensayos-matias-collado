@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Post on Ensayos - Matías Collado</title><link>https://github.com/MatiasColladoCA/ensayos-matias-collado/post/</link><description>[i18n] recent [i18n] in Post [i18n] on Ensayos - Matías Collado</description><generator>Hugo 0.147.4</generator><language>es-AR</language><managingEditor>Author Name</managingEditor><webMaster>Author Name</webMaster><lastBuildDate>Wed, 21 May 2025 15:20:42 +0000</lastBuildDate><atom:link href="https://github.com/MatiasColladoCA/ensayos-matias-collado/post/index.xml" rel="self" type="application/rss+xml"/><item><title>CHANGED Authoring Cover Images and Audio Articles</title><link>https://github.com/MatiasColladoCA/ensayos-matias-collado/post/changed-authoring-cover-images-and-audio-article/</link><pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate><author>Author Name</author><guid>https://github.com/MatiasColladoCA/ensayos-matias-collado/post/changed-authoring-cover-images-and-audio-article/</guid><description>&lt;p>This section demonstrates a list view layout.
+The post listing style can be modified by adjusting the sitemap changeFreq parameter to values like &amp;ldquo;always&amp;rdquo;, &amp;ldquo;hourly&amp;rdquo;, &amp;ldquo;daily&amp;rdquo;, or &amp;ldquo;weekly&amp;rdquo;.
+This section has been set up with the following configuration:&lt;/p>
+&lt;pre>&lt;code>---
+title: &amp;quot;Post&amp;quot;
+translationKey: post
+sitemap:
+ changeFreq: &amp;quot;always&amp;quot;
+---
+&lt;/code>&lt;/pre></description><enclosure url="https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_and_styrofoam_%E2%80%93_electrostatic_charge_%28235112299%29.jpg" length="0" type="image/jpeg"/></item></channel></rss>
