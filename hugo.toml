@@ -28,6 +28,9 @@ relativeURLs = true
 
 languageCode = "es-AR"
 
+# [module]
+#   enabled = true
+
 # [languages]
 # #   languageName = "English"
 #   contentDir = "content/"
@@ -248,3 +251,5 @@ url = "https://MatiasColladoCA.github.io"
 git = true
 force = true
 branch = "main"
+
+
