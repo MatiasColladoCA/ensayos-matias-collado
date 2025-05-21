@@ -239,3 +239,12 @@ languageCode = "es-AR"
         # jsonLD = true
     [params.pin]
         enable = false
+
+
+[deployment]
+[[deployment.targets]]
+name = "github"
+url = "https://MatiasColladoCA.github.io"
+git = true
+force = true
+branch = "main"
