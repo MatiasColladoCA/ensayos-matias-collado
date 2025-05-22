@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://ensayos-matias-collado/sitemap.xml
+Sitemap: https://matiascolladoca.github.io/ensayos-matias-collado/sitemap.xml
