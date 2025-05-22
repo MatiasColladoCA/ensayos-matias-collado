@@ -164,7 +164,7 @@ languageCode = "es-AR"
         reactions_enabled = true
         emit_metadata = true
         input_position = "top"
-        theme = "gruvbox"
+        theme = "dark"
         lang = "es"
         loading = "lazy"
 
