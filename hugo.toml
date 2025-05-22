@@ -1,6 +1,6 @@
 ## Base URL for the site
 # baseURL = 'https://foxihd.github.io/hugo-brewm/'
-baseURL = 'https://ensayos-matias-collado'
+baseURL = 'https://matiascolladoca.github.io/ensayos-matias-collado/'
 ## Site title
 title = 'Ensayos - Matías Collado'
 ## Use hugo-brewm theme
