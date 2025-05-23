@@ -5,3 +5,9 @@ theme = 'hugo-brewm'
     extended = false
     min = "0.135.0"
   enabled = true
+
+# [params]
+#   custom_css = ["assets/css/custom.css"]
+
+[params.Typeface]
+    useGoogleFonts = true

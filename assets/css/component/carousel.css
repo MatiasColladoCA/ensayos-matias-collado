@@ -18,10 +18,9 @@
     width: 100%;
     overflow: hidden;
     background-color: #1E020E; /*modcolor carousel*/
-
-
 }
 
+/*mod lista de tags debajo de slide */
 .carousel__nav {
     display: flex;
     position: absolute;
@@ -31,22 +30,43 @@
     z-index: 1;
     width: calc(100% - 4rem);
     font-size: var(--small);
-
+    font-family: "Fraunces", serif;
+    font-weight: 100;
+    font-style: normal;
+    overflow-x: auto;
+    white-space: nowrap;
+    
 }
 
+
+
+.carousel__nav a, span {
+    color: #e0ddd9ba;; /* Blanco */
+    text-decoration: none;    
+}
+
+/* .carousel__nav a:hover {
+    color: #d6cacf; /* Color vino rojizo */
+    /* background-color: white; */
+    
+/* } */
+
+/* mod fondo de tags introduccion */
 .carousel__nav > ul {
     overflow-x: auto;
     white-space: nowrap;
-
-
+    
 }
+
 
 .carousel__viewport nav a {
     display: flex;
     z-index: 2;
     font-size: var(--small);
+    
 }
 
+/* mod slide introduccion */
 .carousel__viewport {
     display: flex;
     height: 100%;
@@ -55,8 +75,10 @@
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
+    
 }
 
+/* mod slide categorias */
 ul.carousel__viewport {
     border: none;
     padding: 0;
@@ -94,16 +116,17 @@ ul.carousel__viewport > li > a {
     left: -1px;
     border-radius: 0.82ex;
     overflow: clip;
-    color: var(--fg);
+    /* color: var(--fg); */
     font-size: var(--small);
     font-weight: bold;
-
 }
 
+/* mod color de los dibujos en los cubos */
 ul.carousel__viewport > li:hover,
 ul.carousel__viewport > li:focus-within {
     --tsf: scale(0.96);
-    opacity: 0.86;
+    /* opacity: 0.86; */
+    /* background-color: white; */
 
 }
 
@@ -111,7 +134,7 @@ ul.carousel__viewport > li > a > span {
     display: inline-block;
     position: relative;
     border-radius: 0 0 1ex 0;
-    background-color: var(--bg);
+    /* background-color: var(--bg); */
     padding: 0.7ex 2ex;
     max-width: 12.8rem;
     
@@ -161,7 +184,12 @@ ul.carousel__viewport > li > a > span::after {
     height: 14.75rem;
     overflow-y: auto;
     scroll-snap-type: y mandatory;
+    font-family: "Fraunces", serif;
+    font-weight: 100;
+    font-style: normal;
 }
+
+
 
 #list-taxonomy {
     margin: 1rem 0;
@@ -172,7 +200,10 @@ ul.carousel__viewport > li > a > span::after {
 #list-author ul.carousel__viewport {
     scrollbar-width: thin;
 }
-
+/* mod categories names */
+#list-categories a{
+    color: #e0ddd9ba;
+}
 #list-categories a:hover::after {
     position: absolute;
     right: 1ex;
@@ -185,4 +216,29 @@ ul.carousel__viewport > li > a > span::after {
     text-overflow: ellipsis;
     white-space: nowrap;
     content: attr(data-post-counter);
+    font-weight: 100;
+    /* color: white; mod numero dentro de cubos de categorias
+    background-color: white; */
+}
+
+ /* mod carousel*/
+.carousel-viewport a, span, .section-title{
+    font-family: "Fraunces", serif;
+    font-weight: 100;
+    font-style: normal;
+    /* color: white; */
+}
+
+/* .section-title li :hover { */
+    /* font-family: "Fraunces", serif;
+    font-weight: 100;
+    font-style: normal; */
+    /* background-color: black; */
+/* } */
+
+.carousel__nav a {
+    color: #e0ddd9ba;; /* Blanco */
+    text-decoration: none;  
+        /* background-color: white; */
+  
 }

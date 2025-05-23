@@ -174,7 +174,7 @@
                     <ul class="rounded invert" role="presentation">
                         {{- range $index, $slide := . }}
                             <li>
-                                <a href="#slide-{{ add $index 1 }}" role="button" aria-controls="slide-{{ add $index 1 }}">
+                                <a href="#{{ add $index 1 }}" role="button" aria-controls="{{ add $index 1 }}">
                                     <span>{{ .Title }}</span>
                                 </a>
                             </li>

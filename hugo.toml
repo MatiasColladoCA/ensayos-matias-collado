@@ -109,6 +109,11 @@ languageCode = "es-AR"
     series = "series"
 
 ## Site parameters
+
+[params.menu]
+position = "right"
+
+
 [params]
     ## Site title
     title = "Example"
@@ -176,7 +181,7 @@ languageCode = "es-AR"
         ## Dark mode logo mark
         # logoMarkDark = 'https://example.com/logoMarkDark.svg'
         ## Enable logo type
-        logoType = true
+        logoType = false
 
     ## Feed display settings
     [params.feed]
@@ -217,6 +222,23 @@ languageCode = "es-AR"
         pagefind = true
         ## fallback searchbox when javascript disabled, currently the options limited to 'mojeek', otherwise duckduckgo will be used
         # fallback = 'mojeek'
+
+
+    [menu]
+        [[menu.main]]
+            name = "Inicio"
+            url = "/"
+            weight = 1
+        [[menu.main]]
+            name = "Acerca de"
+            url = "/about/"
+            weight = 2
+        [[menu.main]]
+            name = "Contacto"
+            url = "/contact/"
+            weight = 3          
+
+
 
     ## Typography settings
     [params.typeface]

@@ -26,6 +26,113 @@
     --bg-dark-more: #000;
     --ac-dark-more: var(--ac-dark);
 }
+
+
+.fraunces-font {
+  font-family: "Fraunces", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings:
+    "SOFT" 0,
+    "WONK" 0;
+}
+
+
+body{
+    background-color: var(--bg-dark);
+    color: var(--fg-dark);
+
+    font-family: "Fraunces", serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+    font-variation-settings:
+        "SOFT" 0,
+        "WONK" 0;
+    color: #e0ddd9ba;
+}
+
+/* mod para letras, h1, texto, etc */
+/* Si pongo 'a' se modifican los tags */
+h1, h2, h3, h4, h5, h6, strong{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-style: normal;
+    color: #e0ddd9ce;
+}
+
+em, text, p {
+    font-family: "Fraunces", serif;
+    font-weight: 100;
+}
+
+#underline{
+    font-family: "Fraunces", serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+
+/* .fraunces {
+  font-family: "Fraunces", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings:
+    "SOFT" 0,
+    "WONK" 0;
+} */
+
+/* body {
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-style: normal;
+    font-optical-sizing: auto;
+    font-variation-settings: "SOFT" 0, "WONK" 0;
+} */
+
+
+/* Definir la fuente Fraunces */
+/* @font-face {
+    font-family: "Fraunces";
+    src: url("/fonts/Fraunces-Regular.woff2") format("woff2"),
+         url("/fonts/Fraunces-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Fraunces";
+    src: url("/fonts/Fraunces-Bold.woff2") format("woff2"),
+         url("/fonts/Fraunces-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Fraunces";
+    src: url("/fonts/Fraunces-Light.woff2") format("woff2"),
+         url("/fonts/Fraunces-Light.woff") format("woff");
+    font-weight: light;
+    font-style: normal;
+} */
+
+/* Aplicar la fuente globalmente */
+
+
+/* #section-title{ */
+    /* font-family: "Fraunces", serif;
+    font-weight: 200;
+    font-style: normal;
+} */
+/* span {
+    font-family: "Fraunces", serif;
+    font-weight: normal;
+    font-style: normal;
+} */
+
+
 /* 
 :root {
     /* default contrast - Royal Wine Theme */
