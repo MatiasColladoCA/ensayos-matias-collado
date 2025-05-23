@@ -20,6 +20,15 @@
     background-color: #1E020E; /*modcolor carousel*/
 }
 
+/* modcolor carousel tags */
+.carousel > .carousel__nav a{
+    background-color: #260312;
+}
+
+.carousel > .carousel__nav a:hover{
+    background-color: #350c1c;
+}
+
 /*mod lista de tags debajo de slide */
 .carousel__nav {
     display: flex;
@@ -40,7 +49,7 @@
 
 
 
-.carousel__nav a, span {
+.carousel__nav span {
     color: #e0ddd9ba;; /* Blanco */
     text-decoration: none;    
 }
@@ -236,8 +245,8 @@ ul.carousel__viewport > li > a > span::after {
     /* background-color: black; */
 /* } */
 
-.carousel__nav a {
-    color: #e0ddd9ba;; /* Blanco */
+.carousel__nav a, button {
+    background-color: #1E020E;; /* Blanco */
     text-decoration: none;  
         /* background-color: white; */
   
