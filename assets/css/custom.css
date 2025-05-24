@@ -7,7 +7,7 @@
     --fg-dark: #f5f3ef;
     --bg-dark: #260312; /* modcolor nav-var */
     --ac-dark: #fa0;
-    
+
      /* less contrast  */
     /* --ac-light-less: var(--ac-light);
     --fg-light-less: #13253d;
@@ -25,7 +25,7 @@
     --fg-dark-more: #fff;
     --bg-dark-more: #000;
     --ac-dark-more: var(--ac-dark); */
-/* } */
+}
 
 
 .fraunces-font {
@@ -39,10 +39,10 @@
 }
 
 
-body{
-    background-color: var(--bg-dark);
-    color: var(--fg-dark);
 
+body{
+    /* background-color: var(--bg-dark); */
+    /* color: var(--fg-dark); */
     font-family: "Fraunces", serif;
     font-optical-sizing: auto;
     font-weight: 100;
@@ -50,16 +50,18 @@ body{
     font-variation-settings:
         "SOFT" 0,
         "WONK" 0;
+    /* modcolor text */
     color: #e0ddd9ba;
+    
 }
 
 /* mod para letras, h1, texto, etc */
 /* Si pongo 'a' se modifican los tags */
-h1, h2, h3, h4, h5, h6, strong{
+h1, h2, h3, h4, h5, h6, strong,em{
     font-family: "Fraunces", serif;
     font-weight: 300;
     font-style: normal;
-    color: #e0ddd9ce;
+    color: #f5f3ef;
 }
 
 em, text, p {
@@ -73,6 +75,22 @@ em, text, p {
     font-style: normal;
 }
 
+#pagewidth a,h1,h2,h3,h4,h5{
+    color : #f5f3ef;
+}
+
+/* #home #list-posts a, h1, h2, h3{
+        color : #e0ddd9c6;
+
+} */
+
+/* mod recent posts h1 */
+#list-posts h1{
+    /* background-color: rgb(214, 18, 18); */
+    font-weight: 200;
+    font-style: normal;
+    color: #f5f3ef;
+}
 
 /* .fraunces {
   font-family: "Fraunces", serif;

@@ -8,7 +8,7 @@ params:
     target: 'https://github.com/foxihd/hugo-brewm'
 ---
 
-***Introducción***
+***Inicio***
 ====================
  1. La página contiene los ensayos en la pestana ensayos.
 

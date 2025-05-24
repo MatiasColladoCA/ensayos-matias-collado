@@ -55,25 +55,31 @@ ul.rounded a {
 }
 
 ul.rounded a:hover {
-    border-color: #80808022;
+    /* border-color: #80808022;
     box-shadow: var(--box-shadow-active);
-    background: #80808016;
+    background: #260312; */
+    color: #e0ddd9ba;
+    background-color: #350c1c;
+    border-color: #80808022;
 }
 
-ul.invert a {
+ul.invert a{
     /* opacity: 0.86; */
     /* border: unset; */
     /* background: var(--fg) !important; */
     /* color: var(--bg) !important; */
     /* color: var(--bg) !important; */
     background: #350c1c; /*modcolor tags*/
-    color: #350c1c; /*modcolor tags*/
-
-
+    color: #e0ddd9ba; /*modcolor tags*/
+    background-color: #260312;
+    border-color: #80808022;
 }
 
-ul.invert a:visited {
-    /* color: var(--bg); */
+ul.invert a:hover {
+    color: #e0ddd9ba;
+    background-color: #350c1c;
+    border-color: #80808022;
+
 
 
 }

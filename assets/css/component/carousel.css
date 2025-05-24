@@ -210,6 +210,7 @@ ul.carousel__viewport > li > a > span::after {
     scrollbar-width: thin;
 }
 /* mod categories names */
+
 #list-categories a{
     color: #e0ddd9ba;
 }
@@ -235,7 +236,11 @@ ul.carousel__viewport > li > a > span::after {
     font-family: "Fraunces", serif;
     font-weight: 100;
     font-style: normal;
-    /* color: white; */
+}
+
+.carousel-viewport span, .section-title{
+    color: #f5f3ef;
+
 }
 
 /* .section-title li :hover { */
