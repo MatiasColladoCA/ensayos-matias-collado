@@ -118,7 +118,7 @@ position = "right"
     ## Site title
     title = "Example"
     ## Site description
-    description = "An ExampleSite built with Hugo and Hugo-Brewm theme"
+    description = "Página de investigación sobre los aspectos de la vida que a todos nos interesan."
     ## Copyright notice
     copyright = "Copyleft 2025 &copy; Author"
     ## Hide "powered by hugo" on colophon
