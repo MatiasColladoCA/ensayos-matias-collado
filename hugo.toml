@@ -237,6 +237,18 @@ position = "right"
             name = "Contacto"
             url = "/contact/"
             weight = 3          
+        [[menu.main]]
+            name = "Todo"
+            url = "/all/"
+            weight = 4          
+        [[menu.main]]
+            name = "Ensayos"
+            url = "/ensayos/"
+            weight = 5          
+        [[menu.main]]
+            name = "Reflexiones"
+            url = "/reflexiones/"
+            weight = 6          
 
 
 
