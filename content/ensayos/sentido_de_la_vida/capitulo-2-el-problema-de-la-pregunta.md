@@ -1,11 +1,11 @@
 +++
-title = 'Capitulo 2 El Problema De La Pregunta'
+title = 'Capitulo 2: El Problema De La Pregunta'
 date = 2025-05-23T22:57:42-03:00
-draft = true
+draft = false
 type = "ensayo"
 description = ""
 tags = []
-categories = []
+categories = ["Sentido de la vida"]
 author = "Matías Collado"
 +++
 

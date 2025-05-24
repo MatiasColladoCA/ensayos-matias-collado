@@ -1,7 +1,7 @@
 +++
-title = 'Capitulo 3 El Mundo Interior'
+title = 'Capitulo 3: El Mundo Interior'
 date = 2025-05-23T22:57:57-03:00
-draft = true
+draft = false
 type = "ensayo"
 description = ""
 tags = []

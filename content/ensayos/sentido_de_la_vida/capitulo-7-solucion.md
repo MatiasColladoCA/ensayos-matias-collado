@@ -1,7 +1,7 @@
 +++
-title = 'Capitulo 7 Solucion'
+title = 'Capitulo 7: Solucion'
 date = 2025-05-23T22:58:50-03:00
-draft = true
+draft = false
 type = "ensayo"
 description = ""
 tags = []
