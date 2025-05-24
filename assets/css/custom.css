@@ -57,7 +57,7 @@ body{
 
 /* mod para letras, h1, texto, etc */
 /* Si pongo 'a' se modifican los tags */
-h1, h2, h3, h4, h5, h6, strong,em{
+h1, h2, h3, h4, h5, h6, strong, em{
     font-family: "Fraunces", serif;
     font-weight: 300;
     font-style: normal;
@@ -92,91 +92,28 @@ em, text, p {
     color: #f5f3ef;
 }
 
-/* .fraunces {
-  font-family: "Fraunces", serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
-  font-variation-settings:
-    "SOFT" 0,
-    "WONK" 0;
-} */
-
-/* body {
-    font-family: "Fraunces", serif;
-    font-weight: 300;
-    font-style: normal;
-    font-optical-sizing: auto;
-    font-variation-settings: "SOFT" 0, "WONK" 0;
-} */
-
-
-/* Definir la fuente Fraunces */
-/* @font-face {
-    font-family: "Fraunces";
-    src: url("/fonts/Fraunces-Regular.woff2") format("woff2"),
-         url("/fonts/Fraunces-Regular.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
+/* mod bionread */
+#bionReadSwitch+label, #join-discussion, #saveButton, #share, a.cta {
+    background-color: #1E020E;
 }
 
-@font-face {
-    font-family: "Fraunces";
-    src: url("/fonts/Fraunces-Bold.woff2") format("woff2"),
-         url("/fonts/Fraunces-Bold.woff") format("woff");
+#bionReadButton span{
+    color: var(--ac-dark); /* yellow */
+}
+#bionReadButton strong{
+    color: #e0ddd9ba;
+    font-weight: 100;
+}
+#bionReadSwitch:hover+label span{
+    color: #1E020E;
     font-weight: bold;
-    font-style: normal;
 }
-
-@font-face {
-    font-family: "Fraunces";
-    src: url("/fonts/Fraunces-Light.woff2") format("woff2"),
-         url("/fonts/Fraunces-Light.woff") format("woff");
-    font-weight: light;
-    font-style: normal;
-} */
-
-/* Aplicar la fuente globalmente */
-
-
-/* #section-title{ */
-    /* font-family: "Fraunces", serif;
-    font-weight: 200;
-    font-style: normal;
-} */
-/* span {
-    font-family: "Fraunces", serif;
-    font-weight: normal;
-    font-style: normal;
-} */
-
-
-/* 
-:root {
-    /* default contrast - Royal Wine Theme */
-    /* --ac-light: #d83f54;       Rojo vino brillante */
-    /* --fg-light: #fe0000;      Negro profundo para texto sobre fondo claro */
-    /* --bg-light: #fff0f6;      Rosado suave como fondo claro */
-    /* --midtone: #9e2a4b;       Vino / bordeaux para separadores o bloques */
-    /* --fg-dark: #f5f3ef;       Blanco roto para texto principal */
-    /* --bg-dark: #2f0417;       Fondo negro profundo */
-    /* --ac-dark: #ffaa44;       Dorado o ámbar para destacados (realza el vino) */
-
-    /* less contrast - Royal Wine Theme */
-    /* --ac-light-less: var(--ac-light); */
-    /* --fg-light-less: #d60e9e;     Morado oscuro para textos en fondos claros bajos en contraste */
-    /* --bg-light-less: #f0e6eb;       Gris rosado claro */
-    /* --midtone-less: #b3597a; */
-    /* --fg-dark-less: #e0d6db;       Blanco grisáceo */
-    /* --bg-dark-less: #f400bf;       Vino oscuro */
-    /* --ac-dark-less: var(--ac-dark); */
-
-    /* more contrast - Royal Wine Theme */
-    /* --ac-light-more: var(--ac-light); */
-    /* --fg-light-more: #ff0000; */
-    /* --bg-light-more: #fff; */
-    /* --midtone-more: #9e2a4b; */
-    /* --fg-dark-more: #fff; */
-    /* --bg-dark-more: #ff0000; */
-    /* --ac-dark-more: var(--ac-dark); */
-/* } */
+#bionReadSwitch:hover+label{
+    font-weight: 300;
+    background-color: var(--ac-dark);
+    /* background-color: rgb(128, 43, 0); puta q lindo color */
+}
+#bionReadSwitch:checked+label span{
+    color: #1E020E;
+    font-weight: bold;
+}

@@ -301,3 +301,7 @@ force = true
 branch = "main"
 
 
+# [bionread]
+[bionread.params]
+## Enable bionread
+    enable = false
