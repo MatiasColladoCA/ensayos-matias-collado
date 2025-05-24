@@ -196,6 +196,7 @@ tbody tr:nth-child(2n) {
     font-weight: 700;
     font-variant: small-caps;
     font-style: normal;
+    
     /* font-variant-caps: all-small-caps; */
 }
 

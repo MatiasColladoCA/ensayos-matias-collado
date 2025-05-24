@@ -5,6 +5,9 @@ draft = false
 type = 'post'
 layout = 'single'
 author = 'Matías Collado'
+categories = ['']
+tags = ['presentacion']
+# cover = '/images/test.jpg'
 +++
 
 
