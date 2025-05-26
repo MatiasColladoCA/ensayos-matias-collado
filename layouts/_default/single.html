@@ -148,7 +148,20 @@
     {{ "<!-- [post] single.html -->" | safeHTML }}
     {{- /* display color palette for pages with code blocks */}}
     {{- with findRE `class="chroma"` .Content 1 -}}
-        <script>document.getElementById('setColorPalette').setAttribute('style', 'display:flex;');</script>
+        <script>
+            document.getElementById('setColorPalette').setAttribute('style', 'display:flex;');
+            // Espera a que el DOM esté listo
+            document.addEventListener("DOMContentLoaded", function () {
+                // Tu código aquí (ver paso 2)
+            });
+
+            
+        </script>
+        <!-- jQuery (requerido por mark.js) -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js "></script>
+
+        <!-- mark.js para resaltar texto -->
+        <script src="https://cdn.jsdelivr.net/npm/mark.js @8.11.1/dist/jquery.mark.min.js"></script>
     {{- end }}
     {{- /*
 
