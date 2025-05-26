@@ -1,6 +1,7 @@
 {{- define "head" }}
+    <script src="https://hypothes.is/embed.js" async></script>
     {{- /*
-
+    
         MathML render engine    */}}
     {{- if or .Params.Math site.Params.Math }}
         {{ partialCached "head/js/katex.html" . }}
@@ -162,6 +163,9 @@
 
         <!-- mark.js para resaltar texto -->
         <script src="https://cdn.jsdelivr.net/npm/mark.js @8.11.1/dist/jquery.mark.min.js"></script>
+
+        <script src="https://hypothes.is/embed.js" async></script>
+
     {{- end }}
     {{- /*
 
