@@ -11,7 +11,9 @@ tags = ['presentacion']
 +++
 
 
-Soy Matías Collado. Estudiante de software y, por vocación profunda, estudiante de todo lo que despierte mi curiosidad: ciencia, filosofía, psicología, historia, antropología, tecnología, arte, literatura, música y todo aquello que invite a comprender mejor el mundo y la mente humana. Tengo 25 años, y llevo adelante proyectos que no solo busquen el crecimiento personal, sino también —en la medida en que el tiempo y la fortuna me lo permitan— aportar positivamente a la humanidad.
+Soy Matías Collado. Estudiante de software y, por vocación profunda, estudiante de todo lo que despierte mi curiosidad: ciencia, filosofía, psicología, historia, antropología, tecnología, ar~te, literatura, música y todo aquello que invite a comprender mejor el mundo y la mente huma~na. Tengo 25 años, y llevo adelante proyectos que no solo busquen el crecimiento personal, sino también —en la medida en que el tiempo y la fortuna me lo permitan— aportar positivamente a la humanidad.
+
+Testeando corrección de mensaje
 
 El nombre de este blog, "Reflexiones", es, en sí mismo, una declaración de intenciones. Aquí comparto los pensamientos que he forjado a lo largo de años de ensayo y error, viviendo, preguntándome y aprendiendo. Concibo al conocimiento como el recurso más valioso que el ser humano puede cultivar. Se suele hablar del amor, la amistad, la felicidad, el dolor o la traición; pero pocos se detienen a observar sus pensamientos con paciencia, como quien espera a que el agua turbia se aclare para ver el fondo. La reflexión es el arte de ese detenimiento: de ella nacen los descubrimientos que transforman nuestras vidas.
 
