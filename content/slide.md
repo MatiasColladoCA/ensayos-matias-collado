@@ -11,7 +11,9 @@ params:
 ***Inicio***
 ====================
 
-Este espacio fue creado para expresar mis intereses y escribir libremente, como también para aprender de los argumentos presentados en cada artículo por distintos usuarios. Soy un fiel creyente en que no pueden existir dos argumentos que afirmen lo opuesto en el mismo sentido y al mismo tiempo. Mientras exista un argumento mas próximo a la realidad que otro, los artículos se irán perfeccionando por medio de la colaboración y la argumentación. Sé libre de explorar, comentar y debatir sobre los diversos temas de interés. Cada texto está pensado no solo para ser leído, sino también para ser analizado y comentado por la comunidad sin importar el grado de conocimiento que poseas. Ya sea que estés buscando aprender algo nuevo, compartir tus reflexiones o participar en discusiones profundas, este es un lugar para interactuar con el contenido y con otros lectores.
+Este espacio fue creado para expresar mis intereses y escribir libremente, como también para aprender de los argumentos presentados en cada artículo por distintos usuarios. Gracias al ayudo de las IAs, no solo se vió facilitada la creación de este sitio, sino que también cumple un rol importante corrigiendo, ampliando y ordenando ideas, sugiriendo cambios, mejorando argumentos, optimizando y potenciando el proceso creativo.
+
+Soy un fiel creyente en que no pueden existir dos argumentos que afirmen lo opuesto en el mismo sentido y al mismo tiempo. Mientras exista un argumento mas próximo a la realidad que otro, los artículos se irán perfeccionando por medio de la colaboración y la argumentación. Sé libre de explorar, comentar y debatir sobre los diversos temas de interés. Cada texto está pensado no solo para ser leído, sino también para ser analizado y comentado por la comunidad sin importar el grado de conocimiento que poseas. Ya sea que estés buscando aprender algo nuevo, compartir tus reflexiones o participar en discusiones profundas, este es un lugar para interactuar con el contenido y con otros lectores.
 
 *"Nadie es tan ignorante como para no tener nada que enseñar, ni tan sabio como para no tener nada que aprender."*
 
