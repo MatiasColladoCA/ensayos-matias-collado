@@ -1,6 +1,7 @@
 ---
 type: 'slide'
 title: 'Pin'
+draft: true
 params:
     headless: true
     target: 'https://github.com/foxihd/hugo-brewm'

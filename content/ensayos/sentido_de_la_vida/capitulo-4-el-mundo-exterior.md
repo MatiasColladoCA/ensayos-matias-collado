@@ -5,7 +5,8 @@ draft = false
 type = "ensayo"
 description = ""
 tags = []
-categories = []
+categories = ["Sentido de la vida"]
 author = "Matías Collado"
+weight = 4
 +++
 

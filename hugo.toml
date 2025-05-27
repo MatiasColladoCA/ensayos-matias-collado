@@ -233,10 +233,10 @@ position = "right"
             name = "Acerca de"
             url = "/about/"
             weight = 2
-        # [[menu.main]]
-        #     name = "Contacto"
-        #     url = "/contact/"
-        #     weight = 3          
+        [[menu.main]]
+            name = "Changelog"
+            url = "/changelog/"
+            weight = 3          
         # [[menu.main]]
         #     name = "Todo"
         #     url = "/all/"
