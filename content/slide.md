@@ -11,7 +11,7 @@ params:
 #### ***¿Qué es esta página?***
 
 
-Este espacio fue creado para expresar mis intereses y escribir libremente, como también para aprender de los argumentos presentados en cada artículo por distintos usuarios. Gracias al ayudo de las IAs, no solo se vió facilitada la creación de este sitio, sino que también cumple un rol importante corrigiendo, ampliando y ordenando ideas, sugiriendo cambios, mejorando argumentos, optimizando y potenciando el proceso creativo.
+Este espacio fue creado para expresar mis intereses y escribir libremente, como también para aprender de los argumentos presentados en cada artículo por distintos usuarios. Gracias a la ayuda de las IAs, no solo se vió facilitada la creación de este sitio, sino que también cumple un rol importante corrigiendo, ampliando y ordenando ideas, sugiriendo cambios, mejorando argumentos, optimizando y potenciando el proceso creativo.
 
 Soy un fiel creyente en que no pueden existir dos argumentos que afirmen lo opuesto en el mismo sentido y al mismo tiempo. Mientras exista un argumento mas próximo a la realidad que otro, los artículos se irán perfeccionando por medio de la colaboración y la argumentación. Sé libre de explorar, comentar y debatir sobre los diversos temas de interés. Cada texto está pensado no solo para ser leído, sino también para ser analizado y comentado por la comunidad sin importar el grado de conocimiento que poseas. Ya sea que estés buscando aprender algo nuevo, compartir tus reflexiones o participar en discusiones profundas, este es un lugar para interactuar con el contenido y con otros lectores.
 
@@ -26,7 +26,7 @@ Soy un fiel creyente en que no pueden existir dos argumentos que afirmen lo opue
 
 Allí podes iniciar sesión o crear un usuario en [Hypothes.is](https://web.hypothes.is/), una herramienta digital segura de anotación colaborativa que permite a los usuarios resaltar y comentar textos directamente sobre páginas web o archivos PDF, funcionando como una capa social sobre Internet. Fue diseñada con fines educativos, de investigación y de discusión pública del conocimiento.
 
-El paso final para pertenecer a la comunidad de la página, es que, una vez que hayas iniciado sesión, en el panel derecho, arriba de todo, cambies al grupo "Discusiones", permitiendote ver todos los resaltados, comentarios y debates llevados a cabo por los distintos lectores:
+El paso final para pertenecer a la comunidad de la página, es que, una vez que hayas iniciado sesión, en el panel derecho, en su parte superior, seleccionar el grupo "Discusiones" (una opción nueva por estar en la página), permitiendote ver todos los resaltados, comentarios y debates llevados a cabo por los distintos lectores:
 
 ![change-group](/images/change-group.png)
 
