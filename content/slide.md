@@ -8,8 +8,8 @@ params:
     target: 'https://github.com/foxihd/hugo-brewm'
 ---
 
-***Inicio***
-====================
+#### ***¿Qué es esta página?***
+
 
 Este espacio fue creado para expresar mis intereses y escribir libremente, como también para aprender de los argumentos presentados en cada artículo por distintos usuarios. Gracias al ayudo de las IAs, no solo se vió facilitada la creación de este sitio, sino que también cumple un rol importante corrigiendo, ampliando y ordenando ideas, sugiriendo cambios, mejorando argumentos, optimizando y potenciando el proceso creativo.
 
@@ -20,9 +20,15 @@ Soy un fiel creyente en que no pueden existir dos argumentos que afirmen lo opue
 #### ¿Qué se puede hacer?
 **Leer artículos cuidadosamente redactados sobre temas seleccionados.** Cada artículo contiene tags y categorías. Dentro de las categorías te encontrarás varios artículos a veces en orden y otros no. El orden de los artículos permite construir sobre los fundamentos, ideas mas complejas o superficiales (cercanas a nuestro dia a dia).
 
-**Seleccionar fragmentos de texto para resaltarlos y dejar comentarios directamente sobre el contenido.** Cuando entras a un artículo, a la derecha tenes una pestaña, un ojo y una página. Cuando despliegues este menú lateral se te pedirá iniciar sesión o crearte un usuario en [Hypothes.is](https://web.hypothes.is/), una herramienta digital segura de anotación colaborativa que permite a los usuarios resaltar y comentar textos directamente sobre páginas web o archivos PDF, funcionando como una capa social sobre Internet. Fue diseñada con fines educativos, de investigación y de discusión pública del conocimiento.
+**Seleccionar fragmentos de texto para resaltarlos y dejar comentarios directamente sobre el contenido.** Para aprovechar las funcionalidades que permiten comentarios, resaltados e interacciones con la comunidad, podes ingresar a la pestaña superior derecha:
 
 ![panel-lateral](/images/panel-lateral.png)
+
+Allí podes iniciar sesión o crear un usuario en [Hypothes.is](https://web.hypothes.is/), una herramienta digital segura de anotación colaborativa que permite a los usuarios resaltar y comentar textos directamente sobre páginas web o archivos PDF, funcionando como una capa social sobre Internet. Fue diseñada con fines educativos, de investigación y de discusión pública del conocimiento.
+
+El paso final para pertenecer a la comunidad de la página, es que, una vez que hayas iniciado sesión, en el panel derecho, arriba de todo, cambies al grupo "Discusiones", permitiendote ver todos los resaltados, comentarios y debates llevados a cabo por los distintos lectores:
+
+![change-group](/images/change-group.png)
 
 *Ejemplo de como se ve el panel lateral derecho*
 
