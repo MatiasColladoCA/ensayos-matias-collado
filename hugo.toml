@@ -116,7 +116,7 @@ position = "right"
 
 [params]
     ## Site title
-    title = "Example"
+    title = "Ensayos - Matías Collado"
     ## Site description
     description = "Página de investigación sobre los aspectos de la vida que a todos nos interesan."
     ## Copyright notice
@@ -131,7 +131,7 @@ position = "right"
     ## Author information
     [params.author]
         ## site author's name
-        name = 'Author Name'
+        name = 'Matías Collado'
         ## Author's email (will be used for RSS feed)
         email = 'email@example.com'
         ## Co-authors information (optional)
@@ -217,9 +217,9 @@ position = "right"
     ## Search configuration
     [params.search]
         ## Enable search functionality, please index your site first
-        enable = false
+        enable = true
         ## Use pagefind search when javascript enabled, currently only 'pagefind' is supported, further options to be determined
-        pagefind = true
+        pagefind = false
         ## fallback searchbox when javascript disabled, currently the options limited to 'mojeek', otherwise duckduckgo will be used
         # fallback = 'mojeek'
 
