@@ -1,5 +1,16 @@
 {{- define "head" }}
-    <script async src="https://hypothes.is/embed.js " data-hypothesis-group="11YxADd2"></script>
+<!--     <script async src="https://hypothes.is/embed.js " data-hypothesis-group="11YxADd2"></script> -->
+    <script>
+        window.hypothesisConfig = function () {
+            return {
+                showHighlights: true,
+                // Opcional: forzar tu grupo por defecto (aunque se verá junto al público si está logueado)
+                group: '11YxADd2'
+            };
+        };
+    </script>
+    
+    <script async src="https://hypothes.is/embed.js"></script>
     {{- /*
     
         MathML render engine    */}}
