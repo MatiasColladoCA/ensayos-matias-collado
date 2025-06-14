@@ -117,3 +117,13 @@ em, text, p {
     color: #1E020E;
     font-weight: bold;
 }
+
+.hypothesis-prompt {
+  background-color: #2d0312; /* Fondo oscuro vino */
+  border-left: 4px solid #d83f54;
+  padding: 1rem;
+  margin: 2rem auto;
+  max-width: var(--canonic);
+  font-style: italic;
+  color: #f5f3ef;
+}

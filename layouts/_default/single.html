@@ -5,12 +5,25 @@
             return {
                 showHighlights: false,
                 // Opcional: forzar tu grupo por defecto (aunque se verá junto al público si está logueado)
-                group: '11YxADd2'
+                group: 'zLgy9ZxN'
+                // group: '11YxADd2'
             };
         };
     </script>
-    
-    <script async src="https://hypothes.is/embed.js"></script>
+    <script>
+    window.hypothesisConfig = function () {
+      return {
+        // Configuración general
+        showHighlights: false,
+        // Grupo específico donde se deben mostrar las anotaciones
+        group: "zLgy9ZxN"
+      };
+    };
+  </script>
+
+  <!-- Carga de Hypothesis -->
+  <script async src="https://hypothes.is/embed.js"></script> 
+    <!-- <script async src="https://hypothes.is/embed.js" data-hypothesis-group="zLgy9ZxN"></script> -->
     {{- /*
     
         MathML render engine    */}}
@@ -116,6 +129,13 @@
                 {{ .Content }}
             {{- end }}
         </section>
+        <div class="hypothesis-prompt">
+            <p>
+                Podes ver y participar de la discusión creandote una cuenta en 
+                <a href="https://web.hypothes.is/"  target="_blank" rel="noopener">Hypothesis</a> 
+                y uniéndote al grupo.
+            </p>
+        </div>
         {{- if $isPost }}
             <footer>
                 {{ partial "post/tagged.html" . }}
@@ -175,7 +195,7 @@
         <!-- mark.js para resaltar texto -->
         <script src="https://cdn.jsdelivr.net/npm/mark.js @8.11.1/dist/jquery.mark.min.js"></script>
 
-        <script src="https://hypothes.is/embed.js" async></script>
+        <!-- <script src="https://hypothes.is/embed.js" async></script> -->
 
     {{- end }}
     {{- /*
