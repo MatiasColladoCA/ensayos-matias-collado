@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Post on Ensayos - Matías Collado</title><link>https://matiascolladoca.github.io/ensayos-matias-collado/post/</link><description>Recent Posts in Post on Ensayos - Matías Collado</description><generator>Hugo 0.147.6</generator><language>es-AR</language><managingEditor>Matías Collado</managingEditor><webMaster>Matías Collado</webMaster><lastBuildDate>Thu, 29 May 2025 00:39:45 +0000</lastBuildDate><atom:link href="https://matiascolladoca.github.io/ensayos-matias-collado/post/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Post on Ensayos - Matías Collado</title><link>https://matiascolladoca.github.io/ensayos-matias-collado/post/</link><description>Recent Posts in Post on Ensayos - Matías Collado</description><generator>Hugo 0.147.8</generator><language>es-AR</language><managingEditor>Matías Collado</managingEditor><webMaster>Matías Collado</webMaster><lastBuildDate>Sat, 14 Jun 2025 01:16:20 +0000</lastBuildDate><atom:link href="https://matiascolladoca.github.io/ensayos-matias-collado/post/index.xml" rel="self" type="application/rss+xml"/><item><title>CHANGED Authoring Cover Images and Audio Articles</title><link>https://matiascolladoca.github.io/ensayos-matias-collado/post/changed-authoring-cover-images-and-audio-article/</link><pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate><author>Matías Collado</author><guid>https://matiascolladoca.github.io/ensayos-matias-collado/post/changed-authoring-cover-images-and-audio-article/</guid><description>&lt;p>This section demonstrates a list view layout.
+The post listing style can be modified by adjusting the sitemap changeFreq parameter to values like &amp;ldquo;always&amp;rdquo;, &amp;ldquo;hourly&amp;rdquo;, &amp;ldquo;daily&amp;rdquo;, or &amp;ldquo;weekly&amp;rdquo;.
+This section has been set up with the following configuration:&lt;/p>
+&lt;pre>&lt;code>---
+title: &amp;quot;Post&amp;quot;
+translationKey: post
+sitemap:
+ changeFreq: &amp;quot;always&amp;quot;
+---
+&lt;/code>&lt;/pre></description><enclosure url="/test.jpeg" length="0" type="image/jpeg"/></item><item><title>Configure Main Footer</title><link>https://matiascolladoca.github.io/ensayos-matias-collado/post/configure-main-footer/</link><pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate><author>Matías Collado</author><guid>https://matiascolladoca.github.io/ensayos-matias-collado/post/configure-main-footer/</guid><description>&lt;p>This section demonstrates a list view layout.
+The post listing style can be modified by adjusting the sitemap changeFreq parameter to values like &amp;ldquo;always&amp;rdquo;, &amp;ldquo;hourly&amp;rdquo;, &amp;ldquo;daily&amp;rdquo;, or &amp;ldquo;weekly&amp;rdquo;.
+This section has been set up with the following configuration:&lt;/p>
+&lt;pre>&lt;code>---
+title: &amp;quot;Post&amp;quot;
+translationKey: post
+sitemap:
+ changeFreq: &amp;quot;always&amp;quot;
+---
+&lt;/code>&lt;/pre></description></item></channel></rss>
