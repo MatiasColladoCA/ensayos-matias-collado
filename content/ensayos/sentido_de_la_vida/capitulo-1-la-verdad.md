@@ -177,4 +177,8 @@ Spinoza, B. (1677). _Ética_ . Editorial Tecnos.
 
 
 
-> Se libre de hacer tu aporte a la comunidad de la siguiente manera: si tienes una idea, un concepto o un texto que sugerir, simplemente hacelo con Hypothesis, en el menú de la derecha, iniciando sesión te aparecerá el grupo "Discusiones"
+
+
+
+
+*Se libre de hacer tu aporte a la comunidad de la siguiente manera: si tenes una agradecimiento, crítica, idea, concepto o texto que sugerir, lo podes lograr con Hypothesis, en la pequeña pestaña que sobresale arriba a la derecha. No uses el grupo public, iniciando sesión te aparecerá el grupo "Discusiones". Seleccioná el texto que deseas comentar y enviá tu aporte para que todos podamos verlo.*
