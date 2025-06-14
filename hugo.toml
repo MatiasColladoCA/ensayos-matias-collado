@@ -116,7 +116,7 @@ position = "right"
 
 [params]
     ## Site title
-    title = "Example"
+    title = "Ensayos - Matías Collado"
     ## Site description
     description = "Página de investigación sobre los aspectos de la vida que a todos nos interesan."
     ## Copyright notice
@@ -131,7 +131,7 @@ position = "right"
     ## Author information
     [params.author]
         ## site author's name
-        name = 'Author Name'
+        name = 'Matías Collado'
         ## Author's email (will be used for RSS feed)
         email = 'email@example.com'
         ## Co-authors information (optional)
@@ -153,25 +153,25 @@ position = "right"
         ## Fediverse username
         # username = 'username'
 
-    ## Giscus integration settings
-    [params.giscus]
-        repo = "MatiasColladoCA/ensayos-matias-collado"
-        repoID = "R_kgDOOt7NBw"
-        category = "Comments"
-        categoryID = "DIC_kwDOOt7NB84Cqa2I"
+    # ## Giscus integration settings
     # [params.giscus]
-        # repo = "matiascolladoca/ensayos-matias-collado"
-        # repo_id = "R_kgDOOt7NBw"
-        # category = "Comments"
-        # category_id = "DIC_kwDOOt7NB84Cqa2I"
-        mapping = "pathname"
-        strict = false
-        reactions_enabled = true
-        emit_metadata = true
-        input_position = "top"
-        theme = "dark"
-        lang = "es"
-        loading = "lazy"
+    #     repo = "MatiasColladoCA/ensayos-matias-collado"
+    #     repoID = "R_kgDOOt7NBw"
+    #     category = "Comments"
+    #     categoryID = "DIC_kwDOOt7NB84Cqa2I"
+    # # [params.giscus]
+    #     # repo = "matiascolladoca/ensayos-matias-collado"
+    #     # repo_id = "R_kgDOOt7NBw"
+    #     # category = "Comments"
+    #     # category_id = "DIC_kwDOOt7NB84Cqa2I"
+    #     mapping = "pathname"
+    #     strict = false
+    #     reactions_enabled = true
+    #     emit_metadata = true
+    #     input_position = "top"
+    #     theme = "dark"
+    #     lang = "es"
+    #     loading = "lazy"
 
 
     ## Logo configuration
@@ -219,7 +219,7 @@ position = "right"
         ## Enable search functionality, please index your site first
         enable = true
         ## Use pagefind search when javascript enabled, currently only 'pagefind' is supported, further options to be determined
-        pagefind = true
+        pagefind = false
         ## fallback searchbox when javascript disabled, currently the options limited to 'mojeek', otherwise duckduckgo will be used
         # fallback = 'mojeek'
 
