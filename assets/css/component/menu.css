@@ -54,7 +54,7 @@ body > header > nav {
 
 #main-menu a, ul {
     font-family: 'Fraunces', serif; /* Cambia esto por la fuente que quieras */
-    font-size: 16px; /* Opcional */
+    font-size: 16.96px; /* Opcional */
     font-weight: 100;
     font-style: normal;
 }

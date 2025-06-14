@@ -174,3 +174,7 @@ Sartre, J.-P. (1946). _El existencialismo es un humanismo_ . Editorial Anagrama.
 Sócrates. (399 a.C.). _Apología_ . En Platón, _Diálogos_ (Vol. 1). Editorial Gredos.
 
 Spinoza, B. (1677). _Ética_ . Editorial Tecnos.
+
+
+
+> Se libre de hacer tu aporte a la comunidad de la siguiente manera: si tienes una idea, un concepto o un texto que sugerir, simplemente hacelo con Hypothesis, en el menú de la derecha, iniciando sesión te aparecerá el grupo "Discusiones"
