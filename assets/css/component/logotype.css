@@ -81,7 +81,7 @@
     display: inline-block;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
 
     #logomark--dark {
         display: none;

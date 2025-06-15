@@ -13,6 +13,14 @@
     </div>
 <div>
 */
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #0b0c0e;
+    color: #f5f3ef;
+  }
+}
+
 .hero {
     display: flex;
     position: relative;

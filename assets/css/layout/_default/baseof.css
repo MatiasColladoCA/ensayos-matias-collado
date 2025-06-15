@@ -267,7 +267,7 @@ hr {
 
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
 
     body {
         --bg: var(--bg-light);
