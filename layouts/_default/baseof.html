@@ -5,6 +5,7 @@
 <head>
     {{ partial "head.html" . }}
     {{ block "head" . }}{{ end }}
+    {{ partial "google-analytics.html" . }}
 </head>
 {{- if not (or .Params.headless .Params.target .Params.alias) }}
 <body {{ with .Params.Type }} id="{{ . }}" {{ end -}}>
@@ -25,7 +26,6 @@
     {{ block "post" . }}{{ end }}
     {{ "<!-- [background] baseof.html -->" | safeHTML }}
     {{ partialCached "background.html" . }}
-    {{ partial "goatcounter.html" . }}
 </body>
 {{- end }}
 </html>
