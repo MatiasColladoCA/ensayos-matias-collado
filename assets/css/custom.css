@@ -57,7 +57,7 @@ body{
 
 /* mod para letras, h1, texto, etc */
 /* Si pongo 'a' se modifican los tags */
-h1, h2, h3, h4, h5, h6, strong, em{
+h1, h2, h3, h4, h5, h6, strong{
     font-family: "Fraunces", serif;
     font-weight: 300;
     font-style: normal;
