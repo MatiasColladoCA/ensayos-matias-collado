@@ -16,7 +16,7 @@ Un espacio para compartir mis ideas y alcanzar un espacio colaborativo.
 
 Podes leer y comentar lo que te comparto para que juntos alcancemos mejores ideas. En [Ensayos](https://matiascolladoca.github.io/ensayos-matias-collado/ensayos/) estarán las investigaciones mas complejas. En [Categorías](https://matiascolladoca.github.io/ensayos-matias-collado/categories/) podrás encontrar agrupadas las investigaciones por temática. En [Otras ideas](https://matiascolladoca.github.io/ensayos-matias-collado/ensayos/) habrán guías, reflexiones sueltas, comentarios y opiniones sobre temas relevantes.
 
-Por último, para conocerme mas y ponerte en contacto mas directo conmigo, podes visitar (Acerca de mí)[https://matiascolladoca.github.io/ensayos-matias-collado/about/].
+Por último, para conocerme mas y ponerte en contacto mas directo conmigo, podes visitar [Acerca de mí](https://matiascolladoca.github.io/ensayos-matias-collado/about/).
 
 **Resaltar y comentar fragmentos del artículo para aportar tus ideas.** Esto se logra gracias a la integración de [Hypothes.is](https://web.hypothes.is/), con un menú desplegable a través de la pestaña en la parte superior derecha:
 
