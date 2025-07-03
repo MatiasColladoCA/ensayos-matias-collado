@@ -2,12 +2,13 @@
 title = 'Introducción - El sentido de la vida'
 date = 2025-05-23T22:02:19-03:00
 draft = false
-type = "ensayo"
-description = ""
+type = "post"
+description = "El sentido de la vida es un tema que aborda diversas cuestiones de sumo interés. En esta publicación se presentan los temas a abordar en el ensayo completo."
 tags = []
 categories = ["Sentido de la vida"]
 author = "Matías Collado"
-weight = 0
+weight = 1
+coffee = 10
 +++
 
 

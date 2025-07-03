@@ -4,7 +4,7 @@ title: "Configure Main Footer"
 description: "How to configure the main footer in Hugo Brewm theme"
 date: 2025-01-26
 type: post
-draft: false
+draft: true
 translationKey: mainfooter
 coffee: 1
 tags: ['configuration', 'footer']

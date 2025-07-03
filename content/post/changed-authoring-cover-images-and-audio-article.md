@@ -2,7 +2,7 @@
 title: "CHANGED Authoring Cover Images and Audio Articles"
 date: 2025-02-22
 description: "A guide on adding cover images and audio articles"
-draft: false
+draft: true
 author: "Author Name"
 type: "post"
 tags: ["authoring", "content", "media", "audio", "cover", "images", "alt"]

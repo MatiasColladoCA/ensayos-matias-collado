@@ -11,7 +11,7 @@ params:
 #### ***¿Qué es esta página?***
 
 
-Este espacio fue creado para expresar mis intereses y escribir libremente, como también para aprender de la colaboración de cada lector sin importar cuanto sabe o de qué sabe. Además, gracias a la ayuda de la IA, no solo se vió facilitada la creación de este sitio, sino que también cumple un rol importante corrigiendo, ampliando y ordenando ideas, sugiriendo cambios, mejorando argumentos, optimizando y potenciando el proceso creativo.
+Este espacio fue creado para expresar mis intereses y escribir libremente, como también para aprender de la colaboración de cada lector sin importar cuanto sabe o de qué. Además, gracias a la ayuda de la IA, no solo la creación de este sitio es fue más fácil, sino que también cumple activamente un rol importante para la corrección, ampliación, orden, debates, descubrimiento, sugerencias y mejoras. Optimiza y potencia el proceso creativo.
 
 La filosofía de esta página se basa en una ferrea convicción en que no pueden existir dos argumentos verdaderos que afirmen lo opuesto en el mismo sentido y al mismo tiempo. O uno es falso o, en el peor de los casos, ambos. Mientras exista un argumento mas próximo a la realidad que otro, los artículos se irán perfeccionando por medio de la colaboración y la argumentación.
 

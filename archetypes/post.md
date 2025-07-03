@@ -2,7 +2,7 @@
 title = '{{ replace .File.ContentBaseName "-" " " | title }}'
 date = {{ .Date }}
 draft = true
-type = "ensayo"
+type = "post"
 description = ""
 tags = []
 categories = []
