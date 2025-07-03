@@ -55,6 +55,8 @@ body{
     
 }
 
+
+
 /* mod para letras, h1, texto, etc */
 /* Si pongo 'a' se modifican los tags */
 h1, h2, h3, h4, h5, h6, strong{
@@ -126,4 +128,22 @@ em, text, p {
   max-width: var(--canonic);
   font-style: italic;
   color: #f5f3ef;
+}
+
+
+
+
+/* mod espacio entre parrafos */
+#main-article section>p {
+    margin-top: 2.5rem
+}
+
+.hero__content p{
+    margin-top: 2.5rem
+    
+}
+
+.carousel__viewport__slide__cover + .carousel__viewport__slide__content p{
+    margin-top: 2.5rem
+
 }

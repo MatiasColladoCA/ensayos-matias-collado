@@ -10,21 +10,19 @@ params:
 
 #### ***¿Qué es esta página?***
 
-
-Este espacio fue creado para expresar mis intereses y escribir libremente, como también para aprender de la colaboración de cada lector sin importar cuanto sabe o de qué. Además, gracias a la ayuda de la IA, no solo la creación de este sitio es fue más fácil, sino que también cumple activamente un rol importante para la corrección, ampliación, orden, debates, descubrimiento, sugerencias y mejoras. Optimiza y potencia el proceso creativo.
-
-La filosofía de esta página se basa en una ferrea convicción en que no pueden existir dos argumentos verdaderos que afirmen lo opuesto en el mismo sentido y al mismo tiempo. O uno es falso o, en el peor de los casos, ambos. Mientras exista un argumento mas próximo a la realidad que otro, los artículos se irán perfeccionando por medio de la colaboración y la argumentación.
-
-*"Nadie es tan ignorante como para no tener nada que enseñar, ni tan sabio como para no tener nada que aprender."*
+Un espacio para compartir mis ideas y alcanzar un espacio colaborativo.
 
 #### ¿Qué se puede hacer?
-**Leer artículos que nacen de la necesidad de comprender.** Cada artículo contiene tags y categorías. Dentro de las categorías te encontrarás varios artículos a veces en orden y otros no. Los ordenados pertenecen a un tópico abordado sistemáticamente.
+
+Podes leer y comentar lo que te comparto para que juntos alcancemos mejores ideas. En [Ensayos](https://matiascolladoca.github.io/ensayos-matias-collado/ensayos/) estarán las investigaciones mas complejas. En [Categorías](https://matiascolladoca.github.io/ensayos-matias-collado/categories/) podrás encontrar agrupadas las investigaciones por temática. En [Otras ideas](https://matiascolladoca.github.io/ensayos-matias-collado/ensayos/) habrán guías, reflexiones sueltas, comentarios y opiniones sobre temas relevantes.
+
+Por último, para conocerme mas y ponerte en contacto mas directo conmigo, podes visitar (Acerca de mí)[https://matiascolladoca.github.io/ensayos-matias-collado/about/].
 
 **Resaltar y comentar fragmentos del artículo para aportar tus ideas.** Esto se logra gracias a la integración de [Hypothes.is](https://web.hypothes.is/), con un menú desplegable a través de la pestaña en la parte superior derecha:
 
 ![panel-lateral](/images/panel-lateral.png)
 
-Allí podes iniciar sesión o crear un usuario rapidamente, sin costo ni peligro. Se trata de una herramienta digital segura de anotación colaborativa que permite a los usuarios resaltar y comentar textos directamente sobre páginas web o archivos PDF, funcionando como una capa social sobre Internet. Fue diseñada con fines educativos, de investigación y de discusión pública del conocimiento.
+Allí podes iniciar sesión o crear un usuario rapidamente, sin costo ni riesgos. Se trata de una herramienta digital segura de anotación colaborativa que permite a los usuarios resaltar y comentar textos directamente sobre páginas web o archivos PDF, funcionando como una capa social sobre Internet. Fue diseñada con fines educativos, de investigación y de discusión pública del conocimiento.
 
 El paso final para pertenecer a la comunidad de la página es que, una vez que hayas iniciado sesión, en el panel derecho, en su parte superior seleccionar el grupo "Discusiones" (grupo propio de la página), permitiendote ver todos los resaltados, comentarios y debates llevados a cabo por los distintos lectores:
 

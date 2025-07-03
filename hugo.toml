@@ -245,10 +245,10 @@ position = "right"
             name = "Ensayos"
             url = "/ensayos/"
             weight = 5          
-        # [[menu.main]]
-        #     name = "Reflexiones"
-        #     url = "/reflexiones/"
-        #     weight = 6          
+        [[menu.main]]
+            name = "Otras Ideas"
+            url = "/otras-ideas/"
+            weight = 6          
 
 
 
