@@ -17,12 +17,15 @@
 }
 
 /* article frontmatter */
+/* mod header */
 
 #main-article > header {
     display: flex;
     flex-direction: column;
     margin:var(--vskip);
     gap: 1rem;
+    margin: 0.618pc auto;
+    width: 70%;
 }
 
 #has-stage {
@@ -160,9 +163,12 @@ header time {
 }
 
 #main-article audio,
-#main-article section > p {
-    margin: 0.618pc 0;
-    width: var(--golden-ratio);
+#main-article section > p, li, h1, h2, h3, h4, h5, h6 {
+    margin: 0.618pc auto;
+    width: 70%;
+
+    /* mod ancho de parrafos */
+    /* width: var(--golden-ratio); */
 }
 
 /* article mainmatter */
