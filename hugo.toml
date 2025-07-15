@@ -159,19 +159,19 @@ position = "right"
     #     repoID = "R_kgDOOt7NBw"
     #     category = "Comments"
     #     categoryID = "DIC_kwDOOt7NB84Cqa2I"
-    # # [params.giscus]
-    #     # repo = "matiascolladoca/ensayos-matias-collado"
-    #     # repo_id = "R_kgDOOt7NBw"
-    #     # category = "Comments"
-    #     # category_id = "DIC_kwDOOt7NB84Cqa2I"
-    #     mapping = "pathname"
-    #     strict = false
-    #     reactions_enabled = true
-    #     emit_metadata = true
-    #     input_position = "top"
-    #     theme = "dark"
-    #     lang = "es"
-    #     loading = "lazy"
+    [params.giscus]
+        repo = "matiascolladoca/ensayos-matias-collado"
+        repo_id = "R_kgDOOt7NBw"
+        category = "Comments"
+        category_id = "DIC_kwDOOt7NB84Cqa2I"
+        mapping = "pathname"
+        strict = false
+        reactions_enabled = true
+        emit_metadata = true
+        input_position = "top"
+        theme = "dark"
+        lang = "es"
+        loading = "lazy"
 
 
     ## Logo configuration
