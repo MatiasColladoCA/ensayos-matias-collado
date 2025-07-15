@@ -164,7 +164,7 @@ header time {
 
 #main-article audio,
 #main-article section > p, li, h1, h2, h3, h4, h5, h6 {
-    margin: 0.618pc auto;
+    margin: 0.618rem auto;
     width: 70%;
 
     /* mod ancho de parrafos */
