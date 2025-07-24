@@ -11,7 +11,17 @@ params:
 
 Some rights reserved.
 
-<br>
-<strong class="section-title">Impressum</strong>
 
-Lorem ipsum dolor sit amet.
+
+<strong class="section-title">REDES SOCIALES</strong>
+
+<a href="https://github.com/MatiasColladoCA" target="_blank" rel="noopener">
+  <i class="fab fa-github"></i> GitHub
+</a> |
+<a href="https://www.linkedin.com/in/matias-collado-972129242/" target="_blank" rel="noopener">
+  <i class="fab fa-linkedin"></i> LinkedIn
+</a> |
+<a href="https://www.instagram.com/matii_collado/" target="_blank" rel="noopener">
+  <i class="fab fa-instagram"></i> Instagram
+</a>
+

@@ -167,7 +167,7 @@ position = "right"
         mapping = "pathname"
         strict = false
         reactions_enabled = true
-        emit_metadata = true
+        emit_metadata = false
         input_position = "top"
         theme = "dark"
         lang = "es"
@@ -298,10 +298,11 @@ name = "github"
 url = "https://MatiasColladoCA.github.io"
 git = true
 force = true
-branch = "main"
+branch = "gh-page"
 
 
 # [bionread]
 [bionread.params]
 ## Enable bionread
     enable = false
+

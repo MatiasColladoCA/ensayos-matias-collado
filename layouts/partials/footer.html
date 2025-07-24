@@ -1,14 +1,15 @@
 {{ "<!-- footer.html -->" | safeHTML }}
 <footer id="body-footer" class="pagewidth" style="display: none;">
-    <div id="background-footer" class="background" role="presentation" aria-hidden="true">
+    <div id="background-footer" class="background hide" role="presentation" aria-hidden="true">
         <div class="grain" hidden></div>
     </div>
-    {{ partialCached "a11y/focusMode.html" . }}
+    <div id="focusMode"></div>
     {{ partialCached "a11y.html" . }}
-    {{ partialCached "a11y/bionread.html" . }}
+    <div id="useBionRead" class="sri"></div>
     {{ "<!-- [top] bypass block -->" | safeHTML }}
     <nav aria-label="{{ i18n "bypass" }}">
-        <a id="to-top" href="#top" title="{{ i18n "toTop" }}" accesskey="c" aria-keyshortcuts="c" aria-label="{{ i18n "toTop" }}">
+        <a id="to-top" class="srm" href="#top" title="{{ i18n "toTop" }}" accesskey="c" aria-keyshortcuts="c" aria-label="{{ i18n "toTop" }}">
+            <span class="t srt">{{ i18n "toTop" }}</span>
             <kbd class="key" aria-hidden="true">c</kbd>
         </a>
     </nav>
@@ -17,11 +18,13 @@
 {{- define "partials/main/footer.html" -}}
     {{ "<!-- main/footer.html -->" | safeHTML }}
     {{- $page := . }}
+    {{- $stat := site.Params.coffeeStat }}
+    {{- $menu := site.Menus.footer }}
     {{- $iterateEntry := where .Site.RegularPages "Type" "footer" }}
     {{ with $iterateEntry -}}
         <hr class="hide">
         <footer id="main-footer">
-            <div class="column column--multicols pagewidth" style="--multicols: 2">
+            <div class="{{ if or $stat $menu (index . 1) }}column column--multicols{{ end }} pagewidth" style="--multicols: 2">
                 {{- $counter := 1 }}
                 {{- with index . 0 -}}
                     <div id="main-footer-primary"
@@ -33,7 +36,7 @@
                         {{ .Content }}
                     </div>
                 {{- end }}
-                <div id="main-footer-secondary" class="column" style="--col: 15rem">
+                <div id="main-footer-secondary" {{ if or $stat (index . 2) }} class="column" style="--col: 15rem"{{ end }}>
                     {{- range after 1 . -}}
                         {{- $counter := add 1 $counter }}
                         <div
@@ -45,7 +48,7 @@
                             {{ .Content }}
                         </div>
                     {{- end }}
-                    {{- if site.Params.coffeeStat }}
+                    {{- if $stat }}
                         {{- $coffeeStat := partialCached "coffeeStat.html" . }}
                         {{- with $coffeeStat }}
                         <div id="coffee-counter">

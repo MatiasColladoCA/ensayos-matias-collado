@@ -2,7 +2,8 @@
 title = 'Capitulo 1: La Verdad'
 date = 2025-05-23T22:57:07-03:00
 draft = false
-type = "post"
+type = 'post'
+layout = 'single'
 description = ""
 tags = []
 categories = ["Sentido de la vida"]

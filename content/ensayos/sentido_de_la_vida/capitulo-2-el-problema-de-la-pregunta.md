@@ -4,6 +4,7 @@ date = 2025-05-23T22:57:42-03:00
 draft = false
 type = "post"
 description = ""
+layout = 'single'
 tags = []
 categories = ["Sentido de la vida"]
 author = "Matías Collado"
