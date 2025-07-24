@@ -11,3 +11,18 @@ theme = 'hugo-brewm'
 
 [params.Typeface]
     useGoogleFonts = true
+
+
+[params.giscus]
+    repo = "MatiasColladoCA/ensayos-matias-collado"
+    repo_id = "R_kgDOOt7NBw"
+    category = "Comments"
+    category_id = "DIC_kwDOOt7NB84CtXcD"
+    mapping = "pathname"
+    strict = false
+    reactions_enabled = true
+    emit_metadata = false
+    input_position = "bottom"
+    theme = "dark"
+    lang = "es"
+    loading = "lazy"
