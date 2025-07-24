@@ -24,8 +24,8 @@
     flex-direction: column;
     margin:var(--vskip);
     gap: 1rem;
-    margin: 0.618pc auto;
-    width: 70%;
+    margin: 0.618rem auto;
+    width: 80%;
 }
 
 #has-stage {
@@ -162,13 +162,44 @@ header time {
     border-radius: 2rem;
 }
 
-#main-article audio,
-#main-article section > p, li, h1, h2, h3, h4, h5, h6 {
-    margin: 0.618rem auto;
-    width: 70%;
+/* #main-article audio,
+#main-article section > p, h1, h2, h3, h4, h5, h6 {
+    margin: .618rem 1rem .618rem 1rem;
+    width: 80%;
+} */
 
-    /* mod ancho de parrafos */
-    /* width: var(--golden-ratio); */
+
+#main-article audio,
+#main-article section > p,
+#main-article section > li,
+#main-article section > h1,
+#main-article section > h2,
+#main-article section > h3,
+#main-article section > h4,
+#main-article section > h5,
+#main-article section > h6 {
+    margin: .618rem 1rem .618rem 1rem;
+    width: 100%; /* Valor por defecto para móviles */
+}
+
+/* Solo en pantallas grandes (computadoras) */
+@media (min-width: 768px) {
+    #main-article audio,
+    #main-article section > p,
+    #main-article section > li,
+    #main-article section > h1,
+    #main-article section > h2,
+    #main-article section > h3,
+    #main-article section > h4,
+    #main-article section > h5,
+    #main-article section > h6 {
+        margin: .618rem 1rem .618rem 1rem;
+        width: 80%;
+    }
+}
+
+#main-article section > li{
+    font-weight: 100;
 }
 
 /* article mainmatter */
@@ -410,3 +441,5 @@ header time {
     }
 
 }
+
+

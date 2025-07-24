@@ -67,11 +67,6 @@
     margin: 4pt 0;
     font: italic var(--Large) var(--rm), serif;
     line-height: 1.618;
-    /* font-family: "Fraunces", serif;
-    font-weight: 300;
-    font-style: normal;
-    font-optical-sizing: auto;
-    font-variation-settings: "SOFT" 0, "WONK" 0; */
 }
 
 .hero__content p {

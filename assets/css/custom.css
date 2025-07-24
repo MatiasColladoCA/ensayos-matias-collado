@@ -28,11 +28,10 @@
 }
 
 
-
 .fraunces-font {
   font-family: "Fraunces", serif;
   font-optical-sizing: auto;
-  font-weight: 300;
+  font-weight: 100;
   font-style: normal;
   font-variation-settings:
     "SOFT" 0,
@@ -67,9 +66,23 @@ h1, h2, h3, h4, h5, h6, strong{
     color: #f5f3ef;
 }
 
-em, text, p {
+@media (max-width: 767px) {
+    em, text, p {
     font-family: "Fraunces", serif;
     font-weight: 100;
+    display: block;
+    max-width: 100%;
+    padding: 0 1rem;
+    }   
+}
+
+@media (min-width: 768px) {
+    em, text, p {
+    font-family: "Fraunces", serif;
+    font-weight: 100;
+    display: block;
+    max-width: 80%;
+}
 }
 
 #underline{
