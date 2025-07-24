@@ -26,3 +26,8 @@ theme = 'hugo-brewm'
     theme = "dark"
     lang = "es"
     loading = "lazy"
+
+
+[bionread.params]
+## Enable bionread
+    enable = true

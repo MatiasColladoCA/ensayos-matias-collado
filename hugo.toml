@@ -304,5 +304,5 @@ branch = "gh-page"
 # [bionread]
 [bionread.params]
 ## Enable bionread
-    enable = false
+    enable = true
 
