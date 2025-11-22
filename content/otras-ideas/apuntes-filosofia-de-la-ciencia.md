@@ -718,6 +718,76 @@ La teoría de los paradigmas nos invita a repensar lo que entendemos por **progr
 
 Esta visión, aunque desafiante para algunos modelos tradicionales, nos acerca más a cómo realmente funciona la ciencia.
 
+# Clase recomendada por falta de la clase 9 parte 1
+
+### Apuntes corregidos y reconstruidos
+
+(En base al tipo de curso que dicta Hoyningen-Huene y a la filosofía de la ciencia contemporánea)
+
+
+## ¿Qué es la ciencia?
+
+La pregunta surge por un vacío conceptual: **la pérdida de confianza en la existencia de *el* método científico único**. Ese vacío consiste en no saber con claridad **qué hace específico al conocimiento científico** y **por qué sería superior a otros tipos de conocimiento**.
+
+Una respuesta clásica afirma que la ciencia es especial porque proviene del “método científico”, entendido como una empresa regida por reglas estrictas.
+El problema es que **los estudios históricos de la ciencia muestran que no existe tal conjunto fijo de reglas**. La práctica real es demasiado diversa y no se ajusta a un método único universal.
+
+Por lo tanto, reaparece la pregunta central:
+**¿En qué se diferencia el conocimiento científico de otras formas de conocimiento?**
+
+
+## Línea histórica (corregida)
+
+La disputa sobre qué distingue a la ciencia recorre múltiples enfoques:
+
+-400 ——— 1600 ——— 1700 ——— 1800 ——— 1900 ——— 2000
+*(hitos conceptuales: certeza, prueba deductiva, método científico, falsacionismo, y crítica contemporánea a estos modelos)*
+
+* **Certeza y prueba deductiva** (época clásica): se pensaba la ciencia como conocimiento demostrable con absoluta seguridad.
+* **Método científico** (Renacimiento–Ilustración): surge la idea de reglas estables de investigación empírica.
+* **Falsacionismo** (siglo XX): Popper propone que la ciencia avanza eliminando teorías falsas.
+* **Post-Popperianos** (Kuhn, Lakatos, Feyerabend, Hoyningen-Huene): muestran que ninguna de estas respuestas captura adecuadamente cómo funciona la ciencia realmente.
+
+
+## Caída de la certeza
+
+Gracias al **falibilismo** (fallibilism), sabemos que:
+
+* El conocimiento científico **no es absolutamente cierto**.
+* Siempre puede revisarse, corregirse o abandonar teorías.
+* La autoridad de la ciencia **no proviene de la certeza**, sino de otras propiedades estructurales de su práctica.
+
+
+## Por qué importa
+Somos culturalmente dependientes de la ciencia en niveles inmensos. Entender su funcionamiento es esencial porque:
+
+* La metodología científica influye en **política, educación, economía y debate público**.
+* Las distintas disciplinas no usan métodos idénticos y sus diferencias tienen consecuencias prácticas.
+
+
+## Amplitud disciplinaria
+En este curso, el término **ciencia** se entiende en su acepción más amplia:
+**Wissenschaft** (campo de investigación sistemática).
+
+Incluye no solo ciencias naturales, sino también:
+
+* ciencias sociales
+* historia
+* ingeniería
+* investigación formal
+* estudios empíricos de todo tipo
+
+No se busca descubrir “la esencia” de la ciencia ni fijar límites nítidos, porque la práctica científica real **no tiene fronteras rígidas**. Solo se intenta **definir operativamente qué es la ciencia**.
+
+
+## Respuesta corta (planteada por el curso)
+La respuesta será defendida y elaborada a lo largo de las clases:
+
+**El conocimiento científico se diferencia de otros tipos de conocimiento por su *grado de sistematicidad*.**
+Es decir, la ciencia no es única por reglas infalibles, por un método universal ni por certeza absoluta, sino por el **modo altamente sistemático** en que organiza teorías, datos, métodos, preguntas, explicaciones y prácticas.
+
+*(Esto remite directamente a la tesis central de Hoyningen-Huene: la ciencia es conocimiento más sistemático.)*
+
 
 # CLASE 9: Teoría de la sistematicidad
 
@@ -868,7 +938,6 @@ En la ciencia, las descripciones tienden a ser más sistemáticas que en el cono
 Las explicaciones en ciencias son sistemáticas y buscan responder por qué ocurren ciertos fenómenos. Las generalizaciones empíricas y las teorías unificadoras proporcionan explicaciones más profundas y sistemáticas. En ciencias sociales, las explicaciones suelen recurrir a intenciones y creencias de los individuos para entender sus acciones. Todos estos métodos hacen que las descripciones científicas sean más sistemáticas que las descripciones del conocimiento cotidiano. Mientras que en la vida diaria podemos conformarnos con descripciones vagas o imprecisas, la ciencia busca constantemente formas de hacer sus descripciones más precisas, organizadas y coherentes.
 
 
-## Parte 2
 **Problemas Metodológicos**
 La teoría es descriptiva y debe referirse a las ciencias reales existentes. Existen entre 250 y 500 disciplinas científicas, y miles de subdisciplinas. Es necesario justificar la teoría con ejemplos de diversas áreas científicas.
 
@@ -982,7 +1051,7 @@ Además de los puntos principales ya mencionados, puedo extraer algunas otras id
 
 
 
-# Resumen (Claude y ChatGPT)
+# Resumen (con IA)
 
 ## Inductivismo
 
@@ -1046,7 +1115,6 @@ En conclusión, aunque el deductivismo ofrece una descripción atractiva de cóm
 
 
 ## Teoría de los paradigmas
-
 **Importancia**: Introduce la idea de que la ciencia progresa a través de revoluciones paradigmáticas y no solo mediante acumulación gradual de conocimiento.
 **Limitaciones**: Puede subestimar la continuidad y la acumulación de conocimiento entre paradigmas.
 
@@ -1197,35 +1265,3 @@ Ver también:
 - **Descripción**: Estudia los aspectos sociales del conocimiento, como la transmisión del conocimiento y la estructura de las comunidades epistémicas.
 - **Importancia**: Subraya la importancia de los contextos sociales en la formación y validación del conocimiento.
 
-# Clases recomendada por falta de la clase 9 parte 1
-
-## ¿Qué es la ciencia?
-
-Trata de rellenar el hueco generado por la perdida del método científico. Este hueco consiste en no saber que hace específico al conocimiento científico? qué lo hace mejor?
-
-Lo que hace especial este tipo de conocimiento es que proviene del método científico que es una empresa con reglas específicas.
-	Los estudios históricos demuestran que no se pueden identificar estas supuestas reglas en la práctica científica.
-	Entonces, ¿Cuál es la diferencia de este tipo de conocimiento y los demás?
-
-
-                                 falsacionismo_______________________________
-            método científico__________________________________________
-    certeza_________________________________________________
-     deductive proof_____
-
-    -400     //       1600         1700        1800         1900        2000
-
-
-Gracias al (fallibility) sabemos que el conocimiento científico no es absolutamente cierto (certain), que puede cambiar.
-
-Somos culturalmente dependiente sde la ciencia a niveles inimaginables por lo que debemos entender de qué dependemos. Las discusiones entre las distintas disciplinas y su uso de la metodología científica impacta en la política y la educación.
-
-Consideremos el concepto de ciencia como el de mayor amplitud disciplinaria (campo de investigación, field of research o Wissenschaft en alemán). Incluimos las ciencias sociales, ingenierias, historia, etc.
-
-En la busqueda de la respuesta a esta pregunta no estamos buscando (en esta clase) la esencia de la ciencia, sino sencillamente definir que es la ciencia. Tampoco buscamos limites definidos porque el objeto de estudio de la ciencia tampoco los tiene.
-
-### Respuesta corta
-Esta respuesta a nuestra pregunta es corta y será defendida y explicada:
-*El conocimiento científico difiere de otros tipos de conocimientos desde*
-....
-....
