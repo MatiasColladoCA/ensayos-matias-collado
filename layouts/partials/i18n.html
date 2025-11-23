@@ -1,8 +1,9 @@
 {{ "<!-- i18n.html -->" | safeHTML }}
-{{- $IsMultilingual := hugo.IsMultilingual }}
-{{- $minVersion     := index ( split hugo.Version "." ) 1 }}
-{{- if lt $minVersion 124 }}
-    {{- $IsMultilingual = site.IsMultiLingual }}
+{{- $IsMultilingual := false }}
+{{- with .Site.Languages }}
+    {{- if gt (len .) 1 }}
+        {{- $IsMultilingual = true }}
+    {{- end }}
 {{- end }}
 {{ $flagSrc := "https://raw.githubusercontent.com/lipis/flag-icons/c95b262e5ee2366cad4c5aecc4a5ad86220c9ab9/flags/4x3/" }}
 {{- if $IsMultilingual }}

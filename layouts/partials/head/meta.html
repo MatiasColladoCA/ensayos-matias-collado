@@ -1,5 +1,5 @@
 {{ "<!-- meta.html -->" | safeHTML -}}
-{{- $author := cond (and .IsPage .Params.author) .Params.author site.Params.Author.Name }}
+{{- $author := or .Params.author site.Params.Author.Name }}
 {{- $siteTitle := or site.Title site.Params.title | plainify }}
 {{- $permalink := .Permalink }}
 {{- $title := cond .IsHome $siteTitle (printf "%s | %s" .Title $siteTitle) | plainify  }}

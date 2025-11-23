@@ -18,9 +18,9 @@ Some rights reserved.
 <a href="https://github.com/MatiasColladoCA" target="_blank" rel="noopener">
   <i class="fab fa-github"></i> GitHub
 </a> |
-<a href="https://www.linkedin.com/in/matias-collado-972129242/" target="_blank" rel="noopener">
+<!-- <a href="https://www.linkedin.com/in/matias-collado-972129242/" target="_blank" rel="noopener">
   <i class="fab fa-linkedin"></i> LinkedIn
-</a> |
+</a> | -->
 <a href="https://www.instagram.com/matii_collado/" target="_blank" rel="noopener">
   <i class="fab fa-instagram"></i> Instagram
 </a>

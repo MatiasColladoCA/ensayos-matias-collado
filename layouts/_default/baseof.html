@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{{- $lang := or site.Language.LanguageCode site.Language.Lang }}
+{{- $lang := or .Site.Language.Lang "en" }}
 {{- $dir := or site.Language.LanguageDirection "ltr" }}
 <html lang="{{ $lang }}" dir="{{ $dir }}">
 <head>
@@ -20,7 +20,7 @@
         </div>
         {{ block "main" . }}{{ end }}
         {{ partialCached "main/footer.html" . }}
-        async src="//gc.zgo.at/count.js"></script>
+        <script async src="//gc.zgo.at/count.js"></script>
     </main>
     {{ partialCached "footer.html" . }}
 

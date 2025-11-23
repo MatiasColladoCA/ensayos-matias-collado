@@ -248,7 +248,11 @@ position = "right"
         [[menu.main]]
             name = "Otras Ideas"
             url = "/otras-ideas/"
-            weight = 6          
+            weight = 6   
+        [[menu.main]]
+            name = "Recursos"
+            url = "/recursos/"
+            weight = 7
 
 
 
