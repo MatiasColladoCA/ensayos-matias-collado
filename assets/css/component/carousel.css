@@ -68,6 +68,7 @@
 }
 
 
+/* mod tamaño de letras HUGO RELEASE NEWS */
 .carousel__viewport nav a {
     display: flex;
     z-index: 2;
@@ -75,7 +76,7 @@
     
 }
 
-/* mod slide introduccion */
+/* mod text ¿Qué es esta página? slide introduccion */
 .carousel__viewport {
     display: flex;
     height: 100%;
@@ -84,7 +85,7 @@
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    font-size: 13px;
+    font-size: 15px;
     
 }
 
@@ -252,10 +253,10 @@ ul.carousel__viewport > li > a > span::after {
     background-color: white; */
 }
 
- /* mod carousel*/
+ /* mod text carousel barra superior*/
 .carousel-viewport a, span, .section-title{
     font-family: "Fraunces", serif;
-    font-weight: 100;
+    font-weight:200;
     font-style: normal;
 }
 

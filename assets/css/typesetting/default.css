@@ -2,7 +2,7 @@
     --tiny: 0.618rem;
     --scriptsize: 0.786rem;
     --footnotesize: 1rem;
-    --small: 1.144rem;
+    --small: 1.244rem; /* mod texto 15.23px controla texto chico de presentación */
     --normalsize: 1.272rem;
     --large: 1.414rem;
     --Large: 1.618rem;

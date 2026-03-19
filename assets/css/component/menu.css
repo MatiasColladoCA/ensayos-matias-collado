@@ -190,8 +190,8 @@ details[open] .on-plank,
     border-width: 0 0 2pt 0;
     padding: 1ex;
     width: 100%;
-    color: var(--fg);
-}
+    color: #ffffff;
+} /* mod color texto menu superior */
 
 #top-nav a.has-desc {
     flex-direction: column;

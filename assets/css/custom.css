@@ -51,7 +51,7 @@ body{
         "SOFT" 0,
         "WONK" 0;
     /* modcolor text */
-    color: #e0ddd9ba;
+    color: #eeeeeee5;
     
 }
 
@@ -61,7 +61,7 @@ body{
 /* Si pongo 'a' se modifican los tags */
 h1, h2, h3, h4, h5, h6, strong{
     font-family: "Fraunces", serif;
-    font-weight: 300;
+    font-weight:300;
     font-style: normal;
     color: #f5f3ef;
 }
@@ -76,10 +76,11 @@ h1, h2, h3, h4, h5, h6, strong{
     }   
 }
 
+/* mod text para letras, h1, texto, etc en pantallas grandes */
 @media (min-width: 768px) {
     em, text, p {
     font-family: "Fraunces", serif;
-    font-weight: 200;
+    font-weight: 300;
     display: block;
     max-width: 80%;
 }
