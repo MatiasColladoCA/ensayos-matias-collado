@@ -150,203 +150,383 @@ const material = new THREE.ShaderMaterial({
 const terrain = new THREE.Mesh(geometry, material);
 scene.add(terrain);
 
-// =============== DOME GRID ===============
-const linesVertexShader = `
-    attribute float aRandomOffset;
-    uniform float uTime;
-    varying float vWave;
-    varying float vEdge;
-    
-    void main() {
-        vec3 pos = position;
-        
-        float wave1 = sin(pos.x * 0.3 + pos.z * 0.3 + uTime * 1.5);
-        float wave2 = sin(pos.x * 0.5 - pos.z * 0.4 + uTime * 1.0);
-        vWave = (wave1 + wave2) * 0.5;
-        
-        vEdge = aRandomOffset;
-        
-        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-        gl_Position = projectionMatrix * mvPosition;
-    }
-`;
+// =============== MULTIPLE COLORED DOMES ===============
+const domeRadius = 60;
+const domeSegments = 24;
 
-const linesFragmentShader = `
-    varying float vWave;
-    varying float vEdge;
-    
-    void main() {
-        float edgeIntensity = abs(vEdge - 0.5) * 2.0;
-        float waveEffect = (vWave * 0.5 + 0.5) * edgeIntensity;
-        
-        vec3 neonRed = vec3(1.0, 0.15, 0.05);
-        vec3 baseColor = vec3(0.15, 0.12, 0.18);
-        vec3 color = mix(baseColor, neonRed, waveEffect * 0.9);
-        
-        float alpha = 0.2 + waveEffect * 0.6;
-        gl_FragColor = vec4(color, alpha);
-    }
-`;
+const domeColors = [
+    { neon: new THREE.Vector3(1.0, 0.15, 0.05), base: new THREE.Vector3(0.15, 0.08, 0.05) },   // Rojo
+    { neon: new THREE.Vector3(0.05, 0.5, 1.0), base: new THREE.Vector3(0.05, 0.1, 0.2) },       // Azul electrico
+    { neon: new THREE.Vector3(1.0, 0.9, 0.05), base: new THREE.Vector3(0.2, 0.18, 0.02) },      // Amarillo
+    { neon: new THREE.Vector3(0.05, 1.0, 0.4), base: new THREE.Vector3(0.02, 0.15, 0.08) },    // Verde
+    { neon: new THREE.Vector3(0.6, 0.05, 1.0), base: new THREE.Vector3(0.12, 0.02, 0.2) },    // Violeta
+    { neon: new THREE.Vector3(1.0, 0.3, 0.6), base: new THREE.Vector3(0.2, 0.06, 0.1) },        // Rosa
+    { neon: new THREE.Vector3(0.0, 1.0, 0.9), base: new THREE.Vector3(0.0, 0.15, 0.15) },       // Cyan
+];
 
-// Create dome lines
-const domeRadius = 80;
-const domeSegments = 32;
-const domeGeometry = new THREE.BufferGeometry();
-const domePositions = [];
-const domeOffsets = [];
-const domeIndices = [];
+const domes = [];
+const domesBySection = [];
 
-for (let lat = 0; lat <= domeSegments; lat++) {
-    const theta = (lat / domeSegments) * Math.PI;
-    const sinTheta = Math.sin(theta);
-    const cosTheta = -Math.cos(theta); // Invertido para domo hacia abajo
-    
-    for (let lon = 0; lon <= domeSegments; lon++) {
-        const phi = (lon / domeSegments) * Math.PI * 2;
-        
-        const offsetX = (Math.random() - 0.5) * 2;
-        const offsetY = (Math.random() - 0.5) * 1;
-        const offsetZ = (Math.random() - 0.5) * 2;
-        
-        const x = domeRadius * sinTheta * Math.cos(phi) + offsetX;
-        const y = domeRadius * cosTheta + offsetY;
-        const z = domeRadius * sinTheta * Math.sin(phi) + offsetZ;
-        
-        domePositions.push(x, y, z);
-        domeOffsets.push(Math.random());
+function createDomeGeometry() {
+    const positions = [];
+    const offsets = [];
+    const indices = [];
+
+    for (let lat = 0; lat <= domeSegments; lat++) {
+        const theta = (lat / domeSegments) * Math.PI;
+        const sinTheta = Math.sin(theta);
+        const cosTheta = -Math.cos(theta);
+
+        for (let lon = 0; lon <= domeSegments; lon++) {
+            const phi = (lon / domeSegments) * Math.PI * 2;
+
+            const offsetX = (Math.random() - 0.5) * 1.5;
+            const offsetY = (Math.random() - 0.5) * 0.8;
+            const offsetZ = (Math.random() - 0.5) * 1.5;
+
+            const x = domeRadius * sinTheta * Math.cos(phi) + offsetX;
+            const y = domeRadius * cosTheta + offsetY;
+            const z = domeRadius * sinTheta * Math.sin(phi) + offsetZ;
+
+            positions.push(x, y, z);
+            offsets.push(Math.random());
+        }
     }
+
+    for (let lat = 0; lat < domeSegments; lat++) {
+        for (let lon = 0; lon < domeSegments; lon++) {
+            const first = lat * (domeSegments + 1) + lon;
+            const second = first + domeSegments + 1;
+            indices.push(first, second);
+            indices.push(first, first + 1);
+        }
+    }
+
+    return { positions, offsets, indices };
 }
 
-for (let lat = 0; lat < domeSegments; lat++) {
-    for (let lon = 0; lon < domeSegments; lon++) {
-        const first = lat * (domeSegments + 1) + lon;
-        const second = first + domeSegments + 1;
-        
-        domeIndices.push(first, second);
-        domeIndices.push(first, first + 1);
-    }
+function createDome(colorIndex, position) {
+    const { positions, offsets, indices } = createDomeGeometry();
+    
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('aRandomOffset', new THREE.Float32BufferAttribute(offsets, 1));
+    geometry.setIndex(indices);
+
+    const colors = domeColors[colorIndex];
+    
+    const material = new THREE.ShaderMaterial({
+        vertexShader: `
+            attribute float aRandomOffset;
+            uniform float uTime;
+            varying float vWave;
+            varying float vEdge;
+            
+            void main() {
+                vec3 pos = position;
+                
+                float wave1 = sin(pos.x * 0.4 + pos.z * 0.4 + uTime * 1.8);
+                float wave2 = sin(pos.x * 0.6 - pos.z * 0.5 + uTime * 1.2);
+                vWave = (wave1 + wave2) * 0.5;
+                
+                vEdge = aRandomOffset;
+                
+                vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                gl_Position = projectionMatrix * mvPosition;
+            }
+        `,
+        fragmentShader: `
+            varying float vWave;
+            varying float vEdge;
+            uniform vec3 uNeon;
+            uniform vec3 uBase;
+            
+            void main() {
+                float edgeIntensity = abs(vEdge - 0.5) * 2.0;
+                float waveEffect = (vWave * 0.5 + 0.5) * edgeIntensity;
+                
+                vec3 color = mix(uBase, uNeon, waveEffect * 0.95);
+                
+                float alpha = 0.15 + waveEffect * 0.7;
+                gl_FragColor = vec4(color, alpha);
+            }
+        `,
+        uniforms: {
+            uTime: { value: 0 },
+            uNeon: { value: colors.neon },
+            uBase: { value: colors.base }
+        },
+        transparent: true,
+        depthWrite: false
+    });
+
+    const lines = new THREE.LineSegments(geometry, material);
+    lines.position.copy(position);
+    scene.add(lines);
+
+    const starsGeo = new THREE.BufferGeometry();
+    starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions.slice(), 3));
+    
+    const starsMat = new THREE.ShaderMaterial({
+        vertexShader: `
+            void main() {
+                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                gl_PointSize = 0.6 * (300.0 / -mvPosition.z);
+                gl_Position = projectionMatrix * mvPosition;
+            }
+        `,
+        fragmentShader: `
+            uniform vec3 uNeon;
+            void main() {
+                vec2 center = gl_PointCoord - vec2(0.5);
+                float dist = length(center);
+                if (dist > 0.5) discard;
+                float alpha = 1.0 - smoothstep(0.2, 0.5, dist);
+                gl_FragColor = vec4(uNeon, alpha);
+            }
+        `,
+        uniforms: {
+            uNeon: { value: colors.neon }
+        },
+        transparent: true,
+        depthWrite: false
+    });
+
+    const stars = new THREE.Points(starsGeo, starsMat);
+    stars.position.copy(position);
+    scene.add(stars);
+
+    return { lines, stars, material: lines.material, starMaterial: stars.material };
 }
 
-domeGeometry.setAttribute('position', new THREE.Float32BufferAttribute(domePositions, 3));
-domeGeometry.setAttribute('aRandomOffset', new THREE.Float32BufferAttribute(domeOffsets, 1));
-domeGeometry.setIndex(domeIndices);
+const sectionDomePositions = [
+    new THREE.Vector3(-120, 15, 100),
+    new THREE.Vector3(100, 20, 80),
+    new THREE.Vector3(140, 10, -60),
+    new THREE.Vector3(40, 8, -150),
+    new THREE.Vector3(-130, 18, -80),
+    new THREE.Vector3(-100, 12, 90),
+    new THREE.Vector3(0, 0, 0),
+];
 
-const domeMaterial = new THREE.ShaderMaterial({
-    vertexShader: linesVertexShader,
-    fragmentShader: linesFragmentShader,
-    uniforms: {
-        uTime: { value: 0 }
-    },
-    transparent: true,
-    depthWrite: false
+for (let i = 0; i < 7; i++) {
+    const dome = createDome(i, sectionDomePositions[i].clone());
+    domes.push(dome);
+}
+
+const sections = sectionDomePositions.map((pos, i) => ({
+    domePosition: pos.clone(),
+    cameraOffset: new THREE.Vector3(15, 3, 15),
+    label: ['Rojo', 'Azul', 'Amarillo', 'Verde', 'Violeta', 'Rosa', 'Cyan'][i]
+}));
+
+sections.forEach((section, i) => {
+    const labelEl = document.createElement('div');
+    labelEl.className = 'section-label';
+    labelEl.textContent = `Domo ${section.label}`;
+    labelEl.style.cssText = `
+        position: fixed;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        color: #fff;
+        font-family: sans-serif;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s;
+        white-space: nowrap;
+    `;
+    document.body.appendChild(labelEl);
+    section.element = labelEl;
 });
 
-const dome = new THREE.LineSegments(domeGeometry, domeMaterial);
-scene.add(dome);
+let currentSection = 0;
+let isTransitioning = false;
+let isSettling = false;
+let settleEndTime = 0;
+const SETTLE_DURATION = 500;
+const cameraTarget = new THREE.Vector3(0, 0, 0);
+const orbitCenter = new THREE.Vector3(0, -1.07, 0);
+let currentTheta = 0;
+let orbitRadiusXZ = 25;
+let targetY = -1.07;
+const CAMERA_Y = -1.07;
+let isOrbiting = false;
+const PITCH_DEG = 10;
+const PITCH_RAD = PITCH_DEG * Math.PI / 180;
 
-// Stars at vertices (same positions as dome vertices)
-const starsGeometry = new THREE.BufferGeometry();
-starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(domePositions.slice(), 3));
+function flyToSection(index) {
+    if (isTransitioning || index < 0 || index >= sections.length) return;
+    
+    isTransitioning = true;
+    isOrbiting = false;
+    const target = sections[index];
+    currentSection = index;
+    
+    let startPos = null;
+    const endDomePos = target.domePosition.clone();
+    const endPos = new THREE.Vector3(
+        endDomePos.x + target.cameraOffset.x,
+        CAMERA_Y,
+        endDomePos.z + target.cameraOffset.z
+    );
+    
+    console.log('=== INICIO VUELO ===');
+    console.log('section:', index, target.label);
+    console.log('camera.position ANTES:', camera.position.clone());
+    console.log('endDomePos:', endDomePos.clone());
+    console.log('endPos esperado:', endPos.clone());
+    
+    const duration = 2500;
+    const startTime = Date.now();
+    
+    function updateFlight() {
+        if (startPos === null) {
+            startPos = camera.position.clone();
+            console.log('camera.position AL INICIAR:', startPos.clone());
+        }
+        
+        const elapsed = Date.now() - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const smoothT = t * t * (3 - 2 * t);
+        
+        camera.position.x = startPos.x + (endPos.x - startPos.x) * smoothT;
+        camera.position.z = startPos.z + (endPos.z - startPos.z) * smoothT;
+        camera.position.y = startPos.y + (endPos.y - startPos.y) * smoothT;
+        
+        const lookTarget = new THREE.Vector3().lerpVectors(startPos, endPos, smoothT);
+        lookTarget.y = CAMERA_Y;
+        camera.lookAt(lookTarget);
+        
+        if (t < 1) {
+            requestAnimationFrame(updateFlight);
+        } else {
+            camera.position.copy(endPos);
+            
+            orbitCenter.copy(endDomePos);
+            orbitCenter.y = CAMERA_Y;
+            
+            const dx = camera.position.x - orbitCenter.x;
+            const dz = camera.position.z - orbitCenter.z;
+            orbitRadiusXZ = Math.sqrt(dx * dx + dz * dz);
+            currentTheta = Math.atan2(dx, dz);
+            targetY = CAMERA_Y;
+            isTransitioning = false;
+            isSettling = true;
+            settleEndTime = Date.now() + SETTLE_DURATION;
+            
+            cameraTarget.copy(orbitCenter);
+            cameraTarget.y = camera.position.y + Math.sin(PITCH_RAD) * orbitRadiusXZ;
+            
+            console.log('=== FIN VUELO ===');
+            console.log('camera.position:', camera.position.clone());
+            console.log('orbitCenter:', orbitCenter.clone());
+            console.log('cameraTarget:', cameraTarget.clone());
+            console.log('orbitRadiusXZ:', orbitRadiusXZ);
+            console.log('currentTheta:', currentTheta);
+            console.log('desired pitch:', PITCH_DEG, '°');
+        }
+    }
+    
+    requestAnimationFrame(updateFlight);
+}
 
-const starsMaterial = new THREE.ShaderMaterial({
-    vertexShader: `
-        void main() {
-            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-            gl_PointSize = 0.75 * (300.0 / -mvPosition.z);
-            gl_Position = projectionMatrix * mvPosition;
-        }
-    `,
-    fragmentShader: `
-        void main() {
-            vec2 center = gl_PointCoord - vec2(0.5);
-            float dist = length(center);
-            if (dist > 0.5) discard;
-            float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
-            gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
-        }
-    `,
-    transparent: true,
-    depthWrite: false
+let lastScrollTime = 0;
+window.addEventListener('wheel', (e) => {
+    if (isTransitioning) return;
+    
+    const now = Date.now();
+    if (now - lastScrollTime < 800) return;
+    lastScrollTime = now;
+    
+    if (e.deltaY > 0) {
+        flyToSection((currentSection + 1) % sections.length);
+    } else {
+        flyToSection((currentSection - 1 + sections.length) % sections.length);
+    }
 });
-
-const stars = new THREE.Points(starsGeometry, starsMaterial);
-scene.add(stars);
 
 const clock = new THREE.Clock();
 const rotateSpeed = 0.004;
 let rotationDirection = -1;
-let previousTheta = 0;
 
-const Y_MIN = -2;
-const Y_MAX = 1;
-const Y_SPRING = 0.02;
-const Y_DAMPING = 0.985;
-
-let targetY = camera.position.y;
-let velocityY = 0;
-
-controls.addEventListener('start', () => {
-});
-
-controls.addEventListener('end', () => {
-});
-
-controls.addEventListener('change', () => {
-    const y = camera.position.y;
-    if (y < Y_MIN) {
-        camera.position.y = Y_MIN;
-        targetY = Y_MIN;
-    } else if (y > Y_MAX) {
-        camera.position.y = Y_MAX;
-        targetY = Y_MAX;
-    } else {
-        targetY = y;
-    }
-    velocityY = 0;
-});
+let lastDirectionCheckTime = 0;
 
 function animate() {
     requestAnimationFrame(animate);
     
+    const time = clock.getElapsedTime();
+    
+    domes.forEach(dome => {
+        dome.material.uniforms.uTime.value = time;
+    });
+    
+    material.uniforms.uTime.value = time;
+    
+    if (isTransitioning) {
+        camera.lookAt(cameraTarget);
+        renderer.render(scene, camera);
+        return;
+    }
+    
+    if (isSettling) {
+        if (Date.now() > settleEndTime) {
+            isSettling = false;
+            isOrbiting = true;
+            console.log('=== FIN SETTLE ===');
+            console.log('camera.position:', camera.position.clone());
+            console.log('orbitCenter:', orbitCenter.clone());
+            console.log('cameraTarget:', cameraTarget.clone());
+            const dx = camera.position.x - orbitCenter.x;
+            const dz = camera.position.z - orbitCenter.z;
+            const dist = Math.sqrt(dx*dx + dz*dz);
+            const pitchActual = Math.atan2(cameraTarget.y - camera.position.y, dist) * (180/Math.PI);
+            console.log('pitch from orbitCenter:', pitchActual, '°');
+        }
+        camera.lookAt(cameraTarget);
+        renderer.render(scene, camera);
+        return;
+    }
+    
     controls.update();
     
-
+    if (!isOrbiting) {
+        camera.lookAt(cameraTarget);
+        renderer.render(scene, camera);
+        return;
+    }
     
     const pos = camera.position;
-    const currentTheta = Math.atan2(pos.x, pos.z);
-    const deltaTheta = currentTheta - previousTheta;
     
-    if (Math.abs(deltaTheta) > 0.001 && Math.abs(deltaTheta) < Math.PI) {
-        if (deltaTheta > 0) rotationDirection = 1;
-        else rotationDirection = -1;
-    }
-    previousTheta = currentTheta;
+    const dx = pos.x - orbitCenter.x;
+    const dz = pos.z - orbitCenter.z;
+    const newTheta = Math.atan2(dx, dz);
+    const deltaTheta = newTheta - currentTheta;
     
-    const radiusXZ = Math.sqrt(pos.x * pos.x + pos.z * pos.z);
-    
-    if (Math.abs(pos.y - targetY) > 0.01) {
-        const springForce = (targetY - pos.y) * Y_SPRING;
-        velocityY += springForce;
-        velocityY *= Y_DAMPING;
-        targetY += velocityY;
-        
-        if (targetY < Y_MIN) targetY = Y_MIN;
-        if (targetY > Y_MAX) targetY = Y_MAX;
-    } else {
-        targetY = pos.y;
+    if (Date.now() - lastDirectionCheckTime > 500) {
+        if (Math.abs(deltaTheta) > 0.001 && Math.abs(deltaTheta) < Math.PI) {
+            rotationDirection = deltaTheta > 0 ? 1 : -1;
+        }
+        lastDirectionCheckTime = Date.now();
     }
     
-    const newTheta = currentTheta + rotateSpeed * rotationDirection;
-    camera.position.x = Math.sin(newTheta) * radiusXZ;
-    camera.position.z = Math.cos(newTheta) * radiusXZ;
+    currentTheta = newTheta;
+    
+    const orbitTheta = currentTheta + rotateSpeed * rotationDirection;
+    const newX = orbitCenter.x + Math.sin(orbitTheta) * orbitRadiusXZ;
+    const newZ = orbitCenter.z + Math.cos(orbitTheta) * orbitRadiusXZ;
+    
+    camera.position.x = newX;
+    camera.position.z = newZ;
     camera.position.y = targetY;
-    camera.lookAt(0, 0, 0);
-    
-    material.uniforms.uTime.value = clock.getElapsedTime();
-    domeMaterial.uniforms.uTime.value = clock.getElapsedTime();
+    cameraTarget.y = targetY + Math.sin(PITCH_RAD) * orbitRadiusXZ;
+    camera.lookAt(cameraTarget);
     
     renderer.render(scene, camera);
 }
+
 animate();
 
 window.addEventListener('resize', () => {
