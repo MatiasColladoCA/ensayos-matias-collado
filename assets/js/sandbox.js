@@ -432,7 +432,7 @@ sections.forEach((section, i) => {
     const sprite = new THREE.Sprite(material);
     sprite.scale.set(4, 4, 1);
     sprite.position.copy(section.domePosition);
-    sprite.position.y = -15;
+    sprite.position.y = -5;
     sprite.visible = false;
     
     scene.add(sprite);
