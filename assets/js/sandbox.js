@@ -154,7 +154,7 @@ const semMaterial = new THREE.ShaderMaterial({
         uTime: { value: 0 },
         uChromePulse: { value: 1.5 },
         uChromeSpeed: { value: 2.0 },
-        uWaveFreq: { value: 2.0 },
+        uWaveFreq: { value: 0.5 },
         uOrganicSpeed: { value: 0.08 },
         uOrganicScale: { value: 0.05 },
         uOrganicIntensity: { value: 3.0 }
@@ -162,15 +162,17 @@ const semMaterial = new THREE.ShaderMaterial({
     side: THREE.DoubleSide
 });
 
-const resolution = 100;
-
 const params = {
     macroScale: 1.1,
     spikeScale: 3.0,
     spikeFreq: 5.7,
     distAtten: 0.2,
-    distOffset: 1.0
+    distOffset: 1.0,
+    autoMode: false,
+    autoInterval: 30
 };
+
+const resolution = 100;
 
 const effect = new MarchingCubes(resolution, semMaterial, false, false, 600000);
 effect.position.set(0, 0, 0);
@@ -309,13 +311,59 @@ instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:tran
 instructions.innerHTML = 'DRAG TO ORBIT | SCROLL TO ZOOM';
 document.body.appendChild(instructions);
 
+const autoBtn = document.createElement('button');
+autoBtn.textContent = 'AUTO MODE: OFF';
+autoBtn.style.cssText = 'position:fixed;top:10px;right:10px;color:#888;font-family:monospace;font-size:11px;background:rgba(0,0,0,0.9);padding:8px 12px;border:1px solid #444;cursor:pointer;z-index:1000;';
+autoBtn.addEventListener('click', () => {
+    autoModeActive = !autoModeActive;
+    autoBtn.textContent = autoModeActive ? 'AUTO MODE: ON' : 'AUTO MODE: OFF';
+    autoBtn.style.borderColor = autoModeActive ? '#888' : '#444';
+    if (autoModeActive) {
+        autoTimer = clock.getElapsedTime();
+        applyRandomParams();
+    }
+});
+document.body.appendChild(autoBtn);
+
 bakeStructure();
 
 const clock = new THREE.Clock();
+let autoModeActive = false;
+let autoTimer = 0;
+
+function randomInRange(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function applyRandomParams() {
+    params.spikeScale = randomInRange(1.0, 5.0);
+    params.spikeFreq = randomInRange(3.0, 8.0);
+    params.macroScale = randomInRange(0.8, 2.0);
+    semMaterial.uniforms.uOrganicScale.value = randomInRange(0.03, 0.12);
+    semMaterial.uniforms.uOrganicIntensity.value = randomInRange(1.0, 5.0);
+    
+    bakeStructure();
+}
 
 function animate() {
     requestAnimationFrame(animate);
-    semMaterial.uniforms.uTime.value = clock.getElapsedTime();
+    
+    const time = clock.getElapsedTime();
+    semMaterial.uniforms.uTime.value = time;
+    
+    if (autoModeActive) {
+        const pulseVal = 1.5 + Math.abs(Math.sin(time * 0.05)) * 2.5;
+        semMaterial.uniforms.uChromePulse.value = pulseVal;
+        
+        const speedVal = 0.3 - Math.abs(Math.sin(time * 0.03)) * 0.25;
+        semMaterial.uniforms.uOrganicSpeed.value = Math.max(0.05, speedVal);
+        
+        if (time - autoTimer > params.autoInterval) {
+            applyRandomParams();
+            autoTimer = time;
+        }
+    }
+    
     controls.update();
     renderer.render(scene, camera);
 }
