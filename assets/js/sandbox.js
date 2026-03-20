@@ -147,6 +147,148 @@ const material = new THREE.ShaderMaterial({
 const terrain = new THREE.Mesh(geometry, material);
 scene.add(terrain);
 
+// =============== DOME GRID ===============
+const linesVertexShader = `
+    attribute float aRandomOffset;
+    uniform float uTime;
+    varying float vWave;
+    varying float vEdge;
+    
+    void main() {
+        vec3 pos = position;
+        
+        float wave1 = sin(pos.x * 0.3 + pos.z * 0.3 + uTime * 1.5);
+        float wave2 = sin(pos.x * 0.5 - pos.z * 0.4 + uTime * 1.0);
+        vWave = (wave1 + wave2) * 0.5;
+        
+        vEdge = aRandomOffset;
+        
+        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+        gl_Position = projectionMatrix * mvPosition;
+    }
+`;
+
+const linesFragmentShader = `
+    varying float vWave;
+    varying float vEdge;
+    
+    void main() {
+        float edgeIntensity = abs(vEdge - 0.5) * 2.0;
+        float waveEffect = (vWave * 0.5 + 0.5) * edgeIntensity;
+        
+        vec3 neonRed = vec3(1.0, 0.15, 0.05);
+        vec3 baseColor = vec3(0.15, 0.12, 0.18);
+        vec3 color = mix(baseColor, neonRed, waveEffect * 0.9);
+        
+        float alpha = 0.2 + waveEffect * 0.6;
+        gl_FragColor = vec4(color, alpha);
+    }
+`;
+
+// Create dome lines
+const domeRadius = 80;
+const domeSegments = 32;
+const domeGeometry = new THREE.BufferGeometry();
+const domePositions = [];
+const domeOffsets = [];
+const domeIndices = [];
+
+for (let lat = 0; lat <= domeSegments; lat++) {
+    const theta = (lat / domeSegments) * Math.PI;
+    const sinTheta = Math.sin(theta);
+    const cosTheta = -Math.cos(theta); // Invertido para domo hacia abajo
+    
+    for (let lon = 0; lon <= domeSegments; lon++) {
+        const phi = (lon / domeSegments) * Math.PI * 2;
+        
+        const offsetX = (Math.random() - 0.5) * 2;
+        const offsetY = (Math.random() - 0.5) * 1;
+        const offsetZ = (Math.random() - 0.5) * 2;
+        
+        const x = domeRadius * sinTheta * Math.cos(phi) + offsetX;
+        const y = domeRadius * cosTheta + offsetY;
+        const z = domeRadius * sinTheta * Math.sin(phi) + offsetZ;
+        
+        domePositions.push(x, y, z);
+        domeOffsets.push(Math.random());
+    }
+}
+
+for (let lat = 0; lat < domeSegments; lat++) {
+    for (let lon = 0; lon < domeSegments; lon++) {
+        const first = lat * (domeSegments + 1) + lon;
+        const second = first + domeSegments + 1;
+        
+        domeIndices.push(first, second);
+        domeIndices.push(first, first + 1);
+    }
+}
+
+domeGeometry.setAttribute('position', new THREE.Float32BufferAttribute(domePositions, 3));
+domeGeometry.setAttribute('aRandomOffset', new THREE.Float32BufferAttribute(domeOffsets, 1));
+domeGeometry.setIndex(domeIndices);
+
+const domeMaterial = new THREE.ShaderMaterial({
+    vertexShader: linesVertexShader,
+    fragmentShader: linesFragmentShader,
+    uniforms: {
+        uTime: { value: 0 }
+    },
+    transparent: true,
+    depthWrite: false
+});
+
+const dome = new THREE.LineSegments(domeGeometry, domeMaterial);
+dome.position.y = -15;
+scene.add(dome);
+
+// Stars at vertices
+const starsGeometry = new THREE.BufferGeometry();
+const starPositions = domePositions.slice();
+const starSizes = new Float32Array(starPositions.length / 3);
+
+for (let i = 0; i < starSizes.length; i++) {
+    starSizes[i] = 0.8 + Math.random() * 0.8;
+}
+
+starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+
+const starsMaterial = new THREE.ShaderMaterial({
+    vertexShader: `
+        attribute float size;
+        varying float vAlpha;
+        uniform float uTime;
+        
+        void main() {
+            vAlpha = 0.6 + sin(uTime * 2.0 + position.x * 0.5) * 0.3;
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * (200.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+        }
+    `,
+    fragmentShader: `
+        varying float vAlpha;
+        
+        void main() {
+            vec2 center = gl_PointCoord - vec2(0.5);
+            float dist = length(center);
+            if (dist > 0.5) discard;
+            
+            float alpha = vAlpha * (1.0 - dist * 2.0);
+            gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
+        }
+    `,
+    uniforms: {
+        uTime: { value: 0 }
+    },
+    transparent: true,
+    depthWrite: false
+});
+
+const stars = new THREE.Points(starsGeometry, starsMaterial);
+stars.position.y = -15;
+scene.add(stars);
+
 const clock = new THREE.Clock();
 const rotateSpeed = 0.004;
 let rotationDirection = -1;
@@ -218,6 +360,8 @@ function animate() {
     camera.lookAt(0, 0, 0);
     
     material.uniforms.uTime.value = clock.getElapsedTime();
+    domeMaterial.uniforms.uTime.value = clock.getElapsedTime();
+    starsMaterial.uniforms.uTime.value = clock.getElapsedTime();
     
     renderer.render(scene, camera);
 }
