@@ -57,6 +57,8 @@ const vertexShader = `
         
         vec2 p = position.xz * 0.15;
         
+        float heightVariation = noise(p * 0.3 + vec2(500.0)) * 0.4 + 0.8;
+        
         float continental = fbm(p * 0.8) * 12.0;
         continental = pow(continental, 1.1);
         
@@ -70,7 +72,7 @@ const vertexShader = `
         float baseHeight = continental;
         
         float ridgeMask = smoothstep(0.3, 0.6, ridge);
-        float terrainHeight = baseHeight + ridge * ridgeMask * 15.0;
+        float terrainHeight = baseHeight + ridge * ridgeMask * 15.0 * heightVariation;
         
         float flatMask = smoothstep(0.15, 0.3, fbm(p * 0.5 + vec2(300.0)));
         terrainHeight = mix(terrainHeight * 0.1, terrainHeight, flatMask);
@@ -99,7 +101,8 @@ const fragmentShader = `
     void main() {
         float normalizedElevation = clamp(vElevation / 25.0, 0.0, 1.0);
         
-        float fogFactor = 1.0 - exp(-vFogDepth * 0.006);
+        float fogFactor = 1.0 - exp(-vFogDepth * 0.015);
+        fogFactor = pow(fogFactor, 1.5);
         fogFactor = clamp(fogFactor, 0.0, 1.0);
         
         vec3 deepValley = vec3(0.12, 0.1, 0.14);
@@ -122,8 +125,8 @@ const fragmentShader = `
             color = mix(mountain, peak, (normalizedElevation - 0.75) / 0.25);
         }
         
-        vec3 fogColor = vec3(0.08, 0.07, 0.1);
-        color = mix(color, fogColor, fogFactor * 0.6);
+        vec3 fogColor = vec3(0.0, 0.0, 0.0);
+        color = mix(color, fogColor, fogFactor);
         
         float ao = 1.0 - clamp(vElevation / 35.0, 0.0, 0.2);
         color *= ao;
@@ -132,7 +135,7 @@ const fragmentShader = `
     }
 `;
 
-const geometry = new THREE.PlaneGeometry(100, 100, 256, 256);
+const geometry = new THREE.PlaneGeometry(600, 600, 384, 384);
 geometry.rotateX(-Math.PI / 2);
 
 const material = new THREE.ShaderMaterial({
