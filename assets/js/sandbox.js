@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { MarchingCubes } from 'three/examples/jsm/objects/MarchingCubes.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { createNoise3D } from 'simplex-noise';
 
 const canvas = document.getElementById('three-canvas');
@@ -13,6 +16,17 @@ camera.position.set(0, 0, 50);
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+
+const bokehPass = new BokehPass(scene, camera, {
+    focus: 10.0,
+    aperture: 0.0002,
+    maxblur: 0.0116
+});
+composer.addPass(bokehPass);
 
 const simplex3D = createNoise3D();
 
@@ -171,19 +185,51 @@ let params = {
     autoInterval: 30
 };
 
-const resolution = 100;
+const resolution = 60;
 
-const effect = new MarchingCubes(resolution, semMaterial, false, false, 600000);
-effect.position.set(0, 0, 0);
-effect.scale.set(50, 50, 50);
-effect.isolation = 0;
-scene.add(effect);
+const numInstances = 3;
+const instanceSpacing = 80;
+const instanceMaterial = [];
+const instances = [];
 
-const boxWire = new THREE.LineSegments(
-    new THREE.EdgesGeometry(new THREE.BoxGeometry(50, 50, 50)),
-    new THREE.LineBasicMaterial({ color: 0x333333 })
-);
-scene.add(boxWire);
+for (let i = 0; i < numInstances; i++) {
+    const mat = semMaterial.clone();
+    instanceMaterial.push(mat);
+    
+    const effect = new MarchingCubes(resolution, mat, false, false, 300000);
+    effect.scale.set(45, 45, 45);
+    effect.isolation = 0;
+    
+    const angle = (i / numInstances) * Math.PI * 2;
+    const radius = 30;
+    effect.position.set(
+        Math.cos(angle) * radius,
+        0,
+        Math.sin(angle) * radius
+    );
+    
+    instances.push(effect);
+    scene.add(effect);
+    
+    const boxWire = new THREE.LineSegments(
+        new THREE.EdgesGeometry(new THREE.BoxGeometry(45, 45, 45)),
+        new THREE.LineBasicMaterial({ color: 0x222222 })
+    );
+    boxWire.position.copy(effect.position);
+    scene.add(boxWire);
+}
+
+function syncMaterials() {
+    instanceMaterial.forEach(mat => {
+        mat.uniforms.uTime.value = semMaterial.uniforms.uTime.value;
+        mat.uniforms.uChromePulse.value = semMaterial.uniforms.uChromePulse.value;
+        mat.uniforms.uChromeSpeed.value = semMaterial.uniforms.uChromeSpeed.value;
+        mat.uniforms.uWaveFreq.value = semMaterial.uniforms.uWaveFreq.value;
+        mat.uniforms.uOrganicSpeed.value = semMaterial.uniforms.uOrganicSpeed.value;
+        mat.uniforms.uOrganicScale.value = semMaterial.uniforms.uOrganicScale.value;
+        mat.uniforms.uOrganicIntensity.value = semMaterial.uniforms.uOrganicIntensity.value;
+    });
+}
 
 function ferroSpikesJS(x, y, z, freq) {
     const px = Math.abs(Math.sin(x * freq * Math.PI));
@@ -194,37 +240,50 @@ function ferroSpikesJS(x, y, z, freq) {
 }
 
 function bakeStructure() {
-    effect.reset();
-    
-    const spikeFreq = params.spikeFreq * 3;
-    const spikeScale = params.spikeScale * 0.08;
-    
-    let index = 0;
-    for (let k = 0; k < resolution; k++) {
-        for (let j = 0; j < resolution; j++) {
-            for (let i = 0; i < resolution; i++) {
-                
-                const nx = (i / resolution) * 2 - 1;
-                const ny = (j / resolution) * 2 - 1;
-                const nz = (k / resolution) * 2 - 1;
+    instances.forEach((effect, idx) => {
+        effect.reset();
+        
+        const spikeFreq = params.spikeFreq * 3;
+        const spikeScale = params.spikeScale * 0.08;
+        const noiseOffset = idx * 17.3;
+        
+        let index = 0;
+        for (let k = 0; k < resolution; k++) {
+            for (let j = 0; j < resolution; j++) {
+                for (let i = 0; i < resolution; i++) {
+                    
+                    const nx = (i / resolution) * 2 - 1;
+                    const ny = (j / resolution) * 2 - 1;
+                    const nz = (k / resolution) * 2 - 1;
 
-                const macroFbm = fbmSimplex(nx * params.macroScale, ny * params.macroScale, nz * params.macroScale, 2);
-                let baseDensity = -(macroFbm - 0.55);
-                
-                const distToCenter = Math.sqrt(nx*nx + ny*ny + nz*nz);
-                let finalDensity = baseDensity + (distToCenter * params.distAtten) - params.distOffset;
-                
-                const spike = ferroSpikesJS(nx * 10, ny * 10, nz * 10, spikeFreq);
-                finalDensity += spike * spikeScale;
-                
-                finalDensity = Math.max(-1, Math.min(1, finalDensity));
+                    const macroFbm = fbmSimplex(
+                        nx * params.macroScale + noiseOffset,
+                        ny * params.macroScale + noiseOffset * 0.7,
+                        nz * params.macroScale + noiseOffset * 0.5,
+                        2
+                    );
+                    let baseDensity = -(macroFbm - 0.55);
+                    
+                    const distToCenter = Math.sqrt(nx*nx + ny*ny + nz*nz);
+                    let finalDensity = baseDensity + (distToCenter * params.distAtten) - params.distOffset;
+                    
+                    const spike = ferroSpikesJS(
+                        nx * 10 + noiseOffset,
+                        ny * 10 + noiseOffset,
+                        nz * 10 + noiseOffset,
+                        spikeFreq
+                    );
+                    finalDensity += spike * spikeScale;
+                    
+                    finalDensity = Math.max(-1, Math.min(1, finalDensity));
 
-                effect.field[index] = finalDensity;
-                index++;
+                    effect.field[index] = finalDensity;
+                    index++;
+                }
             }
         }
-    }
-    effect.update();
+        effect.update();
+    });
 }
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -257,12 +316,12 @@ let targetMacroScale = params.macroScale;
 let targetOrganicScale = semMaterial.uniforms.uOrganicScale.value;
 let targetOrganicIntensity = semMaterial.uniforms.uOrganicIntensity.value;
 
-function createSlider(name, min, max, step, value, callback) {
+function createSlider(name, min, max, step, value, callback, decimals = 2) {
     const div = document.createElement('div');
     div.style.marginBottom = '8px';
     
     const label = document.createElement('div');
-    label.textContent = `${name}: ${typeof value === 'number' ? value.toFixed(2) : value}`;
+    label.textContent = `${name}: ${typeof value === 'number' ? value.toFixed(decimals) : value}`;
     label.style.marginBottom = '3px';
     
     sliderLabels[name] = label;
@@ -279,7 +338,7 @@ function createSlider(name, min, max, step, value, callback) {
     
     slider.addEventListener('input', () => {
         const val = parseFloat(slider.value);
-        label.textContent = `${name}: ${val.toFixed(2)}`;
+        label.textContent = `${name}: ${val.toFixed(decimals)}`;
         callback(val);
     });
     
@@ -330,6 +389,56 @@ createSlider('organicIntensity', 0.0, 6.0, 0.1, semMaterial.uniforms.uOrganicInt
     currentOrganicIntensity = val;
     targetOrganicIntensity = val;
 });
+
+createSlider('bokehFocus', 10, 150, 1, 10, (val) => {
+    bokehPass.uniforms.focus.value = val;
+});
+
+{
+    const div = document.createElement('div');
+    div.style.marginBottom = '8px';
+    const label = document.createElement('div');
+    label.textContent = 'bokehAperture: 0.00020';
+    label.style.marginBottom = '3px';
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 1;
+    slider.max = 100;
+    slider.step = 1;
+    slider.value = 20;
+    slider.style.width = '180px';
+    slider.addEventListener('input', () => {
+        const val = parseFloat(slider.value) / 100000;
+        label.textContent = `bokehAperture: ${val.toFixed(5)}`;
+        bokehPass.uniforms.aperture.value = val;
+    });
+    div.appendChild(label);
+    div.appendChild(slider);
+    panel.appendChild(div);
+}
+
+{
+    const div = document.createElement('div');
+    div.style.marginBottom = '8px';
+    const label = document.createElement('div');
+    label.textContent = 'bokehBlur: 0.0116';
+    label.style.marginBottom = '3px';
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 10;
+    slider.max = 150;
+    slider.step = 1;
+    slider.value = 116;
+    slider.style.width = '180px';
+    slider.addEventListener('input', () => {
+        const val = parseFloat(slider.value) / 10000;
+        label.textContent = `bokehBlur: ${val.toFixed(4)}`;
+        bokehPass.uniforms.maxblur.value = val;
+    });
+    div.appendChild(label);
+    div.appendChild(slider);
+    panel.appendChild(div);
+}
 
 const instructions = document.createElement('div');
 instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:#888;font-family:monospace;font-size:14px;text-align:center;background:rgba(0,0,0,0.8);padding:15px;border:2px solid #444;pointer-events:none;z-index:1000;';
@@ -387,6 +496,7 @@ function animate() {
     
     const time = clock.getElapsedTime();
     semMaterial.uniforms.uTime.value = time;
+    syncMaterials();
     
     if (autoModeActive) {
         const pulseVal = 1.5 + Math.abs(Math.sin(time * 0.05)) * 2.5;
@@ -429,7 +539,7 @@ function animate() {
     }
     
     controls.update();
-    renderer.render(scene, camera);
+    composer.render();
 }
 
 animate();
@@ -438,4 +548,5 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    composer.setSize(window.innerWidth, window.innerHeight);
 });
