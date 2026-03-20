@@ -33,11 +33,64 @@ const vertexShader = `
     varying vec3 vWorldPos;
     varying vec3 vViewPos;
     
+    uniform float uTime;
+    uniform float uOrganicSpeed;
+    uniform float uOrganicScale;
+    uniform float uOrganicIntensity;
+    
+    float hash(vec3 p) {
+        p = fract(p * 0.3183099 + 0.1);
+        p *= 17.0;
+        return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+    }
+    
+    float noise3D(vec3 p) {
+        vec3 i = floor(p);
+        vec3 f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(
+            mix(mix(hash(i + vec3(0,0,0)), hash(i + vec3(1,0,0)), f.x),
+                mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
+            mix(mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x),
+                mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x), f.y),
+            f.z
+        );
+    }
+    
+    float snoise(vec3 p) {
+        return noise3D(p) * 2.0 - 1.0;
+    }
+    
+    float fbm(vec3 p, float t) {
+        float v = 0.0;
+        float a = 0.5;
+        v += snoise(p + t * 0.1) * a;
+        p *= 2.0;
+        v += snoise(p + t * 0.15) * a * 0.5;
+        p *= 1.8;
+        v += snoise(p + t * 0.08) * a * 0.25;
+        return v;
+    }
+    
     void main() {
         vNormal = normalize(normalMatrix * normal);
-        vec4 worldPos = modelMatrix * vec4(position, 1.0);
+        
+        vec3 p1 = position * uOrganicScale;
+        vec3 p2 = position * uOrganicScale * 0.6 + vec3(50.0);
+        vec3 p3 = position * uOrganicScale * 1.2 + vec3(100.0);
+        
+        float wave1 = fbm(p1, uTime * uOrganicSpeed);
+        float wave2 = fbm(p2, uTime * uOrganicSpeed * 0.7);
+        float wave3 = fbm(p3, uTime * uOrganicSpeed * 1.3);
+        
+        float organicWave = (wave1 * 0.5 + wave2 * 0.3 + wave3 * 0.2) * uOrganicIntensity;
+        organicWave = organicWave * organicWave * organicWave;
+        
+        vec3 animatedPos = position + (normal * organicWave);
+        
+        vec4 worldPos = modelMatrix * vec4(animatedPos, 1.0);
         vWorldPos = worldPos.xyz;
-        vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+        vec4 mvPos = modelViewMatrix * vec4(animatedPos, 1.0);
         vViewPos = -mvPos.xyz;
         gl_Position = projectionMatrix * mvPos;
     }
@@ -101,7 +154,10 @@ const semMaterial = new THREE.ShaderMaterial({
         uTime: { value: 0 },
         uChromePulse: { value: 1.5 },
         uChromeSpeed: { value: 2.0 },
-        uWaveFreq: { value: 2.0 }
+        uWaveFreq: { value: 2.0 },
+        uOrganicSpeed: { value: 0.08 },
+        uOrganicScale: { value: 0.05 },
+        uOrganicIntensity: { value: 3.0 }
     },
     side: THREE.DoubleSide
 });
@@ -234,6 +290,18 @@ createSlider('chromeSpeed', 0.5, 10.0, 0.1, 2.0, (val) => {
 
 createSlider('waveFreq', 0.5, 5.0, 0.1, 2.0, (val) => {
     semMaterial.uniforms.uWaveFreq.value = val;
+});
+
+createSlider('organicSpeed', 0.01, 0.5, 0.01, 0.08, (val) => {
+    semMaterial.uniforms.uOrganicSpeed.value = val;
+});
+
+createSlider('organicScale', 0.02, 0.15, 0.01, 0.05, (val) => {
+    semMaterial.uniforms.uOrganicScale.value = val;
+});
+
+createSlider('organicIntensity', 0.0, 6.0, 0.1, 3.0, (val) => {
+    semMaterial.uniforms.uOrganicIntensity.value = val;
 });
 
 const instructions = document.createElement('div');
