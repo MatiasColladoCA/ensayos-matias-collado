@@ -8,7 +8,7 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0a0a12);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
-camera.position.set(0, 0, 30);
+camera.position.set(0, 0, 40);
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -21,22 +21,23 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
 dirLight.position.set(10, 20, 10);
 scene.add(dirLight);
 
-const material = new THREE.MeshStandardMaterial({
-    color: 0x00cccc,
-    roughness: 0.8,
-    metalness: 0.1,
+const resolution = 100;
+
+const roughMaterial = new THREE.MeshStandardMaterial({
+    color: 0x888888,
+    roughness: 1.0,
+    metalness: 0.0,
     side: THREE.DoubleSide
 });
 
-const resolution = 45;
-const effect = new MarchingCubes(resolution, material, false, false, 150000);
+const effect = new MarchingCubes(resolution, roughMaterial, false, false, 600000);
 effect.position.set(0, 0, 0);
-effect.scale.set(50, 50, 50);
+effect.scale.set(60, 60, 60);
 effect.isolation = 0;
 scene.add(effect);
 
 const boxWire = new THREE.LineSegments(
-    new THREE.EdgesGeometry(new THREE.BoxGeometry(50, 50, 50)),
+    new THREE.EdgesGeometry(new THREE.BoxGeometry(60, 60, 60)),
     new THREE.LineBasicMaterial({ color: 0xff00ff })
 );
 scene.add(boxWire);
@@ -55,7 +56,18 @@ function fbmSimplex(x, y, z, octaves) {
     return v;
 }
 
-function bakeBoneStructure() {
+const params = {
+    macroScale: 1.3,
+    caveConnectivity: 0.55,
+    splinterFreq: 40,
+    splinterAmp: 0.15,
+    distAtten: 0.2,
+    distOffset: 1.0
+};
+
+function bakeStructure() {
+    effect.reset();
+    
     let index = 0;
     for (let k = 0; k < resolution; k++) {
         for (let j = 0; j < resolution; j++) {
@@ -65,18 +77,17 @@ function bakeBoneStructure() {
                 const ny = (j / resolution) * 2 - 1;
                 const nz = (k / resolution) * 2 - 1;
 
-                const baseScale = 4.0;
-                const baseFbm = fbmSimplex(nx * baseScale, ny * baseScale, nz * baseScale, 2);
+                const macroFbm = fbmSimplex(nx * params.macroScale, ny * params.macroScale, nz * params.macroScale, 2);
+                let baseDensity = -(macroFbm - params.caveConnectivity);
                 
-                const caveConnectivity = 0.03;
-                let density = baseFbm - caveConnectivity;
+                let splinterNoise = 1.0 - Math.abs(simplex3D(nx * params.splinterFreq, ny * params.splinterFreq, nz * params.splinterFreq));
                 
-                let finalCaveDensity = -density;
+                let roughDensity = baseDensity + (splinterNoise * params.splinterAmp);
                 
                 const distToCenter = Math.sqrt(nx*nx + ny*ny + nz*nz);
-                finalCaveDensity += (distToCenter * 0.3) - 0.1;
+                let finalDensity = roughDensity + (distToCenter * params.distAtten) - params.distOffset;
 
-                effect.field[index] = finalCaveDensity;
+                effect.field[index] = finalDensity;
                 index++;
             }
         }
@@ -92,12 +103,17 @@ controls.enablePan = false;
 controls.minDistance = 5;
 controls.maxDistance = 100;
 
+const info = document.createElement('div');
+info.style.cssText = 'position:fixed;top:10px;left:10px;color:#0ff;font-family:monospace;font-size:11px;background:rgba(0,0,0,0.8);padding:10px;border:1px solid #f0f;z-index:1000;';
+info.innerHTML = `macroScale: ${params.macroScale}<br>caveConnectivity: ${params.caveConnectivity}<br>splinterFreq: ${params.splinterFreq}<br>splinterAmp: ${params.splinterAmp}<br>distAtten: ${params.distAtten}<br>distOffset: ${params.distOffset}`;
+document.body.appendChild(info);
+
 const instructions = document.createElement('div');
-instructions.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#0ff;font-family:monospace;font-size:16px;text-align:center;background:rgba(0,0,0,0.9);padding:25px;border:2px solid #f0f;pointer-events:none;z-index:1000;';
-instructions.innerHTML = 'DRAG TO ORBIT<br>SCROLL TO ZOOM';
+instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-family:monospace;font-size:14px;text-align:center;background:rgba(0,0,0,0.8);padding:15px;border:2px solid #f0f;pointer-events:none;z-index:1000;';
+instructions.innerHTML = 'DRAG TO ORBIT | SCROLL TO ZOOM';
 document.body.appendChild(instructions);
 
-bakeBoneStructure();
+bakeStructure();
 
 function animate() {
     requestAnimationFrame(animate);
