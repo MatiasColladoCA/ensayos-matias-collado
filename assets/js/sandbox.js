@@ -317,29 +317,127 @@ for (let i = 0; i < 7; i++) {
 const sections = sectionDomePositions.map((pos, i) => ({
     domePosition: pos.clone(),
     cameraOffset: new THREE.Vector3(15, 3, 15),
-    label: ['Rojo', 'Azul', 'Amarillo', 'Verde', 'Violeta', 'Rosa', 'Cyan'][i]
+    label: ['Rojo', 'Azul', 'Amarillo', 'Verde', 'Violeta', 'Rosa', 'Cyan'][i],
+    title: ['Ensayos Filosóficos', 'Reflexiones', 'Crítica Cultural', 'Tecnología y Sociedad', 'Arte y Estética', 'Ética y Política', 'Metafísica'][i],
+    description: ['Explorando las grandes preguntas del pensamiento humano', 'Notas sobre la condición contemporánea', 'Análisis de la cultura actual', 'El futuro que estamos construyendo', 'Belleza, forma y significado', 'El bien, el mal y todo lo demás', 'Sobre la naturaleza de la realidad'][i],
+    href: ['/ensayos', '/ensayos', '/ensayos', '/ensayos', '/ensayos', '/ensayos', '/ensayos'][i]
 }));
 
+const hudCanvasSize = 2048;
+const hudBillboards = [];
+
 sections.forEach((section, i) => {
-    const labelEl = document.createElement('div');
-    labelEl.className = 'section-label';
-    labelEl.textContent = `Domo ${section.label}`;
-    labelEl.style.cssText = `
-        position: fixed;
-        padding: 8px 16px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 4px;
-        color: #fff;
-        font-family: sans-serif;
-        font-size: 14px;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s;
-        white-space: nowrap;
-    `;
-    document.body.appendChild(labelEl);
-    section.element = labelEl;
+    const canvas = document.createElement('canvas');
+    canvas.width = hudCanvasSize;
+    canvas.height = hudCanvasSize;
+    const ctx = canvas.getContext('2d');
+    
+    const w = hudCanvasSize;
+    const h = hudCanvasSize;
+    const padding = 80;
+    
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.85)';
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.strokeStyle = '#00ffff';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(padding, padding, w - padding * 2, h - padding * 2);
+    
+    ctx.strokeStyle = '#33ff33';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(padding + 15, padding + 15, w - padding * 2 - 30, h - padding * 2 - 30);
+    
+    ctx.font = 'bold 64px "Courier New", monospace';
+    ctx.fillStyle = '#00ffff';
+    ctx.fillText('[ ]', padding + 30, padding + 100);
+    ctx.fillText('+', w - padding - 100, padding + 100);
+    ctx.fillText('+', padding + 30, h - padding - 30);
+    ctx.fillText('[ ]', w - padding - 100, h - padding - 30);
+    
+    ctx.font = '45px "Courier New", monospace';
+    ctx.fillStyle = 'rgba(0, 255, 255, 0.7)';
+    ctx.fillText('WAYPOINT COORDS:', padding + 40, padding + 170);
+    ctx.fillStyle = '#00ffff';
+    ctx.fillText(`[ ${section.domePosition.x.toFixed(2)} // ${section.domePosition.y.toFixed(2)} // ${section.domePosition.z.toFixed(2)} ]`, padding + 40, padding + 230);
+    
+    ctx.font = '45px "Courier New", monospace';
+    ctx.fillStyle = '#33ff33';
+    ctx.fillText('TELEMETRY: [ONLINE]', padding + 40, padding + 320);
+    
+    ctx.font = '40px "Courier New", monospace';
+    ctx.fillStyle = '#dfff00';
+    ctx.fillText('INTEGRITY: 100%', padding + 40, padding + 390);
+    
+    const titleY = h / 2 + 50;
+    ctx.font = 'bold 180px "Helvetica Neue", Arial, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(section.title, padding + 40, titleY);
+    
+    ctx.font = '55px "Helvetica Neue", Arial, sans-serif';
+    ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
+    const words = section.description.split(' ');
+    let line = '';
+    let y = titleY + 120;
+    const maxWidth = w - padding * 2 - 200;
+    for (const word of words) {
+        const testLine = line + word + ' ';
+        if (ctx.measureText(testLine).width > maxWidth) {
+            ctx.fillText(line.trim(), padding + 40, y);
+            line = word + ' ';
+            y += 80;
+        } else {
+            line = testLine;
+        }
+    }
+    ctx.fillText(line.trim(), padding + 40, y);
+    
+    for (let j = 0; j < 10; j++) {
+        const barX = padding + 40 + j * 60;
+        const barY = h - padding - 200;
+        const barH = 20 + Math.random() * 30;
+        ctx.fillStyle = j % 3 === 0 ? 'rgba(223, 255, 0, 0.8)' : 'rgba(51, 255, 51, 0.4)';
+        ctx.fillRect(barX, barY - barH, 40, barH);
+    }
+    
+    const btnX = w - padding - 400;
+    const btnY = h - padding - 180;
+    const btnW = 320;
+    const btnH = 80;
+    ctx.fillStyle = 'rgba(0, 255, 255, 0.15)';
+    ctx.fillRect(btnX, btnY, btnW, btnH);
+    ctx.strokeStyle = '#00ffff';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(btnX, btnY, btnW, btnH);
+    ctx.font = 'bold 50px "Courier New", monospace';
+    ctx.fillStyle = '#00ffff';
+    ctx.fillText('[NAVEGAR]', btnX + 30, btnY + 55);
+    
+    for (let j = 0; j < 20; j++) {
+        ctx.fillStyle = 'rgba(0, 255, 255, 0.03)';
+        ctx.fillRect(0, j * (h / 20), w, 2);
+    }
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    
+    const material = new THREE.SpriteMaterial({ 
+        map: texture, 
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        side: THREE.DoubleSide
+    });
+    
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(4, 4, 1);
+    sprite.position.copy(section.domePosition);
+    sprite.position.y = -15;
+    sprite.visible = false;
+    
+    scene.add(sprite);
+    hudBillboards.push(sprite);
+    section.billboard = sprite;
 });
 
 let currentSection = 0;
@@ -373,19 +471,12 @@ function flyToSection(index) {
         endDomePos.z + target.cameraOffset.z
     );
     
-    console.log('=== INICIO VUELO ===');
-    console.log('section:', index, target.label);
-    console.log('camera.position ANTES:', camera.position.clone());
-    console.log('endDomePos:', endDomePos.clone());
-    console.log('endPos esperado:', endPos.clone());
-    
     const duration = 2500;
     const startTime = Date.now();
     
     function updateFlight() {
         if (startPos === null) {
             startPos = camera.position.clone();
-            console.log('camera.position AL INICIAR:', startPos.clone());
         }
         
         const elapsed = Date.now() - startTime;
@@ -419,14 +510,6 @@ function flyToSection(index) {
             
             cameraTarget.copy(orbitCenter);
             cameraTarget.y = camera.position.y + Math.sin(PITCH_RAD) * orbitRadiusXZ;
-            
-            console.log('=== FIN VUELO ===');
-            console.log('camera.position:', camera.position.clone());
-            console.log('orbitCenter:', orbitCenter.clone());
-            console.log('cameraTarget:', cameraTarget.clone());
-            console.log('orbitRadiusXZ:', orbitRadiusXZ);
-            console.log('currentTheta:', currentTheta);
-            console.log('desired pitch:', PITCH_DEG, '°');
         }
     }
     
@@ -447,6 +530,12 @@ window.addEventListener('wheel', (e) => {
         flyToSection((currentSection - 1 + sections.length) % sections.length);
     }
 });
+
+function updateHUD() {
+    hudBillboards.forEach((billboard, i) => {
+        billboard.visible = (i === currentSection && !isTransitioning);
+    });
+}
 
 const clock = new THREE.Clock();
 const rotateSpeed = 0.004;
@@ -475,18 +564,10 @@ function animate() {
         if (Date.now() > settleEndTime) {
             isSettling = false;
             isOrbiting = true;
-            console.log('=== FIN SETTLE ===');
-            console.log('camera.position:', camera.position.clone());
-            console.log('orbitCenter:', orbitCenter.clone());
-            console.log('cameraTarget:', cameraTarget.clone());
-            const dx = camera.position.x - orbitCenter.x;
-            const dz = camera.position.z - orbitCenter.z;
-            const dist = Math.sqrt(dx*dx + dz*dz);
-            const pitchActual = Math.atan2(cameraTarget.y - camera.position.y, dist) * (180/Math.PI);
-            console.log('pitch from orbitCenter:', pitchActual, '°');
         }
         camera.lookAt(cameraTarget);
         renderer.render(scene, camera);
+        updateHUD();
         return;
     }
     
@@ -495,6 +576,7 @@ function animate() {
     if (!isOrbiting) {
         camera.lookAt(cameraTarget);
         renderer.render(scene, camera);
+        updateHUD();
         return;
     }
     
@@ -525,6 +607,7 @@ function animate() {
     camera.lookAt(cameraTarget);
     
     renderer.render(scene, camera);
+    updateHUD();
 }
 
 animate();
