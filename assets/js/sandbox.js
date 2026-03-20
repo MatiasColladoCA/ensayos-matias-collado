@@ -4,7 +4,7 @@ import GSAP from 'gsap';
 
 const canvas = document.getElementById('three-canvas');
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0a0a0a);
+scene.background = new THREE.Color(0x020204);
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
 camera.position.set(-3.62, -1.07, 3.28);
@@ -239,54 +239,34 @@ const domeMaterial = new THREE.ShaderMaterial({
 });
 
 const dome = new THREE.LineSegments(domeGeometry, domeMaterial);
-dome.position.y = -15;
 scene.add(dome);
 
-// Stars at vertices
+// Stars at vertices (same positions as dome vertices)
 const starsGeometry = new THREE.BufferGeometry();
-const starPositions = domePositions.slice();
-const starSizes = new Float32Array(starPositions.length / 3);
-
-for (let i = 0; i < starSizes.length; i++) {
-    starSizes[i] = 0.8 + Math.random() * 0.8;
-}
-
-starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(domePositions.slice(), 3));
 
 const starsMaterial = new THREE.ShaderMaterial({
     vertexShader: `
-        attribute float size;
-        varying float vAlpha;
-        uniform float uTime;
-        
         void main() {
-            vAlpha = 0.6 + sin(uTime * 2.0 + position.x * 0.5) * 0.3;
             vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-            gl_PointSize = size * (200.0 / -mvPosition.z);
+            gl_PointSize = 0.75 * (300.0 / -mvPosition.z);
             gl_Position = projectionMatrix * mvPosition;
         }
     `,
     fragmentShader: `
-        varying float vAlpha;
-        
         void main() {
             vec2 center = gl_PointCoord - vec2(0.5);
             float dist = length(center);
             if (dist > 0.5) discard;
-            
-            float alpha = vAlpha * (1.0 - dist * 2.0);
+            float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
             gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
         }
     `,
-    uniforms: {
-        uTime: { value: 0 }
-    },
     transparent: true,
     depthWrite: false
 });
 
 const stars = new THREE.Points(starsGeometry, starsMaterial);
-stars.position.y = -15;
 scene.add(stars);
 
 const clock = new THREE.Clock();
@@ -361,7 +341,6 @@ function animate() {
     
     material.uniforms.uTime.value = clock.getElapsedTime();
     domeMaterial.uniforms.uTime.value = clock.getElapsedTime();
-    starsMaterial.uniforms.uTime.value = clock.getElapsedTime();
     
     renderer.render(scene, camera);
 }
