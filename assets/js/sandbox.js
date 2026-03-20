@@ -162,13 +162,12 @@ const semMaterial = new THREE.ShaderMaterial({
     side: THREE.DoubleSide
 });
 
-const params = {
+let params = {
     macroScale: 1.1,
     spikeScale: 3.0,
     spikeFreq: 5.7,
     distAtten: 0.2,
     distOffset: 1.0,
-    autoMode: false,
     autoInterval: 30
 };
 
@@ -240,6 +239,24 @@ const panel = document.createElement('div');
 panel.style.cssText = 'position:fixed;top:10px;left:10px;color:#888;font-family:monospace;font-size:11px;background:rgba(0,0,0,0.9);padding:12px;border:1px solid #444;z-index:1000;min-width:200px;';
 document.body.appendChild(panel);
 
+let sliderLabels = {};
+let sliderElements = {};
+let autoModeActive = false;
+let autoTimer = 0;
+let clock = new THREE.Clock();
+
+let currentSpikeScale = params.spikeScale;
+let currentSpikeFreq = params.spikeFreq;
+let currentMacroScale = params.macroScale;
+let currentOrganicScale = semMaterial.uniforms.uOrganicScale.value;
+let currentOrganicIntensity = semMaterial.uniforms.uOrganicIntensity.value;
+
+let targetSpikeScale = params.spikeScale;
+let targetSpikeFreq = params.spikeFreq;
+let targetMacroScale = params.macroScale;
+let targetOrganicScale = semMaterial.uniforms.uOrganicScale.value;
+let targetOrganicIntensity = semMaterial.uniforms.uOrganicIntensity.value;
+
 function createSlider(name, min, max, step, value, callback) {
     const div = document.createElement('div');
     div.style.marginBottom = '8px';
@@ -248,6 +265,8 @@ function createSlider(name, min, max, step, value, callback) {
     label.textContent = `${name}: ${typeof value === 'number' ? value.toFixed(2) : value}`;
     label.style.marginBottom = '3px';
     
+    sliderLabels[name] = label;
+    
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = min;
@@ -255,6 +274,8 @@ function createSlider(name, min, max, step, value, callback) {
     slider.step = step;
     slider.value = value;
     slider.style.width = '180px';
+    
+    sliderElements[name] = slider;
     
     slider.addEventListener('input', () => {
         const val = parseFloat(slider.value);
@@ -265,45 +286,49 @@ function createSlider(name, min, max, step, value, callback) {
     div.appendChild(label);
     div.appendChild(slider);
     panel.appendChild(div);
+    
+    return { label, slider };
 }
 
 createSlider('spikeScale', 0.0, 5.0, 0.1, params.spikeScale, (val) => {
     params.spikeScale = val;
+    currentSpikeScale = val;
+    targetSpikeScale = val;
     bakeStructure();
 });
 
 createSlider('spikeFreq', 1.0, 10.0, 0.1, params.spikeFreq, (val) => {
     params.spikeFreq = val;
+    currentSpikeFreq = val;
+    targetSpikeFreq = val;
     bakeStructure();
 });
 
 createSlider('macroScale', 0.5, 3.0, 0.1, params.macroScale, (val) => {
     params.macroScale = val;
+    currentMacroScale = val;
+    targetMacroScale = val;
     bakeStructure();
 });
 
-createSlider('chromePulse', 0.0, 3.0, 0.1, 1.5, (val) => {
+createSlider('chromePulse', 0.0, 5.0, 0.1, semMaterial.uniforms.uChromePulse.value, (val) => {
     semMaterial.uniforms.uChromePulse.value = val;
 });
 
-createSlider('chromeSpeed', 0.5, 10.0, 0.1, 2.0, (val) => {
-    semMaterial.uniforms.uChromeSpeed.value = val;
-});
-
-createSlider('waveFreq', 0.5, 5.0, 0.1, 2.0, (val) => {
-    semMaterial.uniforms.uWaveFreq.value = val;
-});
-
-createSlider('organicSpeed', 0.01, 0.5, 0.01, 0.08, (val) => {
+createSlider('organicSpeed', 0.01, 0.5, 0.01, semMaterial.uniforms.uOrganicSpeed.value, (val) => {
     semMaterial.uniforms.uOrganicSpeed.value = val;
 });
 
-createSlider('organicScale', 0.02, 0.15, 0.01, 0.05, (val) => {
+createSlider('organicScale', 0.02, 0.15, 0.01, semMaterial.uniforms.uOrganicScale.value, (val) => {
     semMaterial.uniforms.uOrganicScale.value = val;
+    currentOrganicScale = val;
+    targetOrganicScale = val;
 });
 
-createSlider('organicIntensity', 0.0, 6.0, 0.1, 3.0, (val) => {
+createSlider('organicIntensity', 0.0, 6.0, 0.1, semMaterial.uniforms.uOrganicIntensity.value, (val) => {
     semMaterial.uniforms.uOrganicIntensity.value = val;
+    currentOrganicIntensity = val;
+    targetOrganicIntensity = val;
 });
 
 const instructions = document.createElement('div');
@@ -325,25 +350,37 @@ autoBtn.addEventListener('click', () => {
 });
 document.body.appendChild(autoBtn);
 
-bakeStructure();
-
-const clock = new THREE.Clock();
-let autoModeActive = false;
-let autoTimer = 0;
-
 function randomInRange(min, max) {
     return Math.random() * (max - min) + min;
 }
 
 function applyRandomParams() {
-    params.spikeScale = randomInRange(1.0, 5.0);
-    params.spikeFreq = randomInRange(3.0, 8.0);
-    params.macroScale = randomInRange(0.8, 2.0);
-    semMaterial.uniforms.uOrganicScale.value = randomInRange(0.03, 0.12);
-    semMaterial.uniforms.uOrganicIntensity.value = randomInRange(1.0, 5.0);
-    
-    bakeStructure();
+    targetSpikeScale = randomInRange(1.0, 5.0);
+    targetSpikeFreq = randomInRange(3.0, 8.0);
+    targetMacroScale = randomInRange(0.8, 2.0);
+    targetOrganicScale = randomInRange(0.03, 0.12);
+    targetOrganicIntensity = randomInRange(1.0, 5.0);
 }
+
+function lerp(current, target, speed) {
+    const diff = target - current;
+    if (Math.abs(diff) < 0.001) return target;
+    return current + diff * speed;
+}
+
+function updateSliderLabel(name, value) {
+    if (sliderLabels[name]) {
+        sliderLabels[name].textContent = `${name}: ${value.toFixed(2)}`;
+    }
+}
+
+function updateSliderValue(name, value) {
+    if (sliderElements[name]) {
+        sliderElements[name].value = value;
+    }
+}
+
+bakeStructure();
 
 function animate() {
     requestAnimationFrame(animate);
@@ -354,9 +391,36 @@ function animate() {
     if (autoModeActive) {
         const pulseVal = 1.5 + Math.abs(Math.sin(time * 0.05)) * 2.5;
         semMaterial.uniforms.uChromePulse.value = pulseVal;
+        updateSliderLabel('chromePulse', pulseVal);
+        updateSliderValue('chromePulse', pulseVal);
         
         const speedVal = 0.3 - Math.abs(Math.sin(time * 0.03)) * 0.25;
         semMaterial.uniforms.uOrganicSpeed.value = Math.max(0.05, speedVal);
+        updateSliderLabel('organicSpeed', Math.max(0.05, speedVal));
+        updateSliderValue('organicSpeed', Math.max(0.05, speedVal));
+        
+        currentSpikeScale = lerp(currentSpikeScale, targetSpikeScale, 0.02);
+        currentSpikeFreq = lerp(currentSpikeFreq, targetSpikeFreq, 0.02);
+        currentMacroScale = lerp(currentMacroScale, targetMacroScale, 0.02);
+        currentOrganicScale = lerp(currentOrganicScale, targetOrganicScale, 0.02);
+        currentOrganicIntensity = lerp(currentOrganicIntensity, targetOrganicIntensity, 0.02);
+        
+        params.spikeScale = currentSpikeScale;
+        params.spikeFreq = currentSpikeFreq;
+        params.macroScale = currentMacroScale;
+        semMaterial.uniforms.uOrganicScale.value = currentOrganicScale;
+        semMaterial.uniforms.uOrganicIntensity.value = currentOrganicIntensity;
+        
+        updateSliderLabel('spikeScale', currentSpikeScale);
+        updateSliderValue('spikeScale', currentSpikeScale);
+        updateSliderLabel('spikeFreq', currentSpikeFreq);
+        updateSliderValue('spikeFreq', currentSpikeFreq);
+        updateSliderLabel('macroScale', currentMacroScale);
+        updateSliderValue('macroScale', currentMacroScale);
+        updateSliderLabel('organicScale', currentOrganicScale);
+        updateSliderValue('organicScale', currentOrganicScale);
+        updateSliderLabel('organicIntensity', currentOrganicIntensity);
+        updateSliderValue('organicIntensity', currentOrganicIntensity);
         
         if (time - autoTimer > params.autoInterval) {
             applyRandomParams();
