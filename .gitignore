@@ -8,8 +8,6 @@ public/
 # Carpetas generadas por Hugo
 /public/
 /resources/_gen/
-/assets/css/
-/assets/js/
 /dist/
 
 # Archivos temporales
