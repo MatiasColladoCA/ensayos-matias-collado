@@ -253,6 +253,10 @@ position = "right"
             name = "Recursos"
             url = "/recursos/"
             weight = 7
+        [[menu.main]]
+            name = "Test 3D"
+            url = "/test/"
+            weight = 8
 
 
 
