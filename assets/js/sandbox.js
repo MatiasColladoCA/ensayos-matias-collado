@@ -17,8 +17,8 @@ const canvas = document.getElementById('three-canvas');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x030303);
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 0, 120);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 0, 180);
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -33,8 +33,8 @@ orbitControls.dampingFactor = 0.05;
 orbitControls.enableZoom = true;
 orbitControls.enableRotate = true;
 orbitControls.enablePan = false;
-orbitControls.minDistance = 50;
-orbitControls.maxDistance = 200;
+orbitControls.minDistance = 80;
+orbitControls.maxDistance = 300;
 orbitControls.target.set(0, 0, 0);
 
 const composer = new EffectComposer(renderer);
@@ -594,9 +594,9 @@ for (let i = 0; i < dripParticleCount; i++) {
     dripPositions[i * 3 + 1] = point.y;
     dripPositions[i * 3 + 2] = point.z;
     
-    dripVelocities[i * 3] = (Math.random() - 0.5) * 0.3;
-    dripVelocities[i * 3 + 1] = -0.5 - Math.random() * 1.5;
-    dripVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.3;
+    dripVelocities[i * 3] = (Math.random() - 0.5) * 0.15;
+    dripVelocities[i * 3 + 1] = 0.25 + Math.random() * 0.75;
+    dripVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.15;
     
     dripLifetimes[i] = Math.random();
     dripSizes[i] = 0.5 + Math.random() * 2.5;
@@ -605,7 +605,7 @@ for (let i = 0; i < dripParticleCount; i++) {
 function updateDripParticles(deltaTime, time) {
     dripMaterial.uniforms.uTime.value = time;
     
-    const gravity = -2.0;
+    const gravity = 1.0;
     const damping = 0.98;
     
     for (let i = 0; i < dripParticleCount; i++) {
@@ -620,15 +620,15 @@ function updateDripParticles(deltaTime, time) {
         dripVelocities[i * 3] *= damping;
         dripVelocities[i * 3 + 2] *= damping;
         
-        if (dripLifetimes[i] <= 0 || dripPositions[i * 3 + 1] < -100) {
+        if (dripLifetimes[i] <= 0 || dripPositions[i * 3 + 1] > 150) {
             const point = randomPointOnSphere(75);
             dripPositions[i * 3] = point.x;
             dripPositions[i * 3 + 1] = point.y;
             dripPositions[i * 3 + 2] = point.z;
             
-            dripVelocities[i * 3] = (Math.random() - 0.5) * 0.5;
-            dripVelocities[i * 3 + 1] = -0.3 - Math.random() * 0.8;
-            dripVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.5;
+            dripVelocities[i * 3] = (Math.random() - 0.5) * 0.25;
+            dripVelocities[i * 3 + 1] = 0.15 + Math.random() * 0.4;
+            dripVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.25;
             
             dripLifetimes[i] = 0.8 + Math.random() * 1.5;
             dripSizes[i] = 0.5 + Math.random() * 2.0;
@@ -636,6 +636,206 @@ function updateDripParticles(deltaTime, time) {
     }
     
     dripGeometry.attributes.position.needsUpdate = true;
+}
+
+const aiPrefixes = ['SYS', 'CORE', 'NODE', 'PROC', 'EXEC', 'LINK', 'NET', 'DATA', 'MEM', 'CPU', 'IO', 'API', 'SVC', 'DAEMON', 'KERNEL', 'DRIVER'];
+const aiVerbs = ['INIT', 'SYNC', 'LOAD', 'RUN', 'SEND', 'RECV', 'PUSH', 'PULL', 'FLUSH', 'WRITE', 'READ', 'LOCK', 'UNLOCK', 'START', 'STOP', 'RESET'];
+const aiNouns = ['BUFFER', 'STACK', 'QUEUE', 'CACHE', 'TABLE', 'INDEX', 'BLOCK', 'FRAME', 'PACKET', 'TOKEN', 'STREAM', 'HANDLE', 'PORT', 'SOCKET'];
+const aiSymbols = ['->', '=>', '::', '[]', '{}', '()', '<>', '...', '***', '###', '===', '---', ':::', '<<<', '>>>'];
+
+function generateAISyntax() {
+    const patterns = Math.floor(Math.random() * 4);
+    
+    if (patterns === 0) {
+        const prefix = aiPrefixes[Math.floor(Math.random() * aiPrefixes.length)];
+        const verb = aiVerbs[Math.floor(Math.random() * aiVerbs.length)];
+        const num = Math.floor(Math.random() * 9999).toString(16).toUpperCase();
+        return `${prefix}:${verb} 0x${num}`;
+    }
+    else if (patterns === 1) {
+        const noun = aiNouns[Math.floor(Math.random() * aiNouns.length)];
+        const sym = aiSymbols[Math.floor(Math.random() * aiSymbols.length)];
+        const val = Math.floor(Math.random() * 65535);
+        return `${noun}${sym}${val}`;
+    }
+    else if (patterns === 2) {
+        const verb = aiVerbs[Math.floor(Math.random() * aiVerbs.length)];
+        const noun = aiNouns[Math.floor(Math.random() * aiNouns.length)];
+        const addr = Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255);
+        return `${verb}:${noun} @${addr}`;
+    }
+    else {
+        const p1 = aiPrefixes[Math.floor(Math.random() * aiPrefixes.length)];
+        const p2 = aiVerbs[Math.floor(Math.random() * aiVerbs.length)];
+        const p3 = aiNouns[Math.floor(Math.random() * aiNouns.length)];
+        const num = Math.random().toFixed(4);
+        return `${p1}:${p2}:${p3} ${num}`;
+    }
+}
+
+const terminalLineCount = 30;
+const terminalLines = [];
+
+const terminalVertexShader = `
+    varying vec2 vUv;
+    void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+`;
+
+const terminalFragmentShader = `
+    varying vec2 vUv;
+    uniform sampler2D uTexture;
+    uniform float uOpacity;
+    uniform float uResolution;
+    
+    void main() {
+        vec2 uv = vUv;
+        if (uResolution < 1.0) {
+            uv = floor(uv * 128.0) / 128.0;
+        }
+        vec4 color = texture2D(uTexture, uv);
+        gl_FragColor = vec4(color.rgb, color.a * uOpacity);
+    }
+`;
+
+const terminalCanvas = document.createElement('canvas');
+terminalCanvas.width = 512;
+terminalCanvas.height = 32;
+const terminalCtx = terminalCanvas.getContext('2d');
+
+const terminalTextures = [];
+const terminalMaterials = [];
+const terminalSprites = [];
+
+const LINE_GROUP = {
+    CLOSE: 0,
+    MID: 1,
+    FAR: 2
+};
+
+for (let i = 0; i < terminalLineCount; i++) {
+    const group = i < 10 ? LINE_GROUP.CLOSE : (i < 20 ? LINE_GROUP.MID : LINE_GROUP.FAR);
+    
+    const texture = new THREE.CanvasTexture(terminalCanvas);
+    texture.needsUpdate = true;
+    terminalTextures.push(texture);
+    
+    const material = new THREE.ShaderMaterial({
+        vertexShader: terminalVertexShader,
+        fragmentShader: terminalFragmentShader,
+        uniforms: {
+            uTexture: { value: texture },
+            uOpacity: { value: 0 },
+            uResolution: { value: 1 }
+        },
+        transparent: true,
+        depthWrite: false
+    });
+    terminalMaterials.push(material);
+    
+    const sprite = new THREE.Sprite(material);
+    
+    if (group === LINE_GROUP.CLOSE) {
+        sprite.position.set(
+            (Math.random() - 0.5) * 160,
+            100 - (i % 10) * 12,
+            10 + Math.random() * 20
+        );
+        sprite.scale.set(180, 12, 1);
+    } else if (group === LINE_GROUP.MID) {
+        sprite.position.set(
+            (Math.random() - 0.5) * 180,
+            100 - (i % 10) * 12,
+            50 + Math.random() * 30
+        );
+        sprite.scale.set(100, 8, 1);
+    } else {
+        sprite.position.set(
+            (Math.random() - 0.5) * 200,
+            100 - (i % 10) * 12,
+            160 + Math.random() * 50
+        );
+        sprite.scale.set(60, 5, 1);
+    }
+    
+    scene.add(sprite);
+    terminalSprites.push(sprite);
+    
+    terminalLines.push({
+        group: group,
+        y: sprite.position.y,
+        speed: group === LINE_GROUP.CLOSE ? 1.5 : (group === LINE_GROUP.MID ? 2.5 : 3.5),
+        text: generateAISyntax(),
+        stepTimer: 0,
+        stepInterval: 0.04 + Math.random() * 0.08,
+        baseX: sprite.position.x,
+        xDrift: 0
+    });
+}
+
+function renderTerminalLine(index) {
+    const line = terminalLines[index];
+    const text = line.text;
+    const group = line.group;
+    
+    terminalCtx.clearRect(0, 0, 512, 32);
+    
+    if (group === LINE_GROUP.CLOSE) {
+        terminalCtx.font = 'bold 24px "JetBrains Mono", monospace';
+        terminalCtx.fillStyle = `hsla(170, 80%, 65%, 1)`;
+    } else if (group === LINE_GROUP.MID) {
+        terminalCtx.font = '16px "JetBrains Mono", monospace';
+        terminalCtx.fillStyle = `hsla(160, 70%, 55%, 1)`;
+    } else {
+        terminalCtx.font = '12px "JetBrains Mono", monospace';
+        terminalCtx.fillStyle = `hsla(150, 60%, 45%, 1)`;
+    }
+    
+    terminalCtx.fillText(text, 8, 22);
+    
+    terminalTextures[index].needsUpdate = true;
+}
+
+function updateTerminalLines(deltaTime, time) {
+    for (let i = 0; i < terminalLineCount; i++) {
+        const line = terminalLines[i];
+        const sprite = terminalSprites[i];
+        
+        line.stepTimer += deltaTime;
+        
+        if (line.stepTimer >= line.stepInterval) {
+            line.stepTimer = 0;
+            line.y -= line.speed;
+            line.xDrift = (Math.random() - 0.5) * 0.5;
+        }
+        
+        if (line.y < -120) {
+            line.y = 110 + Math.random() * 20;
+            line.text = generateAISyntax();
+            line.baseX = (Math.random() - 0.5) * 160;
+        }
+        
+        sprite.position.y = line.y;
+        sprite.position.x = line.baseX + Math.sin(time * 0.5 + i) * line.xDrift * 5;
+        
+        if (line.group === LINE_GROUP.CLOSE) {
+            sprite.material.uniforms.uOpacity.value = 0.9;
+            sprite.material.uniforms.uResolution.value = 0.3;
+            sprite.renderOrder = 10;
+        } else if (line.group === LINE_GROUP.MID) {
+            sprite.material.uniforms.uOpacity.value = 0.6;
+            sprite.material.uniforms.uResolution.value = 0.7;
+            sprite.renderOrder = 5;
+        } else {
+            sprite.material.uniforms.uOpacity.value = 0.3;
+            sprite.material.uniforms.uResolution.value = 1.0;
+            sprite.renderOrder = -10;
+        }
+        
+        renderTerminalLine(i);
+    }
 }
 
 function syncMaterials() {
@@ -1007,16 +1207,16 @@ toggleBtn.addEventListener('click', () => {
 document.body.appendChild(toggleBtn);
 
 const waypoints = [
-    { position: new THREE.Vector3(0, 0, 120), target: new THREE.Vector3(0, 0, 0), section: 0 },
-    { position: new THREE.Vector3(80, 30, 80), target: new THREE.Vector3(0, 0, 0), section: 1 },
-    { position: new THREE.Vector3(100, -20, -40), target: new THREE.Vector3(0, 0, 0), section: 2 },
-    { position: new THREE.Vector3(-60, 50, -60), target: new THREE.Vector3(0, 0, 0), section: 3 },
-    { position: new THREE.Vector3(-100, -30, 40), target: new THREE.Vector3(0, 0, 0), section: 4 },
-    { position: new THREE.Vector3(50, 80, -80), target: new THREE.Vector3(0, 0, 0), section: 5 },
-    { position: new THREE.Vector3(-80, -60, -60), target: new THREE.Vector3(0, 0, 0), section: 6 },
-    { position: new THREE.Vector3(30, -80, 60), target: new THREE.Vector3(0, 0, 0), section: 7 },
-    { position: new THREE.Vector3(-40, 100, 30), target: new THREE.Vector3(0, 0, 0), section: 8 },
-    { position: new THREE.Vector3(0, 0, 120), target: new THREE.Vector3(0, 0, 0), section: 9 }
+    { position: new THREE.Vector3(0, 0, 180), target: new THREE.Vector3(0, 0, 0), section: 0 },
+    { position: new THREE.Vector3(120, 45, 120), target: new THREE.Vector3(0, 0, 0), section: 1 },
+    { position: new THREE.Vector3(150, -30, -60), target: new THREE.Vector3(0, 0, 0), section: 2 },
+    { position: new THREE.Vector3(-90, 75, -90), target: new THREE.Vector3(0, 0, 0), section: 3 },
+    { position: new THREE.Vector3(-150, -45, 60), target: new THREE.Vector3(0, 0, 0), section: 4 },
+    { position: new THREE.Vector3(75, 120, -120), target: new THREE.Vector3(0, 0, 0), section: 5 },
+    { position: new THREE.Vector3(-120, -90, -90), target: new THREE.Vector3(0, 0, 0), section: 6 },
+    { position: new THREE.Vector3(45, -120, 90), target: new THREE.Vector3(0, 0, 0), section: 7 },
+    { position: new THREE.Vector3(-60, 150, 45), target: new THREE.Vector3(0, 0, 0), section: 8 },
+    { position: new THREE.Vector3(0, 0, 180), target: new THREE.Vector3(0, 0, 0), section: 9 }
 ];
 
 const sections = [
@@ -1657,7 +1857,7 @@ sections.forEach((section, i) => {
 
 let scrollProgress = 0;
 const scrollSensitivity = 0.0003;
-let targetCameraPos = new THREE.Vector3(0, 0, 120);
+let targetCameraPos = new THREE.Vector3(0, 0, 180);
 let autoMutate = true;
 let mutationTimer = 0;
 
@@ -1865,6 +2065,7 @@ function animate() {
     glitchPass.uniforms.uTime.value = time;
     glitchPass.uniforms.uIntensity.value = glitchIntensity;
     updateDripParticles(0.016, time);
+    updateTerminalLines(0.016, time);
     
     camera.position.lerp(targetCameraPos, 0.03);
     camera.lookAt(0, 0, 0);
