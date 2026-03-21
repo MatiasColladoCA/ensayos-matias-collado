@@ -163,6 +163,186 @@ const glitchShader = {
 const glitchPass = new ShaderPass(glitchShader);
 composer.addPass(glitchPass);
 
+const purpleNegativeShader = {
+    uniforms: {
+        tDiffuse: { value: null },
+        uActive: { value: 0.0 },
+        uRectX: { value: 0.25 },
+        uRectY: { value: 0.25 },
+        uRectWidth: { value: 0.3 },
+        uRectHeight: { value: 0.2 },
+        uIntensity: { value: 0.85 },
+        uFlicker: { value: 1.0 }
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform float uActive;
+        uniform float uRectX;
+        uniform float uRectY;
+        uniform float uRectWidth;
+        uniform float uRectHeight;
+        uniform float uIntensity;
+        uniform float uFlicker;
+        varying vec2 vUv;
+
+        vec3 rgb2hsl(vec3 color) {
+            float maxC = max(max(color.r, color.g), color.b);
+            float minC = min(min(color.r, color.g), color.b);
+            float l = (maxC + minC) / 2.0;
+            float s = 0.0;
+            float h = 0.0;
+            if (maxC != minC) {
+                float d = maxC - minC;
+                s = l > 0.5 ? d / (2.0 - maxC - minC) : d / (maxC + minC);
+                if (maxC == color.r) {
+                    h = (color.g - color.b) / d + (color.g < color.b ? 6.0 : 0.0);
+                } else if (maxC == color.g) {
+                    h = (color.b - color.r) / d + 2.0;
+                } else {
+                    h = (color.r - color.g) / d + 4.0;
+                }
+                h /= 6.0;
+            }
+            return vec3(h, s, l);
+        }
+
+        float hue2rgb(float p, float q, float t) {
+            if (t < 0.0) t += 1.0;
+            if (t > 1.0) t -= 1.0;
+            if (t < 1.0/6.0) return p + (q - p) * 6.0 * t;
+            if (t < 1.0/2.0) return q;
+            if (t < 2.0/3.0) return p + (q - p) * (2.0/3.0 - t) * 6.0;
+            return p;
+        }
+
+        vec3 hsl2rgb(vec3 hsl) {
+            float h = hsl.x;
+            float s = hsl.y;
+            float l = hsl.z;
+            if (s == 0.0) {
+                return vec3(l);
+            }
+            float q = l < 0.5 ? l * (1.0 + s) : l + s - l * s;
+            float p = 2.0 * l - q;
+            return vec3(
+                hue2rgb(p, q, h + 1.0/3.0),
+                hue2rgb(p, q, h),
+                hue2rgb(p, q, h - 1.0/3.0)
+            );
+        }
+
+        void main() {
+            vec2 uv = vUv;
+            vec4 color = texture2D(tDiffuse, uv);
+
+            if (uActive < 0.01) {
+                gl_FragColor = color;
+                return;
+            }
+
+            bool inRect = uv.x >= uRectX && 
+                          uv.x <= uRectX + uRectWidth &&
+                          uv.y >= uRectY && 
+                          uv.y <= uRectY + uRectHeight;
+
+            if (!inRect) {
+                gl_FragColor = color;
+                return;
+            }
+
+            vec3 hsl = rgb2hsl(color.rgb);
+            
+            hsl.x = fract(hsl.x + 0.5);
+            hsl.y = min(hsl.y * 1.3, 1.0);
+            hsl.z = 1.0 - hsl.z;
+            
+            vec3 negative = hsl2rgb(hsl);
+            
+            float purpleBase = 0.75;
+            negative.r = mix(negative.r, purpleBase, 0.4);
+            negative.b = mix(negative.b, purpleBase + 0.1, 0.3);
+            negative.g = mix(negative.g, purpleBase * 0.3, 0.5);
+            
+            float localIntensity = uIntensity * uFlicker;
+            vec3 finalColor = mix(color.rgb, negative, localIntensity);
+            
+            gl_FragColor = vec4(finalColor, 1.0);
+        }
+    `
+};
+
+const purpleNegativePass = new ShaderPass(purpleNegativeShader);
+purpleNegativePass.renderToScreen = true;
+composer.addPass(purpleNegativePass);
+
+let fortuitousRectActive = false;
+let fortuitousRectTimer = 0;
+let fortuitousRectDuration = 0;
+let fortuitousRectCooldown = 5.0;
+let fortuitousRectFlickers = 0;
+let fortuitousRectFlickerState = true;
+
+function spawnFortuitousRect() {
+    if (fortuitousRectActive) return;
+    
+    fortuitousRectActive = true;
+    fortuitousRectFlickers = 0;
+    fortuitousRectFlickerState = true;
+    
+    const x = Math.random() * 0.5;
+    const y = Math.random() * 0.5;
+    const w = 0.05 + Math.random() * 0.45;
+    const h = 0.05 + Math.random() * 0.45;
+    
+    fortuitousRectDuration = 0.016 + Math.random() * 0.017;
+    
+    purpleNegativePass.uniforms.uRectX.value = x;
+    purpleNegativePass.uniforms.uRectY.value = y;
+    purpleNegativePass.uniforms.uRectWidth.value = w;
+    purpleNegativePass.uniforms.uRectHeight.value = h;
+    purpleNegativePass.uniforms.uActive.value = 1.0;
+    purpleNegativePass.uniforms.uFlicker.value = 1.0;
+    
+    const flickerInterval = 0.016 + Math.random() * 0.017;
+    const maxFlickers = 1 + Math.floor(Math.random() * 5);
+    
+    function flicker() {
+        if (!fortuitousRectActive) return;
+        if (fortuitousRectFlickers >= maxFlickers) return;
+        
+        fortuitousRectFlickerState = !fortuitousRectFlickerState;
+        purpleNegativePass.uniforms.uFlicker.value = fortuitousRectFlickerState ? 1.0 : 0.0;
+        fortuitousRectFlickers++;
+        
+        setTimeout(flicker, flickerInterval * 1000);
+    }
+    
+    setTimeout(flicker, flickerInterval * 1000);
+}
+
+function updateFortuitousRect(deltaTime) {
+    if (fortuitousRectActive) {
+        fortuitousRectTimer += deltaTime;
+        
+        if (fortuitousRectTimer >= fortuitousRectDuration) {
+            fortuitousRectActive = false;
+            fortuitousRectTimer = 0;
+            purpleNegativePass.uniforms.uActive.value = 0.0;
+            purpleNegativePass.uniforms.uFlicker.value = 1.0;
+            
+            fortuitousRectCooldown = 2.0 + Math.random() * 8.0;
+            setTimeout(spawnFortuitousRect, fortuitousRectCooldown * 1000);
+        }
+    }
+}
+
 const simplex3D = createNoise3D();
 
 function fbmSimplex(x, y, z, octaves) {
@@ -617,6 +797,28 @@ createSlider('toneExposure', 0.1, 3.0, 0.1, 1.5, (val) => {
     renderer.toneMappingExposure = val;
 });
 
+createSectionHeader('[ PURPLE NEGATIVE ]');
+
+createSlider('rectX', 0.0, 0.7, 0.05, 0.25, (val) => {
+    purpleNegativePass.uniforms.uRectX.value = val;
+});
+
+createSlider('rectY', 0.0, 0.7, 0.05, 0.25, (val) => {
+    purpleNegativePass.uniforms.uRectY.value = val;
+});
+
+createSlider('rectWidth', 0.1, 0.8, 0.05, 0.5, (val) => {
+    purpleNegativePass.uniforms.uRectWidth.value = val;
+});
+
+createSlider('rectHeight', 0.1, 0.8, 0.05, 0.5, (val) => {
+    purpleNegativePass.uniforms.uRectHeight.value = val;
+});
+
+createSlider('intensity', 0.0, 1.0, 0.05, 0.85, (val) => {
+    purpleNegativePass.uniforms.uIntensity.value = val;
+});
+
 createSlider('mirrorSize', 50, 400, 10, 250, (val) => {
     mirrorCube.scale.set(val/200, val/200, val/200);
 }, 0);
@@ -660,6 +862,8 @@ createToggle('Mirror Cube', true, (val) => {
 createToggle('Lensflare', true, (val) => {
     lensflare.visible = val;
 });
+
+
 
 createToggle('HUD Telemetry', true, (val) => {
     telemetryTerminal.style.display = val ? 'block' : 'none';
@@ -1479,6 +1683,8 @@ bakeStructureWithWorker(() => {
     mirrorCube.visible = true;
     
     console.log('[INIT] CubeCamera rendered once on load');
+    
+    setTimeout(spawnFortuitousRect, 2000);
 });
 
 clock.start();
@@ -1575,6 +1781,7 @@ function animate() {
     updateTypewriter(0.016);
     updateTelemetryTerminal(0.016);
     updateSectionTelemetry(currentSection % 5);
+    updateFortuitousRect(0.016);
     
     if (glitchIntensity > 0.01) {
         glitchIntensity *= 0.95;
