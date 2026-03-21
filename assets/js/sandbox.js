@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MarchingCubes } from 'three/examples/jsm/objects/MarchingCubes.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
@@ -21,6 +22,17 @@ camera.position.set(0, 0, 120);
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+let orbitControls = new OrbitControls(camera, canvas);
+orbitControls.enabled = false;
+orbitControls.enableDamping = true;
+orbitControls.dampingFactor = 0.05;
+orbitControls.enableZoom = true;
+orbitControls.enableRotate = true;
+orbitControls.enablePan = false;
+orbitControls.minDistance = 50;
+orbitControls.maxDistance = 200;
+orbitControls.target.set(0, 0, 0);
 
 const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
@@ -1037,12 +1049,14 @@ function handleScrollInput(deltaY) {
 }
 
 window.addEventListener('wheel', (e) => {
+    if (orbitControls.enabled) return;
     e.preventDefault();
     e.stopPropagation();
     handleScrollInput(e.deltaY);
 }, { passive: false });
 
 document.addEventListener('scroll', (e) => {
+    if (orbitControls.enabled) return;
     e.preventDefault();
     e.stopPropagation();
     window.scrollTo(0, 0);
@@ -1053,6 +1067,7 @@ sectionsWrapper.addEventListener('touchmove', (e) => {
 }, { passive: false });
 
 window.addEventListener('touchmove', (e) => {
+    if (orbitControls.enabled) return;
     if (e.touches.length > 0) {
         e.preventDefault();
         handleScrollInput(e.touches[0].clientY * 0.5);
@@ -1205,29 +1220,26 @@ function animate() {
         glitchIntensity *= 0.95;
     }
     
-    controls.update();
+    if (orbitControls.enabled) {
+        orbitControls.update();
+    }
+    
     composer.render();
 }
-
-let controls = {
-    update: function() {},
-    enableDamping: false
-};
 
 const orbitControlsBtn = document.createElement('button');
 orbitControlsBtn.textContent = '○ ORBIT';
 orbitControlsBtn.style.cssText = 'position:fixed;top:90px;right:10px;color:#888;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #444;cursor:pointer;z-index:1001;';
 orbitControlsBtn.addEventListener('click', () => {
-    if (controls.enableDamping) {
-        controls.enableDamping = false;
-        orbitControlsBtn.textContent = '○ ORBIT';
-        orbitControlsBtn.style.borderColor = '#444';
-        orbitControlsBtn.style.color = '#888';
-    } else {
-        controls.enableDamping = true;
+    orbitControls.enabled = !orbitControls.enabled;
+    if (orbitControls.enabled) {
         orbitControlsBtn.textContent = '● ORBIT';
         orbitControlsBtn.style.borderColor = '#00ffcc';
         orbitControlsBtn.style.color = '#00ffcc';
+    } else {
+        orbitControlsBtn.textContent = '○ ORBIT';
+        orbitControlsBtn.style.borderColor = '#444';
+        orbitControlsBtn.style.color = '#888';
     }
 });
 document.body.appendChild(orbitControlsBtn);
