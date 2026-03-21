@@ -250,6 +250,7 @@ const fragmentShader = `
     uniform float uChromePulse;
     uniform float uChromeSpeed;
     uniform float uWaveFreq;
+    uniform samplerCube tCube;
     
     varying vec3 vNormal;
     varying vec3 vWorldPos;
@@ -275,24 +276,33 @@ const fragmentShader = `
         vec3 normal = normalize(vNormal);
         vec3 viewDir = normalize(vViewPos);
         
-        float fresnel = pow(1.0 - abs(dot(viewDir, normal)), 3.0);
+        vec3 reflectDir = reflect(-viewDir, normal);
+        vec3 envColor = textureCube(tCube, reflectDir).rgb;
+        
+        float fresnel = pow(1.0 - abs(dot(viewDir, normal)), 4.0);
         
         float wave = noiseWave(vWorldPos, uTime) * 0.5 + 0.5;
         float chromeMod = 1.0 + (wave * uChromePulse);
         
-        float facingLight = max(dot(normal, normalize(vec3(1.0, 1.0, 0.5))), 0.0);
+        vec3 lightDir = normalize(vec3(1.0, 1.0, 0.5));
+        vec3 halfDir = normalize(lightDir + viewDir);
+        float specular = pow(max(dot(normal, halfDir), 0.0), 128.0);
+        
+        float facingLight = max(dot(normal, lightDir), 0.0);
         float backLight = max(dot(normal, normalize(vec3(-1.0, 0.5, -0.5))), 0.0) * 0.3;
         
-        float brightness = (facingLight * 0.15 + backLight * 0.4 + fresnel * 0.3) * chromeMod;
+        float brightness = (facingLight * 0.1 + backLight * 0.3 + fresnel * 0.4) * chromeMod;
         
         brightness = clamp(brightness, 0.0, 1.0);
         
-        vec3 darkBase = vec3(0.015, 0.015, 0.018);
-        vec3 brightEdge = vec3(0.92, 0.92, 0.95);
+        vec3 darkBase = vec3(0.01, 0.01, 0.012);
+        vec3 brightEdge = vec3(0.9, 0.9, 0.95);
         
-        vec3 color = mix(darkBase, brightEdge, brightness);
+        vec3 chromeColor = mix(darkBase, brightEdge, brightness);
+        chromeColor += envColor * fresnel * 0.6;
+        chromeColor += vec3(1.0) * specular * 0.5;
         
-        gl_FragColor = vec4(color, 1.0);
+        gl_FragColor = vec4(chromeColor, 1.0);
     }
 `;
 
@@ -306,7 +316,8 @@ const semMaterial = new THREE.ShaderMaterial({
         uWaveFreq: { value: 0.5 },
         uOrganicSpeed: { value: 0.08 },
         uOrganicScale: { value: 0.05 },
-        uOrganicIntensity: { value: 3.0 }
+        uOrganicIntensity: { value: 3.0 },
+        tCube: { value: cubeRenderTarget.texture }
     },
     side: THREE.DoubleSide
 });
@@ -321,71 +332,19 @@ let params = {
 };
 
 const resolution = 60;
-const numInstances = 3;
 const instanceMaterial = [];
 const instances = [];
 
-for (let i = 0; i < numInstances; i++) {
-    const mat = semMaterial.clone();
-    instanceMaterial.push(mat);
-    
-    const effect = new MarchingCubes(resolution, mat, false, false, 300000);
-    effect.scale.set(45, 45, 45);
-    effect.isolation = 0;
-    
-    const angle = (i / numInstances) * Math.PI * 2;
-    const radius = 30;
-    effect.position.set(
-        Math.cos(angle) * radius,
-        0,
-        Math.sin(angle) * radius
-    );
-    
-    instances.push(effect);
-    scene.add(effect);
-}
+const mat = semMaterial.clone();
+instanceMaterial.push(mat);
 
-let multiInstanceMode = true;
-const instanceVisibility = [true, true, true];
+const effect = new MarchingCubes(resolution, mat, false, false, 300000);
+effect.scale.set(75, 75, 75);
+effect.isolation = 0;
+effect.position.set(0, 0, 0);
 
-function setInstanceMode(multi) {
-    multiInstanceMode = multi;
-    if (multi) {
-        instances.forEach((inst, i) => {
-            inst.visible = instanceVisibility[i];
-        });
-    } else {
-        instances.forEach((inst, i) => {
-            inst.visible = i === 0;
-        });
-    }
-}
-
-const toggleInstancesBtn = document.createElement('button');
-toggleInstancesBtn.textContent = '◆◆◆ INSTANCES';
-toggleInstancesBtn.id = 'toggle-instances-btn';
-toggleInstancesBtn.style.cssText = 'position:fixed;top:130px;right:40px;color:#ff00ff;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #ff00ff;cursor:pointer;z-index:1001;';
-toggleInstancesBtn.addEventListener('click', () => {
-    multiInstanceMode = !multiInstanceMode;
-    setInstanceMode(multiInstanceMode);
-    toggleInstancesBtn.textContent = multiInstanceMode ? '◆◆◆ INSTANCES' : '◆ INSTANCES';
-    toggleInstancesBtn.style.color = multiInstanceMode ? '#ff00ff' : '#888';
-    toggleInstancesBtn.style.borderColor = multiInstanceMode ? '#ff00ff' : '#444';
-});
-document.body.appendChild(toggleInstancesBtn);
-
-window.addEventListener('keydown', (e) => {
-    if (e.key === '1') {
-        instanceVisibility[0] = !instanceVisibility[0];
-        instances[0].visible = instanceVisibility[0];
-    } else if (e.key === '2') {
-        instanceVisibility[1] = !instanceVisibility[1];
-        instances[1].visible = instanceVisibility[1];
-    } else if (e.key === '3') {
-        instanceVisibility[2] = !instanceVisibility[2];
-        instances[2].visible = instanceVisibility[2];
-    }
-});
+instances.push(effect);
+scene.add(effect);
 
 function syncMaterials() {
     instanceMaterial.forEach(mat => {
@@ -396,62 +355,42 @@ function syncMaterials() {
         mat.uniforms.uOrganicSpeed.value = semMaterial.uniforms.uOrganicSpeed.value;
         mat.uniforms.uOrganicScale.value = semMaterial.uniforms.uOrganicScale.value;
         mat.uniforms.uOrganicIntensity.value = semMaterial.uniforms.uOrganicIntensity.value;
+        mat.uniforms.tCube.value = cubeRenderTarget.texture;
     });
-}
-
-function ferroSpikesJS(x, y, z, freq) {
-    const px = Math.abs(Math.sin(x * freq * Math.PI));
-    const py = Math.abs(Math.sin(y * freq * Math.PI));
-    const pz = Math.abs(Math.sin(z * freq * Math.PI));
-    const ridge = px * py + py * pz + px * pz;
-    return Math.max(0, 1 - Math.pow(ridge, 2.5));
 }
 
 function bakeStructure() {
-    instances.forEach((effect, idx) => {
-        effect.reset();
-        
-        const spikeFreq = params.spikeFreq * 3;
-        const spikeScale = params.spikeScale * 0.08;
-        const noiseOffset = idx * 17.3;
-        
-        let index = 0;
-        for (let k = 0; k < resolution; k++) {
-            for (let j = 0; j < resolution; j++) {
-                for (let i = 0; i < resolution; i++) {
-                    
-                    const nx = (i / resolution) * 2 - 1;
-                    const ny = (j / resolution) * 2 - 1;
-                    const nz = (k / resolution) * 2 - 1;
+    const effect = instances[0];
+    effect.reset();
+    
+    let index = 0;
+    for (let k = 0; k < resolution; k++) {
+        for (let j = 0; j < resolution; j++) {
+            for (let i = 0; i < resolution; i++) {
+                
+                const nx = (i / resolution) * 2 - 1;
+                const ny = (j / resolution) * 2 - 1;
+                const nz = (k / resolution) * 2 - 1;
 
-                    const macroFbm = fbmSimplex(
-                        nx * params.macroScale + noiseOffset,
-                        ny * params.macroScale + noiseOffset * 0.7,
-                        nz * params.macroScale + noiseOffset * 0.5,
-                        2
-                    );
-                    let baseDensity = -(macroFbm - 0.55);
-                    
-                    const distToCenter = Math.sqrt(nx*nx + ny*ny + nz*nz);
-                    let finalDensity = baseDensity + (distToCenter * params.distAtten) - params.distOffset;
-                    
-                    const spike = ferroSpikesJS(
-                        nx * 10 + noiseOffset,
-                        ny * 10 + noiseOffset,
-                        nz * 10 + noiseOffset,
-                        spikeFreq
-                    );
-                    finalDensity += spike * spikeScale;
-                    
-                    finalDensity = Math.max(-1, Math.min(1, finalDensity));
+                const macroFbm = fbmSimplex(
+                    nx * params.macroScale,
+                    ny * params.macroScale,
+                    nz * params.macroScale,
+                    2
+                );
+                let baseDensity = -(macroFbm - 0.55);
+                
+                const distToCenter = Math.sqrt(nx*nx + ny*ny + nz*nz);
+                let finalDensity = baseDensity + (distToCenter * params.distAtten) - params.distOffset;
+                
+                finalDensity = Math.max(-1, Math.min(1, finalDensity));
 
-                    effect.field[index] = finalDensity;
-                    index++;
-                }
+                effect.field[index] = finalDensity;
+                index++;
             }
         }
-        effect.update();
-    });
+    }
+    effect.update();
 }
 
 let isCalculating = false;
@@ -461,7 +400,7 @@ function bakeStructureWithWorker(callback) {
     if (isCalculating) return;
     isCalculating = true;
     
-    const worker = new Worker('/js/marching-cubes-worker.js');
+    const worker = new Worker('./js/marching-cubes-worker.js');
     
     worker.onmessage = function(e) {
         if (e.data.type === 'progress') {
@@ -470,16 +409,14 @@ function bakeStructureWithWorker(callback) {
             if (statusEl) statusEl.textContent = e.data.message;
             if (barEl) barEl.style.width = (e.data.progress * 100) + '%';
         } else if (e.data.type === 'complete') {
-            const fields = e.data.fields;
+            const field = e.data.field;
             
-            instances.forEach((effect, idx) => {
-                effect.reset();
-                const field = fields[idx];
-                for (let i = 0; i < field.length; i++) {
-                    effect.field[i] = field[i];
-                }
-                effect.update();
-            });
+            const effect = instances[0];
+            effect.reset();
+            for (let i = 0; i < field.length; i++) {
+                effect.field[i] = field[i];
+            }
+            effect.update();
             
             worker.terminate();
             isCalculating = false;
@@ -498,7 +435,6 @@ function bakeStructureWithWorker(callback) {
     
     worker.postMessage({
         resolution: resolution,
-        numInstances: numInstances,
         params: params
     });
 }
