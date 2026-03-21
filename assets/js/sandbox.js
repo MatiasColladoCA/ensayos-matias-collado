@@ -3,8 +3,9 @@ import { MarchingCubes } from 'three/examples/jsm/objects/MarchingCubes.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare.js';
 import { createNoise3D } from 'simplex-noise';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -22,6 +23,8 @@ camera.position.set(0, 0, 120);
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ReinhardToneMapping;
+renderer.toneMappingExposure = 1.5;
 
 let orbitControls = new OrbitControls(camera, canvas);
 orbitControls.enabled = false;
@@ -38,12 +41,72 @@ const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
 composer.addPass(renderPass);
 
-const bokehPass = new BokehPass(scene, camera, {
-    focus: 10.0,
-    aperture: 0.0002,
-    maxblur: 0.0116
+const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    1.1,
+    1.0,
+    0.35
+);
+composer.addPass(bloomPass);
+
+let mirrorCube, cubeCamera;
+const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(1024, {
+    format: THREE.RGBAFormat,
+    generateMipmaps: true,
+    minFilter: THREE.LinearMipmapLinearFilter
 });
-composer.addPass(bokehPass);
+cubeCamera = new THREE.CubeCamera(0.1, 1000, cubeRenderTarget);
+cubeCamera.position.set(0, 0, 0);
+scene.add(cubeCamera);
+
+const mirrorMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    metalness: 1.0,
+    roughness: 0.0,
+    envMap: cubeRenderTarget.texture,
+    envMapIntensity: 1.0,
+    side: THREE.BackSide
+});
+
+mirrorCube = new THREE.Mesh(
+    new THREE.BoxGeometry(200, 200, 200),
+    mirrorMaterial
+);
+mirrorCube.position.set(0, 0, 0);
+scene.add(mirrorCube);
+
+const coreLight = new THREE.PointLight(0xffffff, 240, 300);
+coreLight.position.set(0, 0, 0);
+scene.add(coreLight);
+
+const lensflare = new Lensflare();
+lensflare.addElement(new LensflareElement(createFlareTexture(), 200, 0, coreLight.color));
+lensflare.addElement(new LensflareElement(createFlareTexture(), 100, 0.2, coreLight.color));
+lensflare.addElement(new LensflareElement(createFlareTexture(), 50, 0.4, coreLight.color));
+lensflare.addElement(new LensflareElement(createFlareTexture(), 80, 0.6, coreLight.color));
+lensflare.addElement(new LensflareElement(createFlareTexture(), 120, 0.8, coreLight.color));
+lensflare.addElement(new LensflareElement(createFlareTexture(), 60, 1.0, coreLight.color));
+coreLight.add(lensflare);
+
+function createFlareTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    
+    const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)');
+    gradient.addColorStop(0.4, 'rgba(255, 255, 255, 0.4)');
+    gradient.addColorStop(0.7, 'rgba(255, 255, 255, 0.1)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 128, 128);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    return texture;
+}
 
 const glitchShader = {
     uniforms: {
@@ -461,19 +524,20 @@ let targetOrganicIntensity = semMaterial.uniforms.uOrganicIntensity.value;
 
 const panel = document.createElement('div');
 panel.id = 'control-panel';
-panel.style.cssText = 'position:fixed;top:10px;left:10px;color:#e0e0e0;font-family:"JetBrains Mono","Fira Code",monospace;font-size:11px;background:rgba(5,10,15,0.85);padding:12px;border:1px solid #00ffcc40;z-index:1000;min-width:200px;display:none;';
+panel.style.cssText = 'position:fixed;top:10px;left:10px;color:#e0e0e0;font-family:"JetBrains Mono","Fira Code",monospace;font-size:11px;background:rgba(5,10,15,0.92);padding:12px;border:1px solid #00ffcc40;z-index:1000;min-width:260px;max-height:90vh;overflow-y:auto;display:none;';
 document.body.appendChild(panel);
 
 let sliderLabels2 = {};
 
 function createSlider(name, min, max, step, value, callback, decimals = 2) {
     const div = document.createElement('div');
-    div.style.marginBottom = '8px';
+    div.style.marginBottom = '10px';
     
     const label = document.createElement('div');
     label.textContent = `${name}: ${typeof value === 'number' ? value.toFixed(decimals) : value}`;
-    label.style.marginBottom = '3px';
+    label.style.marginBottom = '4px';
     label.style.color = '#00ffcc';
+    label.style.fontSize = '10px';
     
     sliderLabels2[name] = label;
     
@@ -483,7 +547,7 @@ function createSlider(name, min, max, step, value, callback, decimals = 2) {
     slider.max = max;
     slider.step = step;
     slider.value = value;
-    slider.style.width = '180px';
+    slider.style.width = '220px';
     slider.style.accentColor = '#00ffcc';
     
     slider.addEventListener('input', () => {
@@ -495,7 +559,44 @@ function createSlider(name, min, max, step, value, callback, decimals = 2) {
     div.appendChild(label);
     div.appendChild(slider);
     panel.appendChild(div);
+    return { label, slider };
 }
+
+function createToggle(name, checked, callback) {
+    const div = document.createElement('div');
+    div.style.marginBottom = '10px';
+    div.style.display = 'flex';
+    div.style.alignItems = 'center';
+    div.style.gap = '10px';
+    
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = checked;
+    checkbox.style.accentColor = '#00ffcc';
+    
+    const label = document.createElement('span');
+    label.textContent = name;
+    label.style.color = '#00ffcc';
+    label.style.fontSize = '10px';
+    
+    checkbox.addEventListener('change', () => {
+        callback(checkbox.checked);
+    });
+    
+    div.appendChild(checkbox);
+    div.appendChild(label);
+    panel.appendChild(div);
+    return checkbox;
+}
+
+function createSectionHeader(text) {
+    const header = document.createElement('div');
+    header.textContent = text;
+    header.style.cssText = 'color:#ff00ff;font-size:11px;font-weight:bold;margin:15px 0 10px 0;padding-bottom:4px;border-bottom:1px solid #ff00ff30;letter-spacing:2px;';
+    panel.appendChild(header);
+}
+
+createSectionHeader('[ STRUCTURE ]');
 
 createSlider('spikeScale', 0.0, 5.0, 0.1, params.spikeScale, (val) => {
     params.spikeScale = val;
@@ -518,9 +619,17 @@ createSlider('macroScale', 0.5, 3.0, 0.1, params.macroScale, (val) => {
     bakeStructure();
 });
 
-createSlider('chromePulse', 0.0, 5.0, 0.1, semMaterial.uniforms.uChromePulse.value, (val) => {
-    semMaterial.uniforms.uChromePulse.value = val;
+createSlider('distOffset', -0.5, 2.0, 0.05, params.distOffset, (val) => {
+    params.distOffset = val;
+    bakeStructure();
 });
+
+createSlider('distAtten', 0.0, 0.5, 0.01, params.distAtten, (val) => {
+    params.distAtten = val;
+    bakeStructure();
+});
+
+createSectionHeader('[ VERTEX SHADER ]');
 
 createSlider('organicSpeed', 0.01, 0.5, 0.01, semMaterial.uniforms.uOrganicSpeed.value, (val) => {
     semMaterial.uniforms.uOrganicSpeed.value = val;
@@ -538,6 +647,98 @@ createSlider('organicIntensity', 0.0, 6.0, 0.1, semMaterial.uniforms.uOrganicInt
     targetOrganicIntensity = val;
 });
 
+createSectionHeader('[ FRAGMENT SHADER ]');
+
+createSlider('chromePulse', 0.0, 5.0, 0.1, semMaterial.uniforms.uChromePulse.value, (val) => {
+    semMaterial.uniforms.uChromePulse.value = val;
+});
+
+createSlider('chromeSpeed', 0.1, 5.0, 0.1, semMaterial.uniforms.uChromeSpeed.value, (val) => {
+    semMaterial.uniforms.uChromeSpeed.value = val;
+});
+
+createSlider('waveFreq', 0.1, 2.0, 0.05, semMaterial.uniforms.uWaveFreq.value, (val) => {
+    semMaterial.uniforms.uWaveFreq.value = val;
+});
+
+createSectionHeader('[ POST-PROCESSING ]');
+
+createSlider('bloomStrength', 0.0, 3.0, 0.1, 1.1, (val) => {
+    bloomPass.strength = val;
+});
+
+createSlider('bloomRadius', 0.0, 2.0, 0.1, 1.0, (val) => {
+    bloomPass.radius = val;
+});
+
+createSlider('bloomThreshold', 0.0, 1.0, 0.05, 0.35, (val) => {
+    bloomPass.threshold = val;
+});
+
+createSectionHeader('[ EFFECTS ]');
+
+createSlider('toneExposure', 0.1, 3.0, 0.1, 1.5, (val) => {
+    renderer.toneMappingExposure = val;
+});
+
+createSlider('mirrorSize', 50, 400, 10, 250, (val) => {
+    mirrorCube.scale.set(val/200, val/200, val/200);
+}, 0);
+
+createSlider('mirrorEnvIntensity', 0.0, 3.0, 0.1, 0.7, (val) => {
+    mirrorMaterial.envMapIntensity = val;
+});
+
+createSlider('coreLightIntensity', 0, 500, 10, 240, (val) => {
+    coreLight.intensity = val;
+});
+
+const refreshMirrorBtn = document.createElement('button');
+refreshMirrorBtn.textContent = '↻ REFRESH MIRROR';
+refreshMirrorBtn.style.cssText = 'color:#ff00ff;font-family:monospace;font-size:9px;background:transparent;padding:4px 8px;border:1px solid #ff00ff40;cursor:pointer;margin-top:8px;';
+refreshMirrorBtn.addEventListener('click', () => {
+    updateCubeCamera();
+});
+panel.appendChild(refreshMirrorBtn);
+
+createSectionHeader('[ PERFORMANCE ]');
+
+let pixelRatioSlider;
+createSlider('pixelRatio', 1, Math.min(window.devicePixelRatio, 2), 0.5, Math.min(window.devicePixelRatio, 2), (val) => {
+    renderer.setPixelRatio(val);
+}, 1);
+
+createToggle('Auto Mutation', autoMutate, (val) => {
+    autoMutate = val;
+});
+
+createToggle('Bloom Pass', true, (val) => {
+    bloomPass.enabled = val;
+});
+
+createToggle('Mirror Cube', true, (val) => {
+    mirrorCube.visible = val;
+    if (val) cubeCameraDirty = true;
+});
+
+createToggle('Lensflare', true, (val) => {
+    lensflare.visible = val;
+});
+
+createToggle('HUD Telemetry', true, (val) => {
+    telemetryTerminal.style.display = val ? 'block' : 'none';
+    hudTelemetry.style.display = val ? 'block' : 'none';
+});
+
+const perfStats = document.createElement('div');
+perfStats.id = 'perf-stats';
+perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;color:#00ffcc;font-family:"JetBrains Mono",monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:8px;border:1px solid #00ffcc40;z-index:1001;pointer-events:none;';
+document.body.appendChild(perfStats);
+
+let frameCount = 0;
+let lastFpsTime = performance.now();
+let fps = 0;
+
 const instructions = document.createElement('div');
 instructions.id = 'instructions';
 instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:#888;font-family:monospace;font-size:14px;text-align:center;background:rgba(0,0,0,0.8);padding:15px;border:2px solid #444;pointer-events:none;z-index:1000;';
@@ -545,7 +746,7 @@ instructions.innerHTML = 'DRAG TO ORBIT | SCROLL TO NAVIGATE';
 document.body.appendChild(instructions);
 
 const toggleBtn = document.createElement('button');
-toggleBtn.textContent = '[] CONTROLS';
+toggleBtn.textContent = '◈ CONTROLS';
 toggleBtn.id = 'toggle-btn';
 toggleBtn.style.cssText = 'position:fixed;top:40px;right:40px;color:#00ffcc;font-family:monospace;font-size:11px;background:rgba(5,10,15,0.9);padding:8px 12px;border:1px solid #00ffcc;cursor:pointer;z-index:1001;';
 toggleBtn.addEventListener('click', () => {
@@ -676,7 +877,6 @@ const glitchChars = '█▓▒░╔╗╚╝║═╬┼┤├┬┴▼▲◄�
 const neonColors = ['#ff00ff', '#00ffff', '#ff0088', '#00ff88', '#ffff00', '#ff6600', '#ff36ff', '#00ffcc'];
 
 let activeGlitchBlocks = [];
-let glitchCooldown = 0;
 
 function generateGlitchBlock(width, height) {
     let block = '';
@@ -1045,6 +1245,8 @@ function activateSection(techIdx, legacyIdx) {
     });
     
     currentSection = techIdx;
+    
+    cubeCameraDirty = true;
 }
 
 function updateTypewriter(deltaTime) {
@@ -1335,6 +1537,12 @@ bakeStructureWithWorker(() => {
         setTimeout(() => loadingEl.remove(), 800);
     }
     hudUI.style.opacity = '1';
+    
+    mirrorCube.visible = false;
+    cubeCamera.update(renderer, scene);
+    mirrorCube.visible = true;
+    
+    console.log('[INIT] CubeCamera rendered once on load');
 });
 
 clock.start();
@@ -1383,6 +1591,18 @@ function autoNavigate() {
     });
 }
 
+let cubeCameraDirty = false;
+
+function updateCubeCamera() {
+    if (mirrorCube.visible) {
+        mirrorCube.visible = false;
+        cubeCamera.update(renderer, scene);
+        mirrorCube.visible = true;
+        cubeCameraDirty = false;
+        console.log('[CUBE] Updated');
+    }
+}
+
 function animate() {
     requestAnimationFrame(animate);
     
@@ -1393,6 +1613,10 @@ function animate() {
     
     camera.position.lerp(targetCameraPos, 0.03);
     camera.lookAt(0, 0, 0);
+    
+    if (camera.position.distanceTo(targetCameraPos) < 1.0 && cubeCameraDirty) {
+        updateCubeCamera();
+    }
     
     if (autoMutate) {
         mutationTimer += 0.016;
@@ -1416,14 +1640,6 @@ function animate() {
     updateTelemetryTerminal(0.016);
     updateSectionTelemetry(currentSection % 5);
     
-    glitchCooldown -= 0.016;
-    if (glitchCooldown <= 0) {
-        if (Math.random() < 0.25) {
-            triggerGlitchEvent();
-        }
-        glitchCooldown = 5 + Math.random() * 5;
-    }
-    
     if (glitchIntensity > 0.01) {
         glitchIntensity *= 0.95;
     }
@@ -1433,6 +1649,16 @@ function animate() {
     }
     
     composer.render();
+    
+    frameCount++;
+    const now = performance.now();
+    if (now - lastFpsTime >= 1000) {
+        fps = frameCount;
+        frameCount = 0;
+        lastFpsTime = now;
+        const mem = performance.memory ? (performance.memory.usedJSHeapSize / 1048576).toFixed(1) : 'N/A';
+        perfStats.textContent = `FPS: ${fps} | MEM: ${mem}MB | DRAWS: ${renderer.info.render.calls}`;
+    }
 }
 
 const orbitControlsBtn = document.createElement('button');
