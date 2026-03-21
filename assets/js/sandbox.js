@@ -379,6 +379,55 @@ function bakeStructure() {
     });
 }
 
+let isCalculating = false;
+const workerReady = { value: false };
+
+function bakeStructureWithWorker(callback) {
+    if (isCalculating) return;
+    isCalculating = true;
+    
+    const worker = new Worker('/js/marching-cubes-worker.js');
+    
+    worker.onmessage = function(e) {
+        if (e.data.type === 'progress') {
+            const statusEl = document.getElementById('loading-status');
+            const barEl = document.getElementById('loading-bar');
+            if (statusEl) statusEl.textContent = e.data.message;
+            if (barEl) barEl.style.width = (e.data.progress * 100) + '%';
+        } else if (e.data.type === 'complete') {
+            const fields = e.data.fields;
+            
+            instances.forEach((effect, idx) => {
+                effect.reset();
+                const field = fields[idx];
+                for (let i = 0; i < field.length; i++) {
+                    effect.field[i] = field[i];
+                }
+                effect.update();
+            });
+            
+            worker.terminate();
+            isCalculating = false;
+            
+            if (callback) callback();
+        }
+    };
+    
+    worker.onerror = function(err) {
+        console.error('[WORKER ERROR]', err);
+        worker.terminate();
+        isCalculating = false;
+        bakeStructure();
+        if (callback) callback();
+    };
+    
+    worker.postMessage({
+        resolution: resolution,
+        numInstances: numInstances,
+        params: params
+    });
+}
+
 let sliderLabels = {};
 let sliderElements = {};
 let autoModeActive = false;
@@ -641,9 +690,21 @@ glitchStyle.textContent = `
 `;
 document.head.appendChild(glitchStyle);
 
+const loadingOverlay = document.createElement('div');
+loadingOverlay.id = 'loading-overlay';
+loadingOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(3,3,3,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.8s ease;font-family:"JetBrains Mono",monospace;';
+loadingOverlay.innerHTML = `
+    <div style="color:#00ffcc;font-size:14px;letter-spacing:4px;margin-bottom:20px;">[CALCULATING TOPOLOGY]</div>
+    <div id="loading-status" style="color:#5a8a5a;font-size:12px;">INITIALIZING WORKER...</div>
+    <div style="width:200px;height:2px;background:#1a1a1a;margin-top:16px;position:relative;">
+        <div id="loading-bar" style="position:absolute;top:0;left:0;height:100%;width:0%;background:linear-gradient(90deg,#00ffcc,#ff00ff);transition:width 0.3s ease;"></div>
+    </div>
+`;
+document.body.appendChild(loadingOverlay);
+
 const hudUI = document.createElement('div');
 hudUI.id = 'hud-container';
-hudUI.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:500;font-family:"JetBrains Mono","Fira Code",monospace;';
+hudUI.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:500;font-family:"JetBrains Mono","Fira Code",monospace;opacity:0;transition:opacity 0.5s ease;';
 document.body.appendChild(hudUI);
 
 const cornerMarkers = document.createElement('div');
@@ -1045,7 +1106,15 @@ function lerp(current, target, speed) {
     return current + diff * speed;
 }
 
-bakeStructure();
+bakeStructureWithWorker(() => {
+    const loadingEl = document.getElementById('loading-overlay');
+    if (loadingEl) {
+        loadingEl.style.opacity = '0';
+        setTimeout(() => loadingEl.remove(), 800);
+    }
+    hudUI.style.opacity = '1';
+});
+
 clock.start();
 
 console.log('[INIT] Total sections:', sections.length);
