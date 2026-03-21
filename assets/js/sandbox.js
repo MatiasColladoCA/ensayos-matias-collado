@@ -634,70 +634,104 @@ glitchLayer.id = 'glitch-layer';
 glitchLayer.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:499;overflow:hidden;';
 document.body.appendChild(glitchLayer);
 
-const asciiFigures = [
-    `<span style="color:#ff00ff;">O</span><span style="color:#00ffff;">-|</span><span style="color:#ff00ff;">-&lt;</span>`,
-    `<span style="color:#00ffff;">█▀▀</span><span style="color:#ff00ff;">▀▀█</span>`,
-    `<span style="color:#ffff00;">░░░</span><span style="color:#ff6600;">█░░</span><span style="color:#00ff00;">░░█</span>`,
-    `<span style="color:#ff0088;">╔╗</span><span style="color:#00ffff;">╔╗</span><span style="color:#ffff00;">╔╗</span>`,
-    `<span style="color:#88ff00;">┌─┐</span><span style="color:#ff0088;">│<span style="color:#ffffff;">◉</span>│</span><span style="color:#00ffff;">└─┘</span>`,
-    `<span style="color:#ff00ff;">○</span><span style="color:#00ff00;">┘</span><span style="color:#ffff00;">┌</span>`,
-    `<span style="color:#ff6600;">█▀█</span><span style="color:#00ffff;">░░█</span><span style="color:#ff00ff;">░░█</span>`,
-    `<span style="color:#00ff00;">╭─╮</span><span style="color:#ff00ff;">│<span style="color:#ffffff;">▽</span>│</span><span style="color:#00ffff;">╰─╯</span>`,
-    `<span style="color:#ffff00;">▄▄▄</span><span style="color:#ff0088;">█▀▄</span><span style="color:#00ffff;">▄█▀</span>`,
-    `<span style="color:#ff00ff;">╱</span><span style="color:#00ffff;">╲</span><span style="color:#ff6600;">╱</span><span style="color:#00ff00;">╲</span><span style="color:#ffff00;">│</span>`,
-];
+const glitchChars = '█▓▒░╔╗╚╝║═╬┼┤├┬┴▼▲◄►▀▄■□▪▫●○◆◇◎⌐¬│┆┇┊╋';
+const neonColors = ['#ff00ff', '#00ffff', '#ff0088', '#00ff88', '#ffff00', '#ff6600', '#ff36ff', '#00ffcc'];
 
-const neonColors = ['#ff00ff', '#00ffff', '#ff0088', '#ffff00', '#00ff00', '#ff6600', '#88ffff', '#ff88ff'];
-let activeGlitches = [];
+let activeGlitchBlocks = [];
 let glitchCooldown = 0;
-const GLITCH_COOLDOWN = 5;
 
-function createGlitch() {
-    if (activeGlitches.length >= 3) return;
-    
+function generateGlitchBlock(width, height) {
+    let block = '';
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            block += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+        }
+        block += '\n';
+    }
+    return block;
+}
+
+function createGlitchBlock() {
     const glitch = document.createElement('div');
     glitch.style.cssText = `
         position:absolute;
         font-family:'JetBrains Mono',monospace;
-        font-size:${8 + Math.random() * 12}px;
+        font-size:10px;
+        line-height:1.1;
         white-space:pre;
+        padding:8px;
+        background:rgba(0,0,0,0.7);
+        border:1px solid currentColor;
         opacity:0;
-        text-shadow:0 0 10px currentColor;
-        animation:glitchFade ${0.5 + Math.random() * 1.5}s ease-in-out forwards;
-        transform:rotate(${-15 + Math.random() * 30}deg) scale(${0.5 + Math.random() * 1});
+        pointer-events:none;
     `;
     
-    glitch.innerHTML = asciiFigures[Math.floor(Math.random() * asciiFigures.length)];
-    glitch.style.color = neonColors[Math.floor(Math.random() * neonColors.length)];
-    glitch.style.left = Math.random() * 80 + 10 + '%';
-    glitch.style.top = Math.random() * 70 + 15 + '%';
+    const blockWidth = 30 + Math.floor(Math.random() * 40);
+    const blockHeight = 8 + Math.floor(Math.random() * 12);
+    
+    const colors = [
+        neonColors[Math.floor(Math.random() * neonColors.length)],
+        neonColors[Math.floor(Math.random() * neonColors.length)]
+    ];
+    
+    glitch.innerHTML = generateGlitchBlock(blockWidth, blockHeight);
+    glitch.style.color = colors[0];
+    glitch.style.textShadow = `0 0 8px ${colors[0]}, 0 0 20px ${colors[1]}, 0 0 40px ${colors[0]}50`;
+    glitch.style.boxShadow = `0 0 10px ${colors[0]}40, inset 0 0 20px ${colors[0]}20`;
+    glitch.style.left = Math.random() * 70 + 5 + '%';
+    glitch.style.top = Math.random() * 70 + 10 + '%';
     
     glitchLayer.appendChild(glitch);
-    activeGlitches.push(glitch);
+    activeGlitchBlocks.push(glitch);
     
-    setTimeout(() => {
-        glitch.style.animation = 'glitchFadeOut 0.3s ease-out forwards';
-        setTimeout(() => {
-            if (glitch.parentNode) glitch.parentNode.removeChild(glitch);
-            activeGlitches = activeGlitches.filter(g => g !== glitch);
-        }, 300);
-    }, 800 + Math.random() * 2000);
+    let flickerCount = 0;
+    const maxFlickers = 3 + Math.floor(Math.random() * 4);
+    
+    function flicker() {
+        if (flickerCount >= maxFlickers) {
+            glitch.style.transition = 'opacity 0.05s';
+            glitch.style.opacity = '0';
+            setTimeout(() => {
+                if (glitch.parentNode) glitch.parentNode.removeChild(glitch);
+                activeGlitchBlocks = activeGlitchBlocks.filter(g => g !== glitch);
+            }, 50);
+            return;
+        }
+        
+        glitch.style.transition = 'none';
+        glitch.style.opacity = Math.random() > 0.5 ? '0.9' : '0.3';
+        
+        if (Math.random() > 0.7) {
+            glitch.style.color = neonColors[Math.floor(Math.random() * neonColors.length)];
+        }
+        
+        if (Math.random() > 0.8) {
+            glitch.style.transform = `translateX(${-2 + Math.random() * 4}px)`;
+        }
+        
+        flickerCount++;
+        setTimeout(flicker, 50 + Math.random() * 100);
+    }
+    
+    requestAnimationFrame(() => {
+        glitch.style.opacity = '0';
+        setTimeout(flicker, 100 + Math.random() * 200);
+    });
+}
+
+function triggerGlitchEvent() {
+    if (activeGlitchBlocks.length >= 2) return;
+    
+    const blockCount = 1 + Math.floor(Math.random() * 2);
+    for (let i = 0; i < blockCount; i++) {
+        setTimeout(() => createGlitchBlock(), i * 150);
+    }
 }
 
 const glitchStyle = document.createElement('style');
 glitchStyle.textContent = `
-    @keyframes glitchFade {
-        0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
-        10% { opacity: 1; transform: scale(1.1) rotate(-5deg); }
-        20% { opacity: 0.8; transform: scale(1) rotate(5deg); }
-        30% { opacity: 1; transform: scale(1.05) rotate(-3deg); }
-        50% { opacity: 0.9; transform: scale(1) rotate(2deg); }
-        70% { opacity: 1; transform: scale(0.95) rotate(-1deg); }
-        100% { opacity: 0; transform: scale(0.8) rotate(0deg); }
-    }
-    @keyframes glitchFadeOut {
-        0% { opacity: 0.8; }
-        100% { opacity: 0; }
+    #glitch-layer {
+        mix-blend-mode: screen;
     }
 `;
 document.head.appendChild(glitchStyle);
@@ -1210,8 +1244,8 @@ function animate() {
     
     glitchCooldown -= 0.016;
     if (glitchCooldown <= 0) {
-        if (Math.random() < 0.3) {
-            createGlitch();
+        if (Math.random() < 0.25) {
+            triggerGlitchEvent();
         }
         glitchCooldown = 5 + Math.random() * 5;
     }
