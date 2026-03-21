@@ -526,6 +526,79 @@ const sections = [
     }
 ];
 
+const glitchLayer = document.createElement('div');
+glitchLayer.id = 'glitch-layer';
+glitchLayer.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:499;overflow:hidden;';
+document.body.appendChild(glitchLayer);
+
+const asciiFigures = [
+    `<span style="color:#ff00ff;">O</span><span style="color:#00ffff;">-|</span><span style="color:#ff00ff;">-&lt;</span>`,
+    `<span style="color:#00ffff;">█▀▀</span><span style="color:#ff00ff;">▀▀█</span>`,
+    `<span style="color:#ffff00;">░░░</span><span style="color:#ff6600;">█░░</span><span style="color:#00ff00;">░░█</span>`,
+    `<span style="color:#ff0088;">╔╗</span><span style="color:#00ffff;">╔╗</span><span style="color:#ffff00;">╔╗</span>`,
+    `<span style="color:#88ff00;">┌─┐</span><span style="color:#ff0088;">│<span style="color:#ffffff;">◉</span>│</span><span style="color:#00ffff;">└─┘</span>`,
+    `<span style="color:#ff00ff;">○</span><span style="color:#00ff00;">┘</span><span style="color:#ffff00;">┌</span>`,
+    `<span style="color:#ff6600;">█▀█</span><span style="color:#00ffff;">░░█</span><span style="color:#ff00ff;">░░█</span>`,
+    `<span style="color:#00ff00;">╭─╮</span><span style="color:#ff00ff;">│<span style="color:#ffffff;">▽</span>│</span><span style="color:#00ffff;">╰─╯</span>`,
+    `<span style="color:#ffff00;">▄▄▄</span><span style="color:#ff0088;">█▀▄</span><span style="color:#00ffff;">▄█▀</span>`,
+    `<span style="color:#ff00ff;">╱</span><span style="color:#00ffff;">╲</span><span style="color:#ff6600;">╱</span><span style="color:#00ff00;">╲</span><span style="color:#ffff00;">│</span>`,
+];
+
+const neonColors = ['#ff00ff', '#00ffff', '#ff0088', '#ffff00', '#00ff00', '#ff6600', '#88ffff', '#ff88ff'];
+let activeGlitches = [];
+let glitchCooldown = 0;
+const GLITCH_COOLDOWN = 5;
+
+function createGlitch() {
+    if (activeGlitches.length >= 3) return;
+    
+    const glitch = document.createElement('div');
+    glitch.style.cssText = `
+        position:absolute;
+        font-family:'JetBrains Mono',monospace;
+        font-size:${8 + Math.random() * 12}px;
+        white-space:pre;
+        opacity:0;
+        text-shadow:0 0 10px currentColor;
+        animation:glitchFade ${0.5 + Math.random() * 1.5}s ease-in-out forwards;
+        transform:rotate(${-15 + Math.random() * 30}deg) scale(${0.5 + Math.random() * 1});
+    `;
+    
+    glitch.innerHTML = asciiFigures[Math.floor(Math.random() * asciiFigures.length)];
+    glitch.style.color = neonColors[Math.floor(Math.random() * neonColors.length)];
+    glitch.style.left = Math.random() * 80 + 10 + '%';
+    glitch.style.top = Math.random() * 70 + 15 + '%';
+    
+    glitchLayer.appendChild(glitch);
+    activeGlitches.push(glitch);
+    
+    setTimeout(() => {
+        glitch.style.animation = 'glitchFadeOut 0.3s ease-out forwards';
+        setTimeout(() => {
+            if (glitch.parentNode) glitch.parentNode.removeChild(glitch);
+            activeGlitches = activeGlitches.filter(g => g !== glitch);
+        }, 300);
+    }, 800 + Math.random() * 2000);
+}
+
+const glitchStyle = document.createElement('style');
+glitchStyle.textContent = `
+    @keyframes glitchFade {
+        0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+        10% { opacity: 1; transform: scale(1.1) rotate(-5deg); }
+        20% { opacity: 0.8; transform: scale(1) rotate(5deg); }
+        30% { opacity: 1; transform: scale(1.05) rotate(-3deg); }
+        50% { opacity: 0.9; transform: scale(1) rotate(2deg); }
+        70% { opacity: 1; transform: scale(0.95) rotate(-1deg); }
+        100% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+    }
+    @keyframes glitchFadeOut {
+        0% { opacity: 0.8; }
+        100% { opacity: 0; }
+    }
+`;
+document.head.appendChild(glitchStyle);
+
 const hudUI = document.createElement('div');
 hudUI.id = 'hud-container';
 hudUI.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:500;font-family:"JetBrains Mono","Fira Code",monospace;';
@@ -534,24 +607,88 @@ document.body.appendChild(hudUI);
 const cornerMarkers = document.createElement('div');
 cornerMarkers.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:501;';
 cornerMarkers.innerHTML = `
-    <div style="position:absolute;top:20px;left:20px;color:#00ffcc;font-size:12px;border-left:2px solid #00ffcc;padding-left:8px;">
-        <div>[ </div>
+    <div style="position:absolute;top:16px;left:16px;color:#00ffcc;font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <span style="color:#00ffcc;">┌─</span><span style="color:#333;">────────────────────</span><span style="color:#00ffcc;">─┐</span>
     </div>
-    <div style="position:absolute;top:20px;right:20px;color:#00ffcc;font-size:12px;border-right:2px solid #00ffcc;padding-right:8px;text-align:right;">
-        <div> ]</div>
+    <div style="position:absolute;top:16px;right:16px;color:#00ffcc;font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <span style="color:#00ffcc;">┌─</span><span style="color:#333;">────────────────────</span><span style="color:#00ffcc;">─┐</span>
     </div>
-    <div style="position:absolute;bottom:80px;left:20px;color:#888;font-size:10px;">
-        <div>+─────────────────────────────────</div>
+    <div style="position:absolute;bottom:16px;left:16px;color:#00ffcc;font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <span style="color:#00ffcc;">└─</span><span style="color:#333;">────────────────────</span><span style="color:#00ffcc;">─┘</span>
     </div>
-    <div style="position:absolute;bottom:80px;right:20px;color:#888;font-size:10px;text-align:right;">
-        <div>─────────────────────────────────+</div>
+    <div style="position:absolute;bottom:16px;right:16px;color:#00ffcc;font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <span style="color:#00ffcc;">└─</span><span style="color:#333;">────────────────────</span><span style="color:#00ffcc;">─┘</span>
     </div>
-    <div style="position:absolute;top:50%;left:20px;color:#333;font-size:24px;font-weight:bold;">|</div>
-    <div style="position:absolute;top:50%;right:20px;color:#333;font-size:24px;font-weight:bold;">|</div>
-    <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);color:#333;font-size:24px;">—</div>
-    <div style="position:absolute;bottom:80px;left:50%;transform:translateX(-50%);color:#333;font-size:24px;">—</div>
+    <div style="position:absolute;top:50%;left:8px;transform:translateY(-50%);color:#00ffcc;font-size:20px;font-family:'JetBrains Mono',monospace;">│</div>
+    <div style="position:absolute;top:50%;right:8px;transform:translateY(-50%);color:#00ffcc;font-size:20px;font-family:'JetBrains Mono',monospace;">│</div>
+    <div style="position:absolute;left:50%;top:8px;transform:translateX(-50%);color:#00ffcc;font-size:20px;font-family:'JetBrains Mono',monospace;">─</div>
+    <div style="position:absolute;left:50%;bottom:8px;transform:translateX(-50%);color:#00ffcc;font-size:20px;font-family:'JetBrains Mono',monospace;">─</div>
 `;
 document.body.appendChild(cornerMarkers);
+
+const telemetryTerminal = document.createElement('div');
+telemetryTerminal.id = 'telemetry-terminal';
+telemetryTerminal.style.cssText = 'position:fixed;bottom:50px;right:20px;width:320px;height:180px;background:rgba(0,8,0,0.85);border:1px solid #00ffcc40;font-family:"JetBrains Mono",monospace;font-size:10px;color:#5a8a5a;z-index:503;pointer-events:none;overflow:hidden;';
+telemetryTerminal.innerHTML = `
+    <div style="padding:8px 12px;border-bottom:1px solid #00ffcc30;color:#00ffcc;">[TELEMETRY_STREAM]</div>
+    <div id="telem-output" style="padding:8px 12px;line-height:1.5;height:calc(100% - 30px);overflow:hidden;"></div>
+`;
+document.body.appendChild(telemetryTerminal);
+
+const telemMessages = [
+    'SCANNING VOLUMETRIC MATRIX...',
+    'FLUX CALIBRATION: ████████░░ 80%',
+    'DENSITY_THRESHOLD: 0.847',
+    'VERTEX_COUNT: 2,847',
+    'RENDER_LATENCY: 16.7ms',
+    'GPU_LOAD: 67%',
+    'MARCHING_CUBES_ACTIVE',
+    'NORMAL_INTERP: LERP',
+    'RESOLUTION: 64x64x64',
+    'FRAME_BUFFER: SYNCHRONIZED',
+    'COORDINATE_SYSTEM: CARTESIAN',
+    'VIEW_MATRIX_UPDATED',
+    'SPikeFreq: ' + (Math.random() * 10).toFixed(3),
+    'ORGANIC_MOD: ' + (Math.random() * 5).toFixed(3),
+    'CHROME_PHASE: ' + (Math.random() * 360).toFixed(1) + '°',
+    'APERTURE: 0.0002',
+    'FOCUS_DIST: 10.0',
+    'BOKEH_ACTIVE',
+    'POSTPROCESS: ENABLED',
+    'GLITCH_SHADER: STANDBY'
+];
+
+const telemOutput = document.getElementById('telem-output');
+let telemLines = [];
+let telemTimer = 0;
+
+function updateTelemetryTerminal(deltaTime) {
+    telemTimer += deltaTime;
+    if (telemTimer > 0.8) {
+        telemTimer = 0;
+        const msg = telemMessages[Math.floor(Math.random() * telemMessages.length)];
+        if (msg.includes('SCANNING') || msg.includes('FLUX') || msg.includes('DENSITY')) {
+            const dynamicValue = (Math.random() * 999.999).toFixed(3);
+            const dynamicMsg = msg.replace('0.847', dynamicValue).replace('2,847', Math.floor(Math.random() * 9999).toString()).replace('67%', Math.floor(Math.random() * 100) + '%');
+            telemLines.push({ text: dynamicMsg, time: Date.now() });
+        } else if (msg.includes('SCAN')) {
+            const coords = `${Math.floor(Math.random() * 999).toString().padStart(3, '0')}:${Math.floor(Math.random() * 999).toString().padStart(3, '0')}:${Math.floor(Math.random() * 999).toString().padStart(3, '0')}`;
+            telemLines.push({ text: `SCAN_COMPLETE @ [${coords}]`, time: Date.now() });
+        } else if (msg.includes('SpikeFreq')) {
+            telemLines.push({ text: `SpikeFreq: ${(Math.random() * 10).toFixed(3)}`, time: Date.now() });
+        } else if (msg.includes('ORGANIC')) {
+            telemLines.push({ text: `ORGANIC_MOD: ${(Math.random() * 5).toFixed(3)}`, time: Date.now() });
+        } else if (msg.includes('CHROME')) {
+            telemLines.push({ text: `CHROME_PHASE: ${(Math.random() * 360).toFixed(1)}°`, time: Date.now() });
+        } else {
+            telemLines.push({ text: msg, time: Date.now() });
+        }
+        if (telemLines.length > 8) {
+            telemLines.shift();
+        }
+        telemOutput.innerHTML = telemLines.map(l => `<div>${l.text}</div>`).join('');
+    }
+}
 
 const progressBar = document.createElement('div');
 progressBar.id = 'progress-indicator';
@@ -571,9 +708,25 @@ let currentSection = 0;
 let glitchIntensity = 0;
 let lastScrollY = 0;
 let scrollVelocity = 0;
+let typewriterTimer = 0;
+const TYPEWRITER_SPEED = 0.03;
 
 function activateSection(idx) {
     console.log('[ACTIVATE] section:', idx, '-', sections[idx]?.title);
+    
+    Object.keys(typewriterState).forEach(key => {
+        typewriterState[key].active = false;
+        typewriterState[key].currentLine = 0;
+        typewriterState[key].currentChar = 0;
+        const lines = sections[key].content.split('. ');
+        typewriterState[key].lines = lines.length;
+        lines.forEach((line, lineIdx) => {
+            const lineEl = document.getElementById(`typewriter-${key}-${lineIdx}`);
+            if (lineEl) lineEl.textContent = '';
+        });
+    });
+    
+    typewriterState[idx].active = true;
     
     let found = 0;
     sections.forEach((_, i) => {
@@ -594,6 +747,32 @@ function activateSection(idx) {
     currentSection = idx;
 }
 
+function updateTypewriter(deltaTime) {
+    if (!typewriterState[currentSection] || !typewriterState[currentSection].active) return;
+    
+    const state = typewriterState[currentSection];
+    const contentLines = sections[currentSection].content.split('. ');
+    
+    typewriterTimer += deltaTime;
+    
+    if (typewriterTimer >= TYPEWRITER_SPEED) {
+        typewriterTimer = 0;
+        
+        if (state.currentLine < state.lines) {
+            const fullLine = contentLines[state.currentLine] + (state.currentLine < state.lines - 1 ? '. ' : '');
+            const lineEl = document.getElementById(`typewriter-${currentSection}-${state.currentLine}`);
+            
+            if (lineEl && state.currentChar <= fullLine.length) {
+                lineEl.textContent = fullLine.substring(0, state.currentChar + 1);
+                state.currentChar++;
+            } else if (state.currentChar > fullLine.length) {
+                state.currentLine++;
+                state.currentChar = 0;
+            }
+        }
+    }
+}
+
 function updateTelemetry(sectionIdx, progress) {
     sections[sectionIdx].telemetry.forEach((_, telemIdx) => {
         const fill = document.querySelector(`.telem-fill-${sectionIdx}-${telemIdx}`);
@@ -610,6 +789,15 @@ const sectionsWrapper = document.createElement('div');
 sectionsWrapper.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:502;pointer-events:none;overflow:hidden;';
 document.body.appendChild(sectionsWrapper);
 
+const typewriterState = {};
+
+function createTypewriterLine(text, className = '') {
+    const line = document.createElement('div');
+    line.style.cssText = 'color:#7a8a7a;font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6;white-space:pre;height:1.6em;';
+    if (className) line.className = className;
+    return line;
+}
+
 sections.forEach((section, i) => {
     const sectionDiv = document.createElement('div');
     sectionDiv.style.cssText = `position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 80px;opacity:0;transition:opacity 0.5s ease;pointer-events:none;`;
@@ -623,16 +811,29 @@ sections.forEach((section, i) => {
     subtitleEl.style.cssText = 'color:#00ffcc;font-size:11px;letter-spacing:2px;margin-bottom:24px;';
     subtitleEl.textContent = section.subtitle;
     
-    const contentEl = document.createElement('div');
-    contentEl.style.cssText = 'color:#888;font-size:13px;line-height:1.8;max-width:500px;';
-    contentEl.textContent = section.content;
+    const typewriterContainer = document.createElement('div');
+    typewriterContainer.id = `typewriter-${i}`;
+    typewriterContainer.style.cssText = 'max-width:520px;';
+    
+    const contentLines = section.content.split('. ');
+    contentLines.forEach((line, lineIdx) => {
+        const lineEl = createTypewriterLine();
+        lineEl.id = `typewriter-${i}-${lineIdx}`;
+        lineEl.textContent = line + (lineIdx < contentLines.length - 1 ? '.' : '');
+        typewriterContainer.appendChild(lineEl);
+    });
+    
+    const cursorLine = document.createElement('div');
+    cursorLine.id = `cursor-${i}`;
+    cursorLine.innerHTML = '<span style="color:#00ffcc;background:#00ffcc;width:8px;height:14px;display:inline-block;animation:blink 1s step-end infinite;">&nbsp;</span>';
+    typewriterContainer.appendChild(cursorLine);
     
     const telemetryEl = document.createElement('div');
     telemetryEl.style.cssText = 'margin-top:24px;display:flex;flex-direction:column;gap:4px;';
     
     section.telemetry.forEach((label, j) => {
         const row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;gap:12px;font-size:10px;';
+        row.style.cssText = 'display:flex;align-items:center;gap:12px;font-size:10px;font-family:"JetBrains Mono",monospace;';
         
         const labelSpan = document.createElement('span');
         labelSpan.style.cssText = 'color:#00ffcc;width:120px;';
@@ -647,7 +848,7 @@ sections.forEach((section, i) => {
         bar.appendChild(fill);
         
         const value = document.createElement('span');
-        value.style.cssText = 'color:#fff;min-width:60px;text-align:right;';
+        value.style.cssText = 'color:#fff;min-width:60px;text-align:right;font-family:"JetBrains Mono",monospace;';
         value.className = `telem-value-${i}-${j}`;
         value.textContent = '0.000';
         
@@ -659,10 +860,25 @@ sections.forEach((section, i) => {
     
     sectionDiv.appendChild(titleEl);
     sectionDiv.appendChild(subtitleEl);
-    sectionDiv.appendChild(contentEl);
+    sectionDiv.appendChild(typewriterContainer);
     sectionDiv.appendChild(telemetryEl);
     sectionsWrapper.appendChild(sectionDiv);
+    
+    typewriterState[i] = { lines: contentLines.length, currentLine: 0, currentChar: 0, active: false };
 });
+
+const cursorStyle = document.createElement('style');
+cursorStyle.textContent = `
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+    @keyframes typewriter {
+        from { width: 0; }
+        to { width: 100%; }
+    }
+`;
+document.head.appendChild(cursorStyle);
 
 let scrollProgress = 0;
 const scrollSensitivity = 0.0003;
@@ -866,6 +1082,17 @@ function animate() {
     }
     
     syncMaterials();
+    
+    updateTypewriter(0.016);
+    updateTelemetryTerminal(0.016);
+    
+    glitchCooldown -= 0.016;
+    if (glitchCooldown <= 0) {
+        if (Math.random() < 0.3) {
+            createGlitch();
+        }
+        glitchCooldown = 5 + Math.random() * 5;
+    }
     
     if (glitchIntensity > 0.01) {
         glitchIntensity *= 0.95;
