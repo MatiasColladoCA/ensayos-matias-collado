@@ -1117,10 +1117,6 @@ function animate() {
         params.spikeFreq = baseParams.spikeFreq * wave2;
         semMaterial.uniforms.uOrganicScale.value = baseParams.organicScale * wave3;
         semMaterial.uniforms.uOrganicIntensity.value = baseParams.organicIntensity * wave1;
-        
-        if (Math.floor(mutationTimer * 2) % 60 === 0) {
-            bakeStructure();
-        }
     }
     
     syncMaterials();
