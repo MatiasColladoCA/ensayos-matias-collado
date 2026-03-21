@@ -270,6 +270,48 @@ for (let i = 0; i < numInstances; i++) {
     scene.add(effect);
 }
 
+let multiInstanceMode = true;
+const instanceVisibility = [true, true, true];
+
+function setInstanceMode(multi) {
+    multiInstanceMode = multi;
+    if (multi) {
+        instances.forEach((inst, i) => {
+            inst.visible = instanceVisibility[i];
+        });
+    } else {
+        instances.forEach((inst, i) => {
+            inst.visible = i === 0;
+        });
+    }
+}
+
+const toggleInstancesBtn = document.createElement('button');
+toggleInstancesBtn.textContent = '◆◆◆ INSTANCES';
+toggleInstancesBtn.id = 'toggle-instances-btn';
+toggleInstancesBtn.style.cssText = 'position:fixed;top:130px;right:10px;color:#ff00ff;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #ff00ff;cursor:pointer;z-index:1001;';
+toggleInstancesBtn.addEventListener('click', () => {
+    multiInstanceMode = !multiInstanceMode;
+    setInstanceMode(multiInstanceMode);
+    toggleInstancesBtn.textContent = multiInstanceMode ? '◆◆◆ INSTANCES' : '◆ INSTANCES';
+    toggleInstancesBtn.style.color = multiInstanceMode ? '#ff00ff' : '#888';
+    toggleInstancesBtn.style.borderColor = multiInstanceMode ? '#ff00ff' : '#444';
+});
+document.body.appendChild(toggleInstancesBtn);
+
+window.addEventListener('keydown', (e) => {
+    if (e.key === '1') {
+        instanceVisibility[0] = !instanceVisibility[0];
+        instances[0].visible = instanceVisibility[0];
+    } else if (e.key === '2') {
+        instanceVisibility[1] = !instanceVisibility[1];
+        instances[1].visible = instanceVisibility[1];
+    } else if (e.key === '3') {
+        instanceVisibility[2] = !instanceVisibility[2];
+        instances[2].visible = instanceVisibility[2];
+    }
+});
+
 function syncMaterials() {
     instanceMaterial.forEach(mat => {
         mat.uniforms.uTime.value = semMaterial.uniforms.uTime.value;
