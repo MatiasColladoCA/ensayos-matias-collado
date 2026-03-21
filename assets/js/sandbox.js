@@ -526,6 +526,118 @@ effect.position.set(0, 0, 0);
 instances.push(effect);
 scene.add(effect);
 
+const dripParticleCount = 200;
+const dripPositions = new Float32Array(dripParticleCount * 3);
+const dripVelocities = new Float32Array(dripParticleCount * 3);
+const dripLifetimes = new Float32Array(dripParticleCount);
+const dripSizes = new Float32Array(dripParticleCount);
+
+const dripGeometry = new THREE.BufferGeometry();
+dripGeometry.setAttribute('position', new THREE.BufferAttribute(dripPositions, 3));
+dripGeometry.setAttribute('size', new THREE.BufferAttribute(dripSizes, 1));
+
+const dripVertexShader = `
+    attribute float size;
+    varying float vAlpha;
+    uniform float uTime;
+    
+    void main() {
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = size * (200.0 / -mvPosition.z);
+        gl_Position = projectionMatrix * mvPosition;
+        vAlpha = size / 3.0;
+    }
+`;
+
+const dripFragmentShader = `
+    varying float vAlpha;
+    
+    void main() {
+        float dist = length(gl_PointCoord - vec2(0.5));
+        if (dist > 0.5) discard;
+        
+        float alpha = smoothstep(0.5, 0.0, dist) * vAlpha;
+        gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
+    }
+`;
+
+const dripMaterial = new THREE.ShaderMaterial({
+    vertexShader: dripVertexShader,
+    fragmentShader: dripFragmentShader,
+    uniforms: {
+        uTime: { value: 0 }
+    },
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+});
+
+const dripParticles = new THREE.Points(dripGeometry, dripMaterial);
+scene.add(dripParticles);
+
+function randomPointOnSphere(radius) {
+    const u = Math.random();
+    const v = Math.random();
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2 * v - 1);
+    const r = radius * (0.85 + Math.random() * 0.3);
+    return {
+        x: r * Math.sin(phi) * Math.cos(theta),
+        y: r * Math.sin(phi) * Math.sin(theta),
+        z: r * Math.cos(phi)
+    };
+}
+
+for (let i = 0; i < dripParticleCount; i++) {
+    const point = randomPointOnSphere(75);
+    dripPositions[i * 3] = point.x;
+    dripPositions[i * 3 + 1] = point.y;
+    dripPositions[i * 3 + 2] = point.z;
+    
+    dripVelocities[i * 3] = (Math.random() - 0.5) * 0.3;
+    dripVelocities[i * 3 + 1] = -0.5 - Math.random() * 1.5;
+    dripVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.3;
+    
+    dripLifetimes[i] = Math.random();
+    dripSizes[i] = 0.5 + Math.random() * 2.5;
+}
+
+function updateDripParticles(deltaTime, time) {
+    dripMaterial.uniforms.uTime.value = time;
+    
+    const gravity = -2.0;
+    const damping = 0.98;
+    
+    for (let i = 0; i < dripParticleCount; i++) {
+        dripLifetimes[i] -= deltaTime * 0.3;
+        
+        dripVelocities[i * 3 + 1] += gravity * deltaTime;
+        
+        dripPositions[i * 3] += dripVelocities[i * 3] * deltaTime;
+        dripPositions[i * 3 + 1] += dripVelocities[i * 3 + 1] * deltaTime;
+        dripPositions[i * 3 + 2] += dripVelocities[i * 3 + 2] * deltaTime;
+        
+        dripVelocities[i * 3] *= damping;
+        dripVelocities[i * 3 + 2] *= damping;
+        
+        if (dripLifetimes[i] <= 0 || dripPositions[i * 3 + 1] < -100) {
+            const point = randomPointOnSphere(75);
+            dripPositions[i * 3] = point.x;
+            dripPositions[i * 3 + 1] = point.y;
+            dripPositions[i * 3 + 2] = point.z;
+            
+            dripVelocities[i * 3] = (Math.random() - 0.5) * 0.5;
+            dripVelocities[i * 3 + 1] = -0.3 - Math.random() * 0.8;
+            dripVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.5;
+            
+            dripLifetimes[i] = 0.8 + Math.random() * 1.5;
+            dripSizes[i] = 0.5 + Math.random() * 2.0;
+        }
+    }
+    
+    dripGeometry.attributes.position.needsUpdate = true;
+}
+
 function syncMaterials() {
     instanceMaterial.forEach(mat => {
         mat.uniforms.uTime.value = semMaterial.uniforms.uTime.value;
@@ -1752,6 +1864,7 @@ function animate() {
     semMaterial.uniforms.uTime.value = time;
     glitchPass.uniforms.uTime.value = time;
     glitchPass.uniforms.uIntensity.value = glitchIntensity;
+    updateDripParticles(0.016, time);
     
     camera.position.lerp(targetCameraPos, 0.03);
     camera.lookAt(0, 0, 0);
