@@ -301,7 +301,7 @@ function setInstanceMode(multi) {
 const toggleInstancesBtn = document.createElement('button');
 toggleInstancesBtn.textContent = '◆◆◆ INSTANCES';
 toggleInstancesBtn.id = 'toggle-instances-btn';
-toggleInstancesBtn.style.cssText = 'position:fixed;top:130px;right:10px;color:#ff00ff;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #ff00ff;cursor:pointer;z-index:1001;';
+toggleInstancesBtn.style.cssText = 'position:fixed;top:130px;right:40px;color:#ff00ff;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #ff00ff;cursor:pointer;z-index:1001;';
 toggleInstancesBtn.addEventListener('click', () => {
     multiInstanceMode = !multiInstanceMode;
     setInstanceMode(multiInstanceMode);
@@ -547,7 +547,7 @@ document.body.appendChild(instructions);
 const toggleBtn = document.createElement('button');
 toggleBtn.textContent = '[] CONTROLS';
 toggleBtn.id = 'toggle-btn';
-toggleBtn.style.cssText = 'position:fixed;top:10px;right:10px;color:#00ffcc;font-family:monospace;font-size:11px;background:rgba(5,10,15,0.9);padding:8px 12px;border:1px solid #00ffcc;cursor:pointer;z-index:1001;';
+toggleBtn.style.cssText = 'position:fixed;top:40px;right:40px;color:#00ffcc;font-family:monospace;font-size:11px;background:rgba(5,10,15,0.9);padding:8px 12px;border:1px solid #00ffcc;cursor:pointer;z-index:1001;';
 toggleBtn.addEventListener('click', () => {
     panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 });
@@ -599,41 +599,6 @@ const sections = [
         title: 'RECURSOS',
         subtitle: 'BIBLIOTECA',
         content: 'Colección de apuntes, aforismos y materiales de referencia sobre filosofía de la ciencia y otras áreas del conocimiento.',
-        link: '/recursos/',
-        telemetry: ['BOOKS', 'NOTES', 'REFERENCES']
-    },
-    {
-        title: 'SOBRE ESTE PROYECTO',
-        subtitle: 'PRESENTACIÓN',
-        content: 'Espacio de reflexión y aprendizaje donde comparto investigaciones, intuiciones y pensamientos sobre ciencia, filosofía, psicología y tecnología.',
-        link: '/about/presentacion/',
-        telemetry: ['RUNTIME', 'POSTS_COUNT', 'UPDATES']
-    },
-    {
-        title: 'REGISTRO DE CAMBIOS',
-        subtitle: 'CHANGELOG',
-        content: 'Historial cronológico de modificaciones, correcciones y mejoras realizadas en los artículos.',
-        link: '/changelog/',
-        telemetry: ['REVISIONS', 'EDIT_COUNT', 'VERSIONS']
-    },
-    {
-        title: 'ENSAYOS',
-        subtitle: 'INVESTIGACIONES',
-        content: 'Reflexiones profundas y exhaustivas sobre temas que invitan a comprender el mundo y la mente humana.',
-        link: '/ensayos/',
-        telemetry: ['ESSAYS', 'READ_TIME', 'COMPLEXITY']
-    },
-    {
-        title: 'OTRAS IDEAS',
-        subtitle: 'PENSAMIENTOS SIMPLES',
-        content: 'Ideas más digeribles y directas. Críticas, recomendaciones y guías sobre diversos temas.',
-        link: '/otras-ideas/',
-        telemetry: ['IDEAS', 'CATEGORIES', 'BREVITY']
-    },
-    {
-        title: 'RECURSOS',
-        subtitle: 'BIBLIOTECA',
-        content: 'Colección de apuntes, aforismos y materiales de referencia sobre filosofía de la ciencia.',
         link: '/recursos/',
         telemetry: ['BOOKS', 'NOTES', 'REFERENCES']
     }
@@ -850,34 +815,86 @@ document.body.appendChild(cornerMarkers);
 
 const telemetryTerminal = document.createElement('div');
 telemetryTerminal.id = 'telemetry-terminal';
-telemetryTerminal.style.cssText = 'position:fixed;bottom:50px;right:20px;width:320px;height:180px;background:rgba(0,8,0,0.85);border:1px solid #00ffcc40;font-family:"JetBrains Mono",monospace;font-size:10px;color:#5a8a5a;z-index:503;pointer-events:none;overflow:hidden;';
+telemetryTerminal.style.cssText = 'position:fixed;bottom:60px;right:40px;width:320px;height:180px;background:rgba(0,8,0,0.85);border:1px solid #00ffcc40;font-family:"JetBrains Mono",monospace;font-size:10px;color:#5a8a5a;z-index:503;pointer-events:none;overflow:hidden;';
 telemetryTerminal.innerHTML = `
-    <div style="padding:8px 12px;border-bottom:1px solid #00ffcc30;color:#00ffcc;">[TELEMETRY_STREAM]</div>
+    <div style="padding:8px 12px;border-bottom:1px solid #00ffcc30;color:#00ffcc;">[SYSTEM_LOG]</div>
     <div id="telem-output" style="padding:8px 12px;line-height:1.5;height:calc(100% - 30px);overflow:hidden;"></div>
 `;
 document.body.appendChild(telemetryTerminal);
 
 const telemMessages = [
-    'SCANNING VOLUMETRIC MATRIX...',
-    'FLUX CALIBRATION: ████████░░ 80%',
-    'DENSITY_THRESHOLD: 0.847',
-    'VERTEX_COUNT: 2,847',
-    'RENDER_LATENCY: 16.7ms',
-    'GPU_LOAD: 67%',
-    'MARCHING_CUBES_ACTIVE',
-    'NORMAL_INTERP: LERP',
-    'RESOLUTION: 64x64x64',
-    'FRAME_BUFFER: SYNCHRONIZED',
-    'COORDINATE_SYSTEM: CARTESIAN',
-    'VIEW_MATRIX_UPDATED',
-    'SPikeFreq: ' + (Math.random() * 10).toFixed(3),
-    'ORGANIC_MOD: ' + (Math.random() * 5).toFixed(3),
-    'CHROME_PHASE: ' + (Math.random() * 360).toFixed(1) + '°',
-    'APERTURE: 0.0002',
-    'FOCUS_DIST: 10.0',
-    'BOKEH_ACTIVE',
-    'POSTPROCESS: ENABLED',
-    'GLITCH_SHADER: STANDBY'
+    'INIT: RENDERER_CORE_ACTIVE',
+    'THREE.JS v0.160.0 LOADED',
+    'GPU_ACCELERATION: ENABLED',
+    'WEBGL_CONTEXT: ACCELERATED',
+    'BUFFER_GEOMETRY: OPTIMIZED',
+    'VERTEX_SHADER: COMPILED',
+    'FRAGMENT_SHADER: COMPILED',
+    'UNIFORM_LOCATIONS: CACHED',
+    'TEXTURE_UNITS: 16/16',
+    'DRAW_CALLS: ' + Math.floor(Math.random() * 100),
+    'TRIANGLES: ' + (Math.random() * 50000).toFixed(0),
+    'FPS: ' + Math.floor(Math.random() * 30 + 50),
+    'FRAME_TIME: ' + (Math.random() * 5 + 10).toFixed(1) + 'ms',
+    'MEMORY_USAGE: ' + (Math.random() * 200 + 100).toFixed(0) + 'MB',
+    'CACHE_HIT_RATE: ' + Math.floor(Math.random() * 40 + 60) + '%',
+    'NOISE_FUNCTIONS: 3 ACTIVE',
+    'FBM_OCTAVES: 2',
+    'SIMPLEX_3D: INITIALIZED',
+    'MARCHING_CUBES: RESOLUTION 60',
+    'ISOLATION_THRESHOLD: 0',
+    'ISO_SURFACE: COMPUTING...',
+    'NORMAL_INTERPOLATION: LERP',
+    'CHROMIUM_WAVE: PROPAGATING',
+    'ORGANIC_DISPLACE: ACTIVE',
+    'VERTEX_DISPLACEMENT: ' + (Math.random() * 0.5 + 0.1).toFixed(3),
+    'APERTURE_VALUE: 0.0002',
+    'FOCUS_DISTANCE: 10.0',
+    'BOKEH_PASS: RENDERING',
+    'DEPTH_OF_FIELD: ENABLED',
+    'POSTFX_COMPOSER: 3 PASSES',
+    'RGB_SHIFT: STANDBY',
+    'GLITCH_INTENSITY: ' + (Math.random() * 0.1).toFixed(3),
+    'SCROLL_PROGRESS: ' + (Math.random()).toFixed(3),
+    'CAMERA_POSITION: [' + (Math.random() * 200 - 100).toFixed(0) + ', ' + (Math.random() * 200 - 100).toFixed(0) + ', ' + (Math.random() * 200 - 100).toFixed(0) + ']',
+    'ORBIT_TARGET: [0, 0, 0]',
+    'UP_VECTOR: [0, 1, 0]',
+    'FOV: 75° | NEAR: 0.1 | FAR: 1000',
+    'RESOLUTION: ' + window.innerWidth + 'x' + window.innerHeight,
+    'PIXEL_RATIO: ' + Math.min(window.devicePixelRatio, 2),
+    'ANTIALIASING: ENABLED',
+    'SHADOW_MAP: DISABLED',
+    'GAMMA_CORRECTION: ENABLED',
+    'TONE_MAPPING: ACESFilmic',
+    'EXPOSURE: 1.0',
+    'CLEAR_COLOR: #030303',
+    'COMPUTE_SHADER: NOT_SUPPORTED',
+    'WEBWORKER: ACTIVE',
+    'WORKER_THREAD: IDLE',
+    'BAKE_STRUCTURE: CACHED',
+    'SCROLL_SENSITIVITY: 0.0003',
+    'EASE_FUNCTION: CUBIC_INOUT',
+    'BEZIER_CTRL_PTS: COMPUTED',
+    'GLITCH_COOLDOWN: ' + (Math.random() * 5 + 5).toFixed(1) + 's',
+    'TYPEWRITER_SPEED: 0.03',
+    'PROGRESS_DOTS: 5 ACTIVE',
+    'HUD_OPACITY: 1.0',
+    'HUD_Z_INDEX: 504',
+    'CORNER_MARKERS: VISIBLE',
+    'BLEND_MODE: SCREEN',
+    'TELEMETRY_STREAM: LIVE',
+    'LOG_INTERVAL: 150ms',
+    'RENDER_PIPELINE: STANDARD',
+    'VSYNC: ENABLED',
+    'ADAPTIVE_VSYNC: ACTIVE',
+    'ERROR_CHECK: DISABLED',
+    'DEBUG_MODE: FALSE',
+    'PRODUCTION_BUILD: TRUE',
+    'HUGO_VERSION: 0.152.2',
+    'THEME: BREWM',
+    'CDN_DELIVERY: NETLIFY',
+    'GIT_BRANCH: MAIN',
+    'LAST_COMMIT: ' + new Date().toISOString().split('T')[0]
 ];
 
 const telemOutput = document.getElementById('telem-output');
@@ -886,26 +903,39 @@ let telemTimer = 0;
 
 function updateTelemetryTerminal(deltaTime) {
     telemTimer += deltaTime;
-    if (telemTimer > 0.8) {
+    if (telemTimer > 0.15) {
         telemTimer = 0;
-        const msg = telemMessages[Math.floor(Math.random() * telemMessages.length)];
-        if (msg.includes('SCANNING') || msg.includes('FLUX') || msg.includes('DENSITY')) {
-            const dynamicValue = (Math.random() * 999.999).toFixed(3);
-            const dynamicMsg = msg.replace('0.847', dynamicValue).replace('2,847', Math.floor(Math.random() * 9999).toString()).replace('67%', Math.floor(Math.random() * 100) + '%');
-            telemLines.push({ text: dynamicMsg, time: Date.now() });
-        } else if (msg.includes('SCAN')) {
-            const coords = `${Math.floor(Math.random() * 999).toString().padStart(3, '0')}:${Math.floor(Math.random() * 999).toString().padStart(3, '0')}:${Math.floor(Math.random() * 999).toString().padStart(3, '0')}`;
-            telemLines.push({ text: `SCAN_COMPLETE @ [${coords}]`, time: Date.now() });
-        } else if (msg.includes('SpikeFreq')) {
-            telemLines.push({ text: `SpikeFreq: ${(Math.random() * 10).toFixed(3)}`, time: Date.now() });
-        } else if (msg.includes('ORGANIC')) {
-            telemLines.push({ text: `ORGANIC_MOD: ${(Math.random() * 5).toFixed(3)}`, time: Date.now() });
-        } else if (msg.includes('CHROME')) {
-            telemLines.push({ text: `CHROME_PHASE: ${(Math.random() * 360).toFixed(1)}°`, time: Date.now() });
-        } else {
-            telemLines.push({ text: msg, time: Date.now() });
-        }
-        if (telemLines.length > 8) {
+        
+        const templates = [
+            () => `FPS: ${Math.floor(Math.random() * 30 + 50)} | FRAME: ${(Math.random() * 5 + 10).toFixed(1)}ms`,
+            () => `MEM: ${(Math.random() * 200 + 100).toFixed(0)}MB | CACHE: ${Math.floor(Math.random() * 40 + 60)}%`,
+            () => `TRIANGLES: ${Math.floor(Math.random() * 50000)} | CALLS: ${Math.floor(Math.random() * 100)}`,
+            () => `CAM: [${Math.floor(Math.random() * 200 - 100)}, ${Math.floor(Math.random() * 200 - 100)}, ${Math.floor(Math.random() * 200 - 100)}]`,
+            () => `ORGANIC: ${(Math.random() * 0.5).toFixed(3)} | CHROME: ${(Math.random() * 360).toFixed(1)}°`,
+            () => `GLITCH: ${(Math.random() * 0.1).toFixed(3)} | ISO: COMPUTING`,
+            () => `SCROLL: ${(Math.random()).toFixed(3)} | SENS: 0.0003`,
+            () => `DOF: ENABLED | BOKEH: ${Math.floor(Math.random() * 100)}%`,
+            () => `TEXTURES: ${Math.floor(Math.random() * 16)}/16 UNITS`,
+            () => `GPU: ${Math.floor(Math.random() * 40 + 60)}% LOAD`,
+            () => `DELTA_TIME: ${(Math.random() * 0.02 + 0.016).toFixed(4)}s`,
+            () => `ELAPSED: ${Math.floor(Math.random() * 1000)}s`,
+            () => `WAYPOINTS: 10 | SECTIONS: 5+10`,
+            () => `PROGRESS_DOT: ${Math.floor(Math.random() * 5 + 1)}/5`,
+            () => `BLEND_MODE: SCREEN | Z_LAYER: 499`,
+            () => `WORKER: ACTIVE | BAKING: IDLE`,
+            () => `NOISE_AMP: ${(Math.random() * 2).toFixed(2)} | FREQ: ${(Math.random() * 10).toFixed(1)}`,
+            () => `VERTEX_COUNT: ${Math.floor(Math.random() * 10000)}`,
+            () => `SCREEN: ${window.innerWidth}x${window.innerHeight}`,
+            () => `PIXEL_RATIO: ${Math.min(window.devicePixelRatio, 2)}`,
+            () => `VSYNC: ON | FRUSTUM: [0.1, 1000]`,
+            () => `THREE_VER: 0.160.0 | HUGO: 0.152.2`,
+            () => `DEBUG: FALSE | PROD: TRUE`
+        ];
+        
+        const msg = templates[Math.floor(Math.random() * templates.length)]();
+        telemLines.push({ text: '> ' + msg, time: Date.now() });
+        
+        if (telemLines.length > 10) {
             telemLines.shift();
         }
         telemOutput.innerHTML = telemLines.map(l => `<div>${l.text}</div>`).join('');
@@ -935,19 +965,29 @@ const TYPEWRITER_SPEED = 0.03;
 
 const hudTelemetry = document.createElement('div');
 hudTelemetry.id = 'hud-telemetry';
-hudTelemetry.style.cssText = 'position:fixed;bottom:20px;left:80px;z-index:504;pointer-events:none;max-width:400px;';
+hudTelemetry.style.cssText = 'position:fixed;bottom:60px;left:40px;z-index:504;pointer-events:none;max-width:400px;';
 hudTelemetry.innerHTML = `
     <div id="telem-title" style="color:#888;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;margin-bottom:6px;opacity:0.6;"></div>
-    <div id="telem-description" style="color:#5a6a5a;font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.5;margin-bottom:10px;max-width:350px;"></div>
+    <div id="telem-description" style="color:#4a7a4a;font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.5;margin-bottom:10px;max-width:350px;"></div>
     <div id="telem-bars" style="display:flex;flex-direction:column;gap:4px;"></div>
 `;
 document.body.appendChild(hudTelemetry);
 
-function activateSection(idx) {
-    console.log('[ACTIVATE] section:', idx, '-', sections[idx]?.title);
+function activateSection(techIdx, legacyIdx) {
+    if (legacyIdx === undefined || legacyIdx === null) {
+        console.warn('[ACTIVATE] Invalid legacyIdx:', legacyIdx);
+        legacyIdx = 0;
+    }
     
-    const section = sections[idx];
-    const tech = techSections[idx];
+    console.log('[ACTIVATE] tech:', techIdx, '| legacy:', legacyIdx, '-', sections[legacyIdx]?.title);
+    
+    const tech = techSections[techIdx];
+    const section = sections[legacyIdx];
+    
+    if (!section) {
+        console.warn('[ACTIVATE] Section not found for legacyIdx:', legacyIdx);
+        return;
+    }
     
     const telemTitle = document.getElementById('telem-title');
     const telemDesc = document.getElementById('telem-description');
@@ -963,9 +1003,9 @@ function activateSection(idx) {
             barContainer.innerHTML = `
                 <span style="color:#00ffcc;width:90px;">${label}</span>
                 <div style="flex:1;height:2px;background:#00ffcc20;position:relative;">
-                    <div class="telem-fill-${idx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#00ffcc;transition:width 1s ease;"></div>
+                    <div class="telem-fill-${techIdx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#00ffcc;transition:width 1s ease;"></div>
                 </div>
-                <span class="telem-value-${idx}-${j}" style="color:#888;min-width:50px;text-align:right;">0.000</span>
+                <span class="telem-value-${techIdx}-${j}" style="color:#888;min-width:50px;text-align:right;">0.000</span>
             `;
             telemBars.appendChild(barContainer);
         });
@@ -977,30 +1017,34 @@ function activateSection(idx) {
         const textEl = document.getElementById(`typewriter-text-${key}`);
         if (textEl) textEl.textContent = '';
         
-        sections[key].telemetry.forEach((_, j) => {
-            const fill = document.querySelector(`.sec-telem-fill-${key}-${j}`);
-            const val = document.querySelector(`.sec-telem-val-${key}-${j}`);
-            if (fill) fill.style.width = '0%';
-            if (val) val.textContent = '0.000';
-        });
+        if (sections[key] && sections[key].telemetry) {
+            sections[key].telemetry.forEach((_, j) => {
+                const fill = document.querySelector(`.sec-telem-fill-${key}-${j}`);
+                const val = document.querySelector(`.sec-telem-val-${key}-${j}`);
+                if (fill) fill.style.width = '0%';
+                if (val) val.textContent = '0.000';
+            });
+        }
     });
     
-    typewriterState[idx].active = true;
+    if (typewriterState[legacyIdx]) {
+        typewriterState[legacyIdx].active = true;
+    }
     
     sections.forEach((_, i) => {
         const sectionDiv = document.getElementById(`section-${i}`);
         if (sectionDiv) {
-            sectionDiv.style.opacity = i === idx ? '1' : '0';
-            sectionDiv.style.transform = i === idx ? 'translateY(0)' : 'translateY(20px)';
+            sectionDiv.style.opacity = i === legacyIdx ? '1' : '0';
+            sectionDiv.style.transform = i === legacyIdx ? 'translateY(0)' : 'translateY(20px)';
         }
     });
     
     document.querySelectorAll('[id^="progress-dot-"]').forEach((el, i) => {
-        el.style.opacity = i === idx ? '1' : '0.3';
-        el.style.background = i === idx ? '#00ffcc' : 'transparent';
+        el.style.opacity = i === legacyIdx ? '1' : '0.3';
+        el.style.background = i === legacyIdx ? '#00ffcc' : 'transparent';
     });
     
-    currentSection = idx;
+    currentSection = techIdx;
 }
 
 function updateTypewriter(deltaTime) {
@@ -1197,17 +1241,18 @@ function handleScrollInput(deltaY) {
     
     targetCameraPos.set(pos.x, pos.y, pos.z);
     
-    const sectionIndex = Math.min(Math.floor(scrollProgress * sections.length), sections.length - 1);
+    const techIndex = Math.min(Math.floor(scrollProgress * 10), 9);
+    const legacyIndex = techIndex % 5;
     
-    console.log(`[SCROLL] progress: ${scrollProgress.toFixed(3)} | section: ${sectionIndex}/${sections.length-1} | target: (${pos.x.toFixed(0)}, ${pos.y.toFixed(0)}, ${pos.z.toFixed(0)})`);
+    console.log(`[SCROLL] progress: ${scrollProgress.toFixed(3)} | tech: ${techIndex} | legacy: ${legacyIndex}`);
     
-    if (sectionIndex !== currentSection) {
-        console.log('[CHANGE] Activating section', sectionIndex, '-', sections[sectionIndex]?.title);
-        activateSection(sectionIndex);
+    if (techIndex !== currentSection) {
+        console.log('[CHANGE] Activating tech', techIndex, '| legacy', legacyIndex, '-', sections[legacyIndex]?.title);
+        activateSection(techIndex, legacyIndex);
     }
     
     glitchIntensity = Math.min(Math.abs(deltaY) * 0.005, 1.0);
-    updateTelemetry(sectionIndex, scrollProgress);
+    updateTelemetry(techIndex, scrollProgress);
 }
 
 window.addEventListener('wheel', (e) => {
@@ -1303,7 +1348,7 @@ activateSection(0);
 let autoModeActiveScrolly = false;
 const scrollyAutoBtn = document.createElement('button');
 scrollyAutoBtn.textContent = '> AUTO NAV';
-scrollyAutoBtn.style.cssText = 'position:fixed;top:50px;right:10px;color:#cccc00;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #cccc00;cursor:pointer;z-index:1001;';
+scrollyAutoBtn.style.cssText = 'position:fixed;top:70px;right:40px;color:#cccc00;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #cccc00;cursor:pointer;z-index:1001;';
 scrollyAutoBtn.addEventListener('click', () => {
     autoModeActiveScrolly = !autoModeActiveScrolly;
     scrollyAutoBtn.textContent = autoModeActiveScrolly ? '> NAVIGATING' : '> AUTO NAV';
@@ -1369,7 +1414,7 @@ function animate() {
     
     updateTypewriter(0.016);
     updateTelemetryTerminal(0.016);
-    updateSectionTelemetry(currentSection);
+    updateSectionTelemetry(currentSection % 5);
     
     glitchCooldown -= 0.016;
     if (glitchCooldown <= 0) {
@@ -1392,7 +1437,7 @@ function animate() {
 
 const orbitControlsBtn = document.createElement('button');
 orbitControlsBtn.textContent = '○ ORBIT';
-orbitControlsBtn.style.cssText = 'position:fixed;top:90px;right:10px;color:#888;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #444;cursor:pointer;z-index:1001;';
+orbitControlsBtn.style.cssText = 'position:fixed;top:100px;right:40px;color:#888;font-family:monospace;font-size:10px;background:rgba(5,10,15,0.9);padding:6px 10px;border:1px solid #444;cursor:pointer;z-index:1001;';
 orbitControlsBtn.addEventListener('click', () => {
     orbitControls.enabled = !orbitControls.enabled;
     if (orbitControls.enabled) {
