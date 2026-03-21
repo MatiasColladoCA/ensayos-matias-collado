@@ -568,63 +568,136 @@ const waypoints = [
 
 const sections = [
     {
+        title: 'SOBRE ESTE PROYECTO',
+        subtitle: 'PRESENTACIÓN',
+        content: 'Espacio de reflexión y aprendizaje donde comparto investigaciones, intuiciones y pensamientos sobre ciencia, filosofía, psicología y tecnología.',
+        link: '/about/presentacion/',
+        telemetry: ['RUNTIME', 'POSTS_COUNT', 'UPDATES']
+    },
+    {
+        title: 'REGISTRO DE CAMBIOS',
+        subtitle: 'CHANGELOG',
+        content: 'Historial cronológico de modificaciones, correcciones y mejoras realizadas en los artículos. Transparencia en la evolución del pensamiento.',
+        link: '/changelog/',
+        telemetry: ['REVISIONS', 'EDIT_COUNT', 'VERSIONS']
+    },
+    {
+        title: 'ENSAYOS',
+        subtitle: 'INVESTIGACIONES',
+        content: 'Reflexiones profundas y exhaustivas sobre temas que invitan a comprender el mundo y la mente humana. Conocimiento como recurso valioso.',
+        link: '/ensayos/',
+        telemetry: ['ESSAYS', 'READ_TIME', 'COMPLEXITY']
+    },
+    {
+        title: 'OTRAS IDEAS',
+        subtitle: 'PENSAMIENTOS SIMPLES',
+        content: 'Ideas más digeribles y directas. Críticas, recomendaciones y guías sobre diversos temas sin la profundidad de un ensayo completo.',
+        link: '/otras-ideas/',
+        telemetry: ['IDEAS', 'CATEGORIES', 'BREVITY']
+    },
+    {
+        title: 'RECURSOS',
+        subtitle: 'BIBLIOTECA',
+        content: 'Colección de apuntes, aforismos y materiales de referencia sobre filosofía de la ciencia y otras áreas del conocimiento.',
+        link: '/recursos/',
+        telemetry: ['BOOKS', 'NOTES', 'REFERENCES']
+    },
+    {
+        title: 'SOBRE ESTE PROYECTO',
+        subtitle: 'PRESENTACIÓN',
+        content: 'Espacio de reflexión y aprendizaje donde comparto investigaciones, intuiciones y pensamientos sobre ciencia, filosofía, psicología y tecnología.',
+        link: '/about/presentacion/',
+        telemetry: ['RUNTIME', 'POSTS_COUNT', 'UPDATES']
+    },
+    {
+        title: 'REGISTRO DE CAMBIOS',
+        subtitle: 'CHANGELOG',
+        content: 'Historial cronológico de modificaciones, correcciones y mejoras realizadas en los artículos.',
+        link: '/changelog/',
+        telemetry: ['REVISIONS', 'EDIT_COUNT', 'VERSIONS']
+    },
+    {
+        title: 'ENSAYOS',
+        subtitle: 'INVESTIGACIONES',
+        content: 'Reflexiones profundas y exhaustivas sobre temas que invitan a comprender el mundo y la mente humana.',
+        link: '/ensayos/',
+        telemetry: ['ESSAYS', 'READ_TIME', 'COMPLEXITY']
+    },
+    {
+        title: 'OTRAS IDEAS',
+        subtitle: 'PENSAMIENTOS SIMPLES',
+        content: 'Ideas más digeribles y directas. Críticas, recomendaciones y guías sobre diversos temas.',
+        link: '/otras-ideas/',
+        telemetry: ['IDEAS', 'CATEGORIES', 'BREVITY']
+    },
+    {
+        title: 'RECURSOS',
+        subtitle: 'BIBLIOTECA',
+        content: 'Colección de apuntes, aforismos y materiales de referencia sobre filosofía de la ciencia.',
+        link: '/recursos/',
+        telemetry: ['BOOKS', 'NOTES', 'REFERENCES']
+    }
+];
+
+const techSections = [
+    {
         title: 'FERROFLUID DYNAMICS',
         subtitle: 'SECT-01 // VOLUMETRIC ANALYSIS',
-        content: 'Spiked ferrofluid structures exhibiting self-organizing behavior under magnetic field influence. Surface tension patterns correlate with electromagnetic frequency modulation.',
+        description: 'Spiked ferrofluid structures exhibiting self-organizing behavior under magnetic field influence. Surface tension patterns correlate with electromagnetic frequency modulation.',
         telemetry: ['FLUX_DENSITY', 'VISCOSITY_INDEX', 'COHESION_COEFF']
     },
     {
         title: 'HORMIGUERO ARCHITECTURE',
         subtitle: 'SECT-02 // BIOMIMETIC STRUCTURE',
-        content: 'Trabecular bone density simulation. Organic cavern networks formed through procedural noise functions with FBM modulation at 2-octave resolution.',
+        description: 'Trabecular bone density simulation. Organic cavern networks formed through procedural noise functions with FBM modulation at 2-octave resolution.',
         telemetry: ['POROSITY_LEVEL', 'CAVERN_CONNECTIVITY', 'DENSITY_MAP']
     },
     {
         title: 'CHROMIUM INTERFERENCE',
         subtitle: 'SECT-03 // SURFACE OPTICS',
-        content: 'Chrome wave propagation analysis. Multi-directional sine interference patterns creating unpredictable illumination cascades across ferrofluid surface.',
+        description: 'Chrome wave propagation analysis. Multi-directional sine interference patterns creating unpredictable illumination cascades across ferrofluid surface.',
         telemetry: ['REFRACTION_INDEX', 'WAVE_FREQ', 'CHROME_MOD']
     },
     {
         title: 'ORGANIC DISPLACEMENT',
         subtitle: 'SECT-04 // VERTEX DEFORMATION',
-        content: 'Lava-lamp viscosity simulation. FBM-driven vertex displacement creating organic breathing motion in the volumetric structure.',
+        description: 'Lava-lamp viscosity simulation. FBM-driven vertex displacement creating organic breathing motion in the volumetric structure.',
         telemetry: ['DISPLACEMENT_AMP', 'WAVE_VELOCITY', 'ORGANIC_SCALE']
     },
     {
         title: 'DEPTH OF FIELD',
         subtitle: 'SECT-05 // MICROSCOPE SIMULATION',
-        content: 'Bokeh rendering with dynamic focus plane. Aperture and blur parameters calibrated for electron microscope aesthetic.',
+        description: 'Bokeh rendering with dynamic focus plane. Aperture and blur parameters calibrated for electron microscope aesthetic.',
         telemetry: ['FOCUS_DISTANCE', 'APERTURE_SIZE', 'BLUR_INTENSITY']
     },
     {
         title: 'TESSELLATION PATTERNS',
         subtitle: 'SECT-06 // GEOMETRIC RESONANCE',
-        content: 'Recursive subdivision algorithms generating fractal surface patterns. Each vertex oscillates with phase-offset timing creating emergent wave structures.',
+        description: 'Recursive subdivision algorithms generating fractal surface patterns. Each vertex oscillates with phase-offset timing creating emergent wave structures.',
         telemetry: ['TESS_LEVEL', 'FRACTAL_DEPTH', 'NODE_COUNT']
     },
     {
         title: 'ACOUSTIC RESONANCE',
         subtitle: 'SECT-07 // FREQUENCY MAPPING',
-        content: 'Audio-reactive deformation synchronized to harmonic frequencies. Standing wave patterns emerge from interference between opposing sine generators.',
+        description: 'Audio-reactive deformation synchronized to harmonic frequencies. Standing wave patterns emerge from interference between opposing sine generators.',
         telemetry: ['BASE_FREQ', 'HARMONIC_RATIO', 'AMPLITUDE_PEAK']
     },
     {
         title: 'THERMAL DIFFUSION',
         subtitle: 'SECT-08 // HEAT TRANSFER',
-        content: 'Heat propagation simulation through volumetric medium. Thermal conductivity gradients create organic morphing transitions between stable states.',
+        description: 'Heat propagation simulation through volumetric medium. Thermal conductivity gradients create organic morphing transitions between stable states.',
         telemetry: ['TEMP_DELTA', 'CONDUCTIVITY', 'ENTROPY_RATE']
     },
     {
         title: 'FLUID DYNAMICS',
         subtitle: 'SECT-09 // NAVIER-STOKES',
-        content: 'Viscous flow visualization using simplified Navier-Stokes equations. Turbulence patterns emerge from boundary condition interactions.',
+        description: 'Viscous flow visualization using simplified Navier-Stokes equations. Turbulence patterns emerge from boundary condition interactions.',
         telemetry: ['VISCOSITY', 'REYNOLDS_NUM', 'VORTICITY']
     },
     {
         title: 'QUANTUM FLUCTUATION',
         subtitle: 'SECT-10 // PROBABILITY DENSITY',
-        content: 'Stochastic particle distribution modeling quantum uncertainty principles. Wave function collapse visualized through probability density gradients.',
+        description: 'Stochastic particle distribution modeling quantum uncertainty principles. Wave function collapse visualized through probability density gradients.',
         telemetry: ['UNCERTAINTY', 'PROB_DENSITY', 'COLLAPSE_RATE']
     }
 ];
@@ -841,7 +914,7 @@ function updateTelemetryTerminal(deltaTime) {
 
 const progressBar = document.createElement('div');
 progressBar.id = 'progress-indicator';
-progressBar.style.cssText = 'position:fixed;bottom:60px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:502;';
+progressBar.style.cssText = 'position:fixed;top:50px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:502;';
 document.body.appendChild(progressBar);
 
 sections.forEach((_, i) => {
@@ -860,33 +933,67 @@ let scrollVelocity = 0;
 let typewriterTimer = 0;
 const TYPEWRITER_SPEED = 0.03;
 
+const hudTelemetry = document.createElement('div');
+hudTelemetry.id = 'hud-telemetry';
+hudTelemetry.style.cssText = 'position:fixed;bottom:20px;left:80px;z-index:504;pointer-events:none;max-width:400px;';
+hudTelemetry.innerHTML = `
+    <div id="telem-title" style="color:#888;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;margin-bottom:6px;opacity:0.6;"></div>
+    <div id="telem-description" style="color:#5a6a5a;font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.5;margin-bottom:10px;max-width:350px;"></div>
+    <div id="telem-bars" style="display:flex;flex-direction:column;gap:4px;"></div>
+`;
+document.body.appendChild(hudTelemetry);
+
 function activateSection(idx) {
     console.log('[ACTIVATE] section:', idx, '-', sections[idx]?.title);
     
+    const section = sections[idx];
+    const tech = techSections[idx];
+    
+    const telemTitle = document.getElementById('telem-title');
+    const telemDesc = document.getElementById('telem-description');
+    const telemBars = document.getElementById('telem-bars');
+    
+    if (telemTitle) telemTitle.textContent = tech ? `[${tech.subtitle}]` : `[${section?.subtitle || ''}]`;
+    if (telemDesc && tech) telemDesc.textContent = tech.description;
+    if (telemBars && tech) {
+        telemBars.innerHTML = '';
+        tech.telemetry.forEach((label, j) => {
+            const barContainer = document.createElement('div');
+            barContainer.style.cssText = 'display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:9px;';
+            barContainer.innerHTML = `
+                <span style="color:#00ffcc;width:90px;">${label}</span>
+                <div style="flex:1;height:2px;background:#00ffcc20;position:relative;">
+                    <div class="telem-fill-${idx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#00ffcc;transition:width 1s ease;"></div>
+                </div>
+                <span class="telem-value-${idx}-${j}" style="color:#888;min-width:50px;text-align:right;">0.000</span>
+            `;
+            telemBars.appendChild(barContainer);
+        });
+    }
+    
     Object.keys(typewriterState).forEach(key => {
         typewriterState[key].active = false;
-        typewriterState[key].currentLine = 0;
         typewriterState[key].currentChar = 0;
-        const lines = sections[key].content.split('. ');
-        typewriterState[key].lines = lines.length;
-        lines.forEach((line, lineIdx) => {
-            const lineEl = document.getElementById(`typewriter-${key}-${lineIdx}`);
-            if (lineEl) lineEl.textContent = '';
+        const textEl = document.getElementById(`typewriter-text-${key}`);
+        if (textEl) textEl.textContent = '';
+        
+        sections[key].telemetry.forEach((_, j) => {
+            const fill = document.querySelector(`.sec-telem-fill-${key}-${j}`);
+            const val = document.querySelector(`.sec-telem-val-${key}-${j}`);
+            if (fill) fill.style.width = '0%';
+            if (val) val.textContent = '0.000';
         });
     });
     
     typewriterState[idx].active = true;
     
-    let found = 0;
     sections.forEach((_, i) => {
         const sectionDiv = document.getElementById(`section-${i}`);
         if (sectionDiv) {
-            found++;
             sectionDiv.style.opacity = i === idx ? '1' : '0';
             sectionDiv.style.transform = i === idx ? 'translateY(0)' : 'translateY(20px)';
         }
     });
-    console.log('[ACTIVATE] found', found, 'section divs in DOM');
     
     document.querySelectorAll('[id^="progress-dot-"]').forEach((el, i) => {
         el.style.opacity = i === idx ? '1' : '0.3';
@@ -900,34 +1007,45 @@ function updateTypewriter(deltaTime) {
     if (!typewriterState[currentSection] || !typewriterState[currentSection].active) return;
     
     const state = typewriterState[currentSection];
-    const contentLines = sections[currentSection].content.split('. ');
+    const textEl = document.getElementById(state.elementId);
+    if (!textEl) return;
     
     typewriterTimer += deltaTime;
     
     if (typewriterTimer >= TYPEWRITER_SPEED) {
         typewriterTimer = 0;
         
-        if (state.currentLine < state.lines) {
-            const fullLine = contentLines[state.currentLine] + (state.currentLine < state.lines - 1 ? '. ' : '');
-            const lineEl = document.getElementById(`typewriter-${currentSection}-${state.currentLine}`);
-            
-            if (lineEl && state.currentChar <= fullLine.length) {
-                lineEl.textContent = fullLine.substring(0, state.currentChar + 1);
-                state.currentChar++;
-            } else if (state.currentChar > fullLine.length) {
-                state.currentLine++;
-                state.currentChar = 0;
-            }
+        if (state.currentChar < state.text.length) {
+            textEl.textContent = state.text.substring(0, state.currentChar + 1);
+            state.currentChar++;
         }
     }
 }
 
 function updateTelemetry(sectionIdx, progress) {
-    sections[sectionIdx].telemetry.forEach((_, telemIdx) => {
+    const tech = techSections[sectionIdx];
+    if (!tech) return;
+    
+    tech.telemetry.forEach((_, telemIdx) => {
         const fill = document.querySelector(`.telem-fill-${sectionIdx}-${telemIdx}`);
         const value = document.querySelector(`.telem-value-${sectionIdx}-${telemIdx}`);
         if (fill && value) {
             const val = Math.sin(Date.now() * 0.001 + sectionIdx * 2 + telemIdx) * 0.5 + 0.5;
+            fill.style.width = `${val * 100}%`;
+            value.textContent = (val * 999.999).toFixed(3);
+        }
+    });
+}
+
+function updateSectionTelemetry(sectionIdx) {
+    const section = sections[sectionIdx];
+    if (!section || !section.telemetry) return;
+    
+    section.telemetry.forEach((_, telemIdx) => {
+        const fill = document.querySelector(`.sec-telem-fill-${sectionIdx}-${telemIdx}`);
+        const value = document.querySelector(`.sec-telem-val-${sectionIdx}-${telemIdx}`);
+        if (fill && value) {
+            const val = Math.sin(Date.now() * 0.0015 + sectionIdx * 3 + telemIdx * 1.5) * 0.5 + 0.5;
             fill.style.width = `${val * 100}%`;
             value.textContent = (val * 999.999).toFixed(3);
         }
@@ -942,79 +1060,10 @@ const typewriterState = {};
 
 function createTypewriterLine(text, className = '') {
     const line = document.createElement('div');
-    line.style.cssText = 'color:#7a8a7a;font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6;white-space:pre;height:1.6em;';
+    line.style.cssText = 'color:#7a8a7a;font-family:"JetBrains Mono",monospace;font-size:14px;line-height:1.7;white-space:pre;height:1.7em;';
     if (className) line.className = className;
     return line;
 }
-
-sections.forEach((section, i) => {
-    const sectionDiv = document.createElement('div');
-    sectionDiv.style.cssText = `position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 80px;opacity:0;transition:opacity 0.5s ease;pointer-events:none;`;
-    sectionDiv.id = `section-${i}`;
-    
-    const titleEl = document.createElement('div');
-    titleEl.style.cssText = 'color:#fff;font-size:28px;font-weight:bold;letter-spacing:4px;margin-bottom:8px;text-shadow:0 0 20px #00ffcc40;';
-    titleEl.textContent = section.title;
-    
-    const subtitleEl = document.createElement('div');
-    subtitleEl.style.cssText = 'color:#00ffcc;font-size:11px;letter-spacing:2px;margin-bottom:24px;';
-    subtitleEl.textContent = section.subtitle;
-    
-    const typewriterContainer = document.createElement('div');
-    typewriterContainer.id = `typewriter-${i}`;
-    typewriterContainer.style.cssText = 'max-width:520px;';
-    
-    const contentLines = section.content.split('. ');
-    contentLines.forEach((line, lineIdx) => {
-        const lineEl = createTypewriterLine();
-        lineEl.id = `typewriter-${i}-${lineIdx}`;
-        lineEl.textContent = line + (lineIdx < contentLines.length - 1 ? '.' : '');
-        typewriterContainer.appendChild(lineEl);
-    });
-    
-    const cursorLine = document.createElement('div');
-    cursorLine.id = `cursor-${i}`;
-    cursorLine.innerHTML = '<span style="color:#00ffcc;background:#00ffcc;width:8px;height:14px;display:inline-block;animation:blink 1s step-end infinite;">&nbsp;</span>';
-    typewriterContainer.appendChild(cursorLine);
-    
-    const telemetryEl = document.createElement('div');
-    telemetryEl.style.cssText = 'margin-top:24px;display:flex;flex-direction:column;gap:4px;';
-    
-    section.telemetry.forEach((label, j) => {
-        const row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;gap:12px;font-size:10px;font-family:"JetBrains Mono",monospace;';
-        
-        const labelSpan = document.createElement('span');
-        labelSpan.style.cssText = 'color:#00ffcc;width:120px;';
-        labelSpan.textContent = label;
-        
-        const bar = document.createElement('div');
-        bar.style.cssText = 'flex:1;height:2px;background:linear-gradient(90deg,#00ffcc20,#00ffcc,#00ffcc20);position:relative;';
-        
-        const fill = document.createElement('div');
-        fill.style.cssText = 'position:absolute;top:0;left:0;height:100%;width:0%;background:#00ffcc;transition:width 2s ease;';
-        fill.className = `telem-fill-${i}-${j}`;
-        bar.appendChild(fill);
-        
-        const value = document.createElement('span');
-        value.style.cssText = 'color:#fff;min-width:60px;text-align:right;font-family:"JetBrains Mono",monospace;';
-        value.className = `telem-value-${i}-${j}`;
-        value.textContent = '0.000';
-        
-        row.appendChild(labelSpan);
-        row.appendChild(bar);
-        row.appendChild(value);
-        telemetryEl.appendChild(row);
-    });
-    
-    sectionDiv.appendChild(titleEl);
-    sectionDiv.appendChild(subtitleEl);
-    sectionDiv.appendChild(typewriterContainer);
-    sectionDiv.appendChild(telemetryEl);
-    sectionsWrapper.appendChild(sectionDiv);
-    
-    typewriterState[i] = { lines: contentLines.length, currentLine: 0, currentChar: 0, active: false };
-});
 
 const cursorStyle = document.createElement('style');
 cursorStyle.textContent = `
@@ -1022,12 +1071,91 @@ cursorStyle.textContent = `
         0%, 100% { opacity: 1; }
         50% { opacity: 0; }
     }
-    @keyframes typewriter {
-        from { width: 0; }
-        to { width: 100%; }
+    .cursor-blink {
+        display:inline-block;
+        width:8px;
+        height:16px;
+        background:#00ffcc;
+        animation:blink 1s step-end infinite;
+        vertical-align:text-bottom;
+        margin-left:2px;
     }
 `;
 document.head.appendChild(cursorStyle);
+
+sections.forEach((section, i) => {
+    const sectionDiv = document.createElement('div');
+    sectionDiv.style.cssText = `position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px;opacity:0;transition:opacity 0.5s ease;pointer-events:none;`;
+    sectionDiv.id = `section-${i}`;
+    
+    const contentWrapper = document.createElement('div');
+    contentWrapper.style.cssText = 'text-align:center;max-width:600px;';
+    
+    const titleEl = document.createElement('div');
+    titleEl.style.cssText = 'color:#fff;font-size:32px;font-weight:bold;letter-spacing:6px;margin-bottom:8px;text-shadow:0 0 30px #00ffcc50;';
+    titleEl.textContent = section.title;
+    
+    const subtitleEl = document.createElement('div');
+    subtitleEl.style.cssText = 'color:#00ffcc;font-size:11px;letter-spacing:3px;margin-bottom:32px;opacity:0.7;';
+    subtitleEl.textContent = section.subtitle;
+    
+    const typewriterContainer = document.createElement('div');
+    typewriterContainer.id = `typewriter-${i}`;
+    typewriterContainer.style.cssText = 'text-align:left;margin-bottom:24px;';
+    
+    const contentLines = section.content.split('. ');
+    typewriterContainer.innerHTML = '<span id="typewriter-text-' + i + '" style="color:#5a7a5a;font-family:\'JetBrains Mono\',monospace;font-size:13px;line-height:1.8;"></span><span class="cursor-blink"></span>';
+    
+    contentWrapper.appendChild(titleEl);
+    contentWrapper.appendChild(subtitleEl);
+    contentWrapper.appendChild(typewriterContainer);
+    
+    const linkEl = document.createElement('a');
+    linkEl.href = section.link;
+    linkEl.style.cssText = 'color:#00ffcc;text-decoration:none;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:2px;padding:10px 20px;border:1px solid #00ffcc40;transition:all 0.3s ease;pointer-events:auto;display:inline-block;margin-bottom:20px;';
+    linkEl.innerHTML = '> ACCEDER <span style="opacity:0.5;">→</span>';
+    linkEl.addEventListener('mouseenter', () => {
+        linkEl.style.background = '#00ffcc20';
+        linkEl.style.borderColor = '#00ffcc';
+        linkEl.style.textShadow = '0 0 10px #00ffcc';
+    });
+    linkEl.addEventListener('mouseleave', () => {
+        linkEl.style.background = 'transparent';
+        linkEl.style.borderColor = '#00ffcc40';
+        linkEl.style.textShadow = 'none';
+    });
+    contentWrapper.appendChild(linkEl);
+    
+    const sectionTelemetry = document.createElement('div');
+    sectionTelemetry.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:center;margin-top:8px;';
+    sectionTelemetry.id = `section-telem-${i}`;
+    
+    if (section.telemetry) {
+        section.telemetry.forEach((label, j) => {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:9px;';
+            row.innerHTML = `
+                <span style="color:#cccc00;width:70px;text-align:right;">${label}</span>
+                <div style="width:100px;height:2px;background:#cccc0020;position:relative;">
+                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#cccc00;transition:width 1s ease;"></div>
+                </div>
+                <span class="sec-telem-val-${i}-${j}" style="color:#888;width:40px;text-align:left;">0.000</span>
+            `;
+            sectionTelemetry.appendChild(row);
+        });
+    }
+    contentWrapper.appendChild(sectionTelemetry);
+    
+    sectionDiv.appendChild(contentWrapper);
+    sectionsWrapper.appendChild(sectionDiv);
+    
+    typewriterState[i] = { 
+        text: section.content, 
+        currentChar: 0, 
+        active: false,
+        elementId: `typewriter-text-${i}`
+    };
+});
 
 let scrollProgress = 0;
 const scrollSensitivity = 0.0003;
@@ -1241,6 +1369,7 @@ function animate() {
     
     updateTypewriter(0.016);
     updateTelemetryTerminal(0.016);
+    updateSectionTelemetry(currentSection);
     
     glitchCooldown -= 0.016;
     if (glitchCooldown <= 0) {
