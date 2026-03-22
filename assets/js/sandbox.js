@@ -2075,49 +2075,56 @@ document.head.appendChild(cursorStyle);
 
 sections.forEach((section, i) => {
     const sectionDiv = document.createElement('div');
-    sectionDiv.style.cssText = `position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px;opacity:0;transition:opacity 0.5s ease;pointer-events:none;`;
+    sectionDiv.style.cssText = `position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity 0.5s ease;pointer-events:none;`;
     sectionDiv.id = `section-${i}`;
-    
-    const contentWrapper = document.createElement('div');
-    contentWrapper.style.cssText = 'text-align:center;max-width:600px;';
-    
+
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:40%;';
+
+    const topRow = document.createElement('div');
+    topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;';
+
     const titleEl = document.createElement('div');
-    titleEl.style.cssText = 'color:#fff;font-size:32px;font-weight:bold;letter-spacing:6px;margin-bottom:8px;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #A0E0FF, 0 0 20px rgba(135,233,15,0.5);';
-    titleEl.textContent = section.title;
-    
+    titleEl.style.cssText = 'flex:0 0 50%;text-align:left;color:#fff;font-size:clamp(18px, 3vw, 36px);font-weight:bold;letter-spacing:-1px;line-height:0.9;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #A0E0FF, 0 0 20px rgba(135,233,15,0.5);';
+    titleEl.innerHTML = section.title.replace(/ /g, '<br>');
+    topRow.appendChild(titleEl);
+
+    const rightCol = document.createElement('div');
+    rightCol.style.cssText = 'flex:0 0 45%;text-align:right;';
+
     const subtitleEl = document.createElement('div');
     subtitleEl.className = 'crt-phosphor-dim';
-    subtitleEl.style.cssText = 'font-size:11px;letter-spacing:3px;margin-bottom:32px;';
+    subtitleEl.style.cssText = 'font-size:9px;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;';
     subtitleEl.textContent = section.subtitle;
-    
+    rightCol.appendChild(subtitleEl);
+
     const typewriterContainer = document.createElement('div');
     typewriterContainer.id = `typewriter-${i}`;
-    typewriterContainer.style.cssText = 'text-align:left;margin-bottom:24px;';
-    
-    const contentLines = section.content.split('. ');
-    typewriterContainer.innerHTML = '<span id="typewriter-text-' + i + '" class="crt-phosphor-dim" style="font-size:13px;line-height:1.8;"></span><span class="cursor-blink"></span>';
-    
-    contentWrapper.appendChild(titleEl);
-    contentWrapper.appendChild(subtitleEl);
-    contentWrapper.appendChild(typewriterContainer);
-    
+    typewriterContainer.style.cssText = 'text-align:right;';
+    typewriterContainer.innerHTML = '<span id="typewriter-text-' + i + '" class="crt-phosphor-dim" style="font-size:11px;line-height:1.4;letter-spacing:1px;"></span><span class="cursor-blink"></span>';
+    rightCol.appendChild(typewriterContainer);
+    topRow.appendChild(rightCol);
+    wrapper.appendChild(topRow);
+
     const linkEl = document.createElement('a');
     linkEl.href = section.link;
     linkEl.className = 'crt-phosphor';
-    linkEl.style.cssText = 'text-decoration:none;font-size:12px;letter-spacing:2px;padding:10px 20px;border:1px solid #A0E0FF;transition:all 0.3s ease;pointer-events:auto;display:inline-block;margin-bottom:20px;';
+    linkEl.style.cssText = 'display:block;margin-left:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #A0E0FF;color:#A0E0FF;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);';
     linkEl.innerHTML = '> ACCEDER <span style="opacity:0.5;">></span>';
     linkEl.addEventListener('mouseenter', () => {
         linkEl.style.background = 'rgba(135,233,15,0.15)';
     });
     linkEl.addEventListener('mouseleave', () => {
-        linkEl.style.background = 'transparent';
+        linkEl.style.background = 'rgba(0,0,0,0.3)';
     });
     linkEl.addEventListener('click', () => {
         console.log('[LINK_CLICK] Section:', section.title, '| URL:', linkEl.href);
     });
     console.log('[SECTION_LINK] Index:', i, '| Title:', section.title, '| Link:', section.link);
-    contentWrapper.appendChild(linkEl);
-    
+    wrapper.appendChild(linkEl);
+
+    sectionDiv.appendChild(wrapper);
+
     const sectionTelemetry = document.createElement('div');
     sectionTelemetry.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:center;margin-top:8px;';
     sectionTelemetry.id = `section-telem-${i}`;
@@ -2136,9 +2143,7 @@ sections.forEach((section, i) => {
             sectionTelemetry.appendChild(row);
         });
     }
-    contentWrapper.appendChild(sectionTelemetry);
-    
-    sectionDiv.appendChild(contentWrapper);
+    sectionDiv.appendChild(sectionTelemetry);
     sectionsWrapper.appendChild(sectionDiv);
     
     typewriterState[i] = { 

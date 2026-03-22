@@ -4,18 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ .Title }}</title>
-    <link rel="preload" href="fonts/ArobaModernDemo-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=VCR+OSD+Mono&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style id="dynamic-fonts"></style>
+    <script>
+        (function() {
+            var prefix = '/' + window.location.pathname.split('/').filter(function(p) { return p.length > 0 && p !== 'test' && p !== 'sandbox'; }).join('/');
+            if (prefix === '/') prefix = '';
+            var fontUrl = prefix + '/fonts/ArobaModernDemo-Regular.woff2';
+            var style = document.getElementById('dynamic-fonts');
+            style.textContent = '@font-face{font-family:"Aroba Modern";src:url("' + fontUrl + '") format("woff2");font-weight:normal;font-style:normal;font-display:swap;}';
+            var link = document.createElement('link');
+            link.rel = 'preload';
+            link.href = fontUrl;
+            link.as = 'font';
+            link.type = 'font/woff2';
+            link.crossOrigin = 'anonymous';
+            document.head.appendChild(link);
+        })();
+    </script>
     <style>
-        @font-face {
-            font-family: 'Aroba Modern';
-            src: url('fonts/ArobaModernDemo-Regular.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
         body, html { margin: 0; padding: 0; overflow: hidden !important; background-color: #111; }
         #three-canvas { width: 100vw; height: 100vh; display: block; }
         
@@ -26,7 +35,7 @@
             transform: translateX(-50%);
             font-family: 'Aroba Modern', sans-serif;
             font-size: 28px;
-            font-weight: 700;
+            font-weight: normal;
             color: #A0E0FF;
             text-transform: uppercase;
             letter-spacing: 90px;
