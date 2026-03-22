@@ -65,9 +65,9 @@ composer.addPass(renderPass);
 
 const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    1.1,
+    0.5,
     1.0,
-    0.35
+    0.5
 );
 composer.addPass(bloomPass);
 
@@ -2106,6 +2106,26 @@ sections.forEach((section, i) => {
     topRow.appendChild(rightCol);
     wrapper.appendChild(topRow);
 
+    const sectionTelemetry = document.createElement('div');
+    sectionTelemetry.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:flex-start;margin-top:24px;';
+    sectionTelemetry.id = `section-telem-${i}`;
+    
+    if (section.telemetry) {
+        section.telemetry.forEach((label, j) => {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:9px;width:100%;';
+            row.innerHTML = `
+                <span style="color:#A0E0FF;width:70px;text-align:right;">${label}</span>
+                <div style="width:100px;height:2px;background:#A0E0FF30;position:relative;">
+                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#A0E0FF;transition:width 1s ease;"></div>
+                </div>
+                <span class="sec-telem-val-${i}-${j}" style="color:#A0E0FF;width:40px;text-align:left;">0.000</span>
+            `;
+            sectionTelemetry.appendChild(row);
+        });
+    }
+    wrapper.appendChild(sectionTelemetry);
+
     const linkEl = document.createElement('a');
     linkEl.href = section.link;
     linkEl.className = 'crt-phosphor';
@@ -2124,26 +2144,6 @@ sections.forEach((section, i) => {
     wrapper.appendChild(linkEl);
 
     sectionDiv.appendChild(wrapper);
-
-    const sectionTelemetry = document.createElement('div');
-    sectionTelemetry.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:center;margin-top:8px;';
-    sectionTelemetry.id = `section-telem-${i}`;
-    
-    if (section.telemetry) {
-        section.telemetry.forEach((label, j) => {
-            const row = document.createElement('div');
-            row.style.cssText = 'display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:9px;';
-            row.innerHTML = `
-                <span style="color:#cccc00;width:70px;text-align:right;">${label}</span>
-                <div style="width:100px;height:2px;background:#cccc0020;position:relative;">
-                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#cccc00;transition:width 1s ease;"></div>
-                </div>
-                <span class="sec-telem-val-${i}-${j}" style="color:#888;width:40px;text-align:left;">0.000</span>
-            `;
-            sectionTelemetry.appendChild(row);
-        });
-    }
-    sectionDiv.appendChild(sectionTelemetry);
     sectionsWrapper.appendChild(sectionDiv);
     
     typewriterState[i] = { 
@@ -2432,7 +2432,7 @@ document.addEventListener('mousemove', (e) => {
 });
 
 let scrollProgress = 0;
-const scrollSensitivity = 0.0003;
+const scrollSensitivity = 0.0001;
 let targetCameraPos = new THREE.Vector3(0, 0, 180);
 let autoMutate = true;
 let mutationTimer = 0;
@@ -2559,12 +2559,14 @@ function lerp(current, target, speed) {
 }
 
 bakeStructureWithWorker(() => {
-    const loadingEl = document.getElementById('loading-overlay');
-    if (loadingEl) {
-        loadingEl.style.opacity = '0';
-        setTimeout(() => loadingEl.remove(), 800);
-    }
-    hudUI.style.opacity = '1';
+    setTimeout(() => {
+        const loadingEl = document.getElementById('loading-overlay');
+        if (loadingEl) {
+            loadingEl.style.opacity = '0';
+            setTimeout(() => loadingEl.remove(), 800);
+        }
+        hudUI.style.opacity = '1';
+    }, 2000);
     
     mirrorCube.visible = false;
     cubeCamera.update(renderer, scene);
