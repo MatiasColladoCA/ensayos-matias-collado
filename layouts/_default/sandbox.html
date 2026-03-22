@@ -6,10 +6,49 @@
     <title>{{ .Title }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=VCR+OSD+Mono&display=swap" rel="stylesheet">
     <style>
         body, html { margin: 0; padding: 0; overflow: hidden !important; background-color: #111; }
         #three-canvas { width: 100vw; height: 100vh; display: block; }
+        
+        .crt-phosphor {
+            font-family: 'VCR OSD Mono', monospace;
+            color: #87E90F;
+            text-shadow: 
+                0 0 2px #87E90F,
+                0 0 4px #87E90F,
+                0 0 8px rgba(135, 233, 15, 0.6),
+                0 0 16px rgba(135, 233, 15, 0.3);
+        }
+        
+        .crt-phosphor-dim {
+            font-family: 'VCR OSD Mono', monospace;
+            color: #6AB80C;
+            text-shadow: 
+                0 0 1px #6AB80C,
+                0 0 3px rgba(106, 184, 12, 0.5);
+        }
+        
+        .crt-scanlines {
+            position: relative;
+        }
+        .crt-scanlines::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
