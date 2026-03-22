@@ -109,19 +109,27 @@ const DonutGlassShader = {
 
             if (mask > 0.01) {
                 vec2 texel = 1.0 / uResolution;
-                vec4 blur = color * 0.2;
-                blur += texture2D(tDiffuse, uv + vec2(texel.x * 7.8, 0.0)) * 0.2;
-                blur += texture2D(tDiffuse, uv - vec2(texel.x * 7.8, 0.0)) * 0.2;
-                blur += texture2D(tDiffuse, uv + vec2(0.0, texel.y * 7.8)) * 0.2;
-                blur += texture2D(tDiffuse, uv - vec2(0.0, texel.y * 7.8)) * 0.2;
+                float blurSize = 12.0;
+                
+                vec4 blur = vec4(0.0);
+                float total = 0.0;
+                for(float x = -3.0; x <= 3.0; x += 1.0) {
+                    for(float y = -3.0; y <= 3.0; y += 1.0) {
+                        float weight = 1.0 - length(vec2(x, y)) / 5.0;
+                        weight = max(weight, 0.0);
+                        blur += texture2D(tDiffuse, uv + vec2(texel.x * blurSize * x, texel.y * blurSize * y)) * weight;
+                        total += weight;
+                    }
+                }
+                blur /= total;
 
                 vec2 refractDir = normalize(pixelPos - mousePos);
-                vec2 refractUv = uv - (refractDir * 0.015 * mask);
+                vec2 refractUv = uv - (refractDir * 0.02 * mask);
                 vec4 glassColor = texture2D(tDiffuse, refractUv);
 
-                vec4 finalGlass = mix(glassColor, blur, 0.5);
+                vec4 finalGlass = mix(glassColor, blur, 0.7);
                 
-                color = mix(color, finalGlass + vec4(0.05), mask); 
+                color = mix(color, finalGlass, mask); 
             }
 
             gl_FragColor = color;
@@ -2180,6 +2188,70 @@ function createMagnetParticles(count) {
     magnetEffect.particles = [];
     magnetEffect.particleCount = count;
     
+    magnetEffect.innerRing = document.createElement('div');
+    magnetEffect.innerRing.id = 'magnet-inner-ring';
+    magnetEffect.innerRing.style.cssText = `
+        position: absolute;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 510;
+    `;
+    magnetEffect.container.appendChild(magnetEffect.innerRing);
+    
+    magnetEffect.outerDashedRing = document.createElement('div');
+    magnetEffect.outerDashedRing.id = 'magnet-outer-dashed';
+    magnetEffect.outerDashedRing.style.cssText = `
+        position: absolute;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 510;
+    `;
+    magnetEffect.container.appendChild(magnetEffect.outerDashedRing);
+    
+    const platoText = 'μετὰ ταῦτα δή, εἶπον, ἀπείκασον τοιούτῳ πάθει τὴν ἡμετέραν φύσιν παιδείας τε πέρι καὶ ἀπαιδευσίας. ἰδὲ γὰρ ἀνθρώπους οἷον ἐν καταγείῳ οἰκήσει σπηλαιώδει ';
+    const words = platoText.repeat(8).trim().split(' ');
+    
+    magnetEffect.innerText = [];
+    const innerWordCount = 50;
+    for (let i = 0; i < innerWordCount; i++) {
+        const letter = document.createElement('div');
+        const angle = (Math.PI * 2 / innerWordCount) * i;
+        const wordIndex = i % words.length;
+        letter.textContent = words[wordIndex];
+        letter.style.cssText = `
+            position: absolute;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 11px;
+            font-family: 'Times New Roman', serif;
+            pointer-events: none;
+            text-shadow: 0 0 10px rgba(160, 224, 255, 1);
+            white-space: nowrap;
+            z-index: 515;
+        `;
+        magnetEffect.innerRing.appendChild(letter);
+        magnetEffect.innerText.push({ el: letter, baseAngle: angle });
+    }
+    
+    magnetEffect.outerText = [];
+    const outerWordCount = 60;
+    for (let i = 0; i < outerWordCount; i++) {
+        const letter = document.createElement('div');
+        const angle = (Math.PI * 2 / outerWordCount) * i;
+        const wordIndex = i % words.length;
+        letter.textContent = words[wordIndex];
+        letter.style.cssText = `
+            position: absolute;
+            color: rgba(160, 224, 255, 0.85);
+            font-size: 9px;
+            font-family: 'Times New Roman', serif;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 515;
+        `;
+        magnetEffect.outerDashedRing.appendChild(letter);
+        magnetEffect.outerText.push({ el: letter, baseAngle: angle });
+    }
+    
     for (let i = 0; i < count; i++) {
         const particle = document.createElement('div');
         const isLine = Math.random() > 0.5;
@@ -2260,15 +2332,69 @@ function updateMagnetParticles(deltaTime) {
         particle.el.style.boxShadow = `0 0 ${15 + (1-distanceRatio) * 25}px rgba(160, 224, 255, ${glowIntensity})`;
     });
     
+    const thickness = 120;
+    const outerR = baseRadius + thickness / 2;
+    const innerR = Math.max(5, baseRadius - thickness / 2);
+    
     if (donutGlassPass) {
         donutGlassPass.uniforms.uMouse.value.set(linkCenterX, linkCenterY);
-        
-        const thickness = 120;
-        const outerR = baseRadius + thickness / 2;
-        const innerR = Math.max(5, baseRadius - thickness / 2);
-        
         donutGlassPass.uniforms.uInner.value = innerR;
         donutGlassPass.uniforms.uOuter.value = outerR;
+    }
+    
+    const innerRingRadius = innerR;
+    const outerRingRadius = outerR;
+    const opacity = 0.3 + (1 - distanceRatio) * 0.4;
+    
+    if (magnetEffect.innerRing && magnetEffect.innerText) {
+        magnetEffect.innerRing.style.left = `${linkCenterX}px`;
+        magnetEffect.innerRing.style.top = `${linkCenterY}px`;
+        magnetEffect.innerRing.style.width = `${innerRingRadius * 2}px`;
+        magnetEffect.innerRing.style.height = `${innerRingRadius * 2}px`;
+        magnetEffect.innerRing.style.transform = `translate(-50%, -50%) rotate(${time * 0.3}rad)`;
+        magnetEffect.innerRing.style.opacity = opacity;
+        
+        const innerVisibleRatio = Math.min(1, innerRingRadius / 50);
+        const innerVisibleCount = Math.floor(magnetEffect.innerText.length * innerVisibleRatio);
+        const innerTextOpacity = opacity * innerVisibleRatio;
+        
+        magnetEffect.innerText.forEach((item, i) => {
+            const angle = item.baseAngle;
+            const rotatedAngle = angle + time * 0.3;
+            const x = Math.cos(rotatedAngle) * innerRingRadius;
+            const y = Math.sin(rotatedAngle) * innerRingRadius;
+            item.el.style.left = `${innerRingRadius + x}px`;
+            item.el.style.top = `${innerRingRadius + y}px`;
+            item.el.style.transform = `translate(-50%, -50%) rotate(${rotatedAngle + Math.PI/2}rad)`;
+            item.el.style.opacity = i < innerVisibleCount ? innerTextOpacity : 0;
+        });
+    }
+    
+    if (magnetEffect.outerDashedRing && magnetEffect.outerText) {
+        magnetEffect.outerDashedRing.style.left = `${linkCenterX}px`;
+        magnetEffect.outerDashedRing.style.top = `${linkCenterY}px`;
+        magnetEffect.outerDashedRing.style.width = `${outerRingRadius * 2}px`;
+        magnetEffect.outerDashedRing.style.height = `${outerRingRadius * 2}px`;
+        magnetEffect.outerDashedRing.style.borderRadius = '50%';
+        magnetEffect.outerDashedRing.style.border = `1px dashed rgba(160, 224, 255, ${opacity})`;
+        magnetEffect.outerDashedRing.style.transform = `translate(-50%, -50%) rotate(${-time * 0.5}rad)`;
+        magnetEffect.outerDashedRing.style.opacity = opacity;
+        
+        const outerTextRadius = outerRingRadius + 12;
+        const outerVisibleRatio = Math.min(1, outerRingRadius / 80);
+        const outerVisibleCount = Math.floor(magnetEffect.outerText.length * outerVisibleRatio);
+        const outerTextOpacity = opacity * outerVisibleRatio;
+        
+        magnetEffect.outerText.forEach((item, i) => {
+            const angle = item.baseAngle;
+            const rotatedAngle = angle - time * 0.5;
+            const x = Math.cos(rotatedAngle) * outerTextRadius;
+            const y = Math.sin(rotatedAngle) * outerTextRadius;
+            item.el.style.left = `${outerRingRadius + x}px`;
+            item.el.style.top = `${outerRingRadius + y}px`;
+            item.el.style.transform = `translate(-50%, -50%) rotate(${rotatedAngle + Math.PI/2}rad)`;
+            item.el.style.opacity = i < outerVisibleCount ? outerTextOpacity : 0;
+        });
     }
 }
 
@@ -2287,6 +2413,18 @@ function showMagnetEffectForSection(linkEl) {
             particle.baseY = particle.currentY;
         }, particle.delay * 1000);
     });
+    
+    if (magnetEffect.innerRing) {
+        setTimeout(() => {
+            magnetEffect.innerRing.style.opacity = '0.6';
+        }, 200);
+    }
+    
+    if (magnetEffect.outerDashedRing) {
+        setTimeout(() => {
+            magnetEffect.outerDashedRing.style.opacity = '0.6';
+        }, 200);
+    }
 }
 
 createMagnetEffectContainer();
