@@ -71,6 +71,67 @@ const bloomPass = new UnrealBloomPass(
 );
 composer.addPass(bloomPass);
 
+const DonutGlassShader = {
+    uniforms: {
+        'tDiffuse': { value: null },
+        'uMouse': { value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2) },
+        'uResolution': { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        'uInner': { value: 60.0 },
+        'uOuter': { value: 140.0 },
+        'uEdge': { value: 20.0 }
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform vec2 uMouse;
+        uniform vec2 uResolution;
+        uniform float uInner;
+        uniform float uOuter;
+        uniform float uEdge;
+        varying vec2 vUv;
+
+        void main() {
+            vec2 uv = vUv;
+            vec2 pixelPos = uv * uResolution;
+            vec2 mousePos = vec2(uMouse.x, uResolution.y - uMouse.y);
+
+            float dist = distance(pixelPos, mousePos);
+
+            float mask = smoothstep(uInner - uEdge, uInner, dist) - smoothstep(uOuter, uOuter + uEdge, dist);
+
+            vec4 color = texture2D(tDiffuse, uv);
+
+            if (mask > 0.01) {
+                vec2 texel = 1.0 / uResolution;
+                vec4 blur = color * 0.2;
+                blur += texture2D(tDiffuse, uv + vec2(texel.x * 7.8, 0.0)) * 0.2;
+                blur += texture2D(tDiffuse, uv - vec2(texel.x * 7.8, 0.0)) * 0.2;
+                blur += texture2D(tDiffuse, uv + vec2(0.0, texel.y * 7.8)) * 0.2;
+                blur += texture2D(tDiffuse, uv - vec2(0.0, texel.y * 7.8)) * 0.2;
+
+                vec2 refractDir = normalize(pixelPos - mousePos);
+                vec2 refractUv = uv - (refractDir * 0.015 * mask);
+                vec4 glassColor = texture2D(tDiffuse, refractUv);
+
+                vec4 finalGlass = mix(glassColor, blur, 0.5);
+                
+                color = mix(color, finalGlass + vec4(0.05), mask); 
+            }
+
+            gl_FragColor = color;
+        }
+    `
+};
+
+const donutGlassPass = new ShaderPass(DonutGlassShader);
+composer.addPass(donutGlassPass);
+
 const purpleTintShader = {
     uniforms: {
         tDiffuse: { value: null },
@@ -1925,6 +1986,11 @@ function activateSection(techIdx, legacyIdx) {
     currentSection = techIdx;
     
     cubeCameraDirty = true;
+    
+    const linkEl = document.querySelector(`#section-${legacyIdx} a.crt-phosphor`);
+    if (linkEl) {
+        showMagnetEffectForSection(linkEl);
+    }
 }
 
 function updateTypewriter(deltaTime) {
@@ -2081,6 +2147,157 @@ sections.forEach((section, i) => {
         active: false,
         elementId: `typewriter-text-${i}`
     };
+});
+
+const magnetEffect = {
+    container: null,
+    particles: [],
+    currentLinkEl: null,
+    mouseX: window.innerWidth / 2,
+    mouseY: window.innerHeight / 2,
+    maxDistance: 300,
+    particleCount: 0
+};
+
+function createMagnetEffectContainer() {
+    magnetEffect.container = document.createElement('div');
+    magnetEffect.container.id = 'magnet-effect';
+    magnetEffect.container.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 503;
+        overflow: hidden;
+    `;
+    document.body.appendChild(magnetEffect.container);
+}
+
+function createMagnetParticles(count) {
+    magnetEffect.container.innerHTML = '';
+    magnetEffect.particles = [];
+    magnetEffect.particleCount = count;
+    
+    for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        const isLine = Math.random() > 0.5;
+        const size = 20 + Math.random() * 40;
+        const delay = i * 0.15;
+        
+        particle.style.cssText = `
+            position: absolute;
+            border: 1px solid #A0E0FF;
+            ${isLine ? 
+                `width: ${size}px; height: 1px;` : 
+                `width: ${size}px; height: ${size}px; border-radius: 50%;`
+            }
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.8s ease-out, opacity 0.5s ease;
+            transform-origin: center center;
+        `;
+        
+        magnetEffect.container.appendChild(particle);
+        magnetEffect.particles.push({
+            el: particle,
+            isLine: isLine,
+            baseSize: size,
+            angle: (Math.PI * 2 / count) * i + Math.random() * 0.5,
+            delay: delay,
+            currentX: 0,
+            currentY: 0,
+            targetX: 0,
+            targetY: 0,
+            baseX: 0,
+            baseY: 0,
+            glowPhase: Math.random() * Math.PI * 2
+        });
+    }
+}
+
+function updateMagnetParticles(deltaTime) {
+    if (!magnetEffect.currentLinkEl || magnetEffect.particles.length === 0) return;
+    
+    const linkRect = magnetEffect.currentLinkEl.getBoundingClientRect();
+    const linkCenterX = linkRect.left + linkRect.width / 2;
+    const linkCenterY = linkRect.top + linkRect.height / 2;
+    
+    const mouseToLinkX = magnetEffect.mouseX - linkCenterX;
+    const mouseToLinkY = magnetEffect.mouseY - linkCenterY;
+    const mouseToLinkDist = Math.sqrt(mouseToLinkX * mouseToLinkX + mouseToLinkY * mouseToLinkY);
+    
+    const minRadius = 30;
+    const maxRadius = 1000;
+    const distanceRatio = Math.min(1, mouseToLinkDist / magnetEffect.maxDistance);
+    
+    const baseRadius = minRadius + (maxRadius - minRadius) * distanceRatio;
+    const time = Date.now() * 0.001;
+    
+    magnetEffect.particles.forEach((particle, i) => {
+        const particleRadius = baseRadius * (0.6 + i * 0.4);
+        const baseAngle = (Math.PI * 2 / magnetEffect.particleCount) * i;
+        const orbitSpeed = 0.5;
+        const orbitAngle = baseAngle + time * orbitSpeed + i * 0.5;
+        
+        particle.targetX = linkCenterX + Math.cos(orbitAngle) * particleRadius;
+        particle.targetY = linkCenterY + Math.sin(orbitAngle) * particleRadius;
+        
+        particle.currentX += (particle.targetX - particle.currentX) * 0.12;
+        particle.currentY += (particle.targetY - particle.currentY) * 0.12;
+        
+        particle.glowPhase += deltaTime * 4;
+        const glowIntensity = 0.3 + Math.sin(particle.glowPhase) * 0.3;
+        
+        const opacity = 0.4 + (1 - distanceRatio) * 0.4;
+        const scale = 0.7 + Math.sin(time * 2 + i) * 0.2;
+        
+        particle.el.style.left = `${particle.currentX}px`;
+        particle.el.style.top = `${particle.currentY}px`;
+        particle.el.style.transform = `translate(-50%, -50%) rotate(${orbitAngle}rad) scale(${scale})`;
+        particle.el.style.opacity = opacity;
+        particle.el.style.boxShadow = `0 0 ${15 + (1-distanceRatio) * 25}px rgba(160, 224, 255, ${glowIntensity})`;
+    });
+    
+    if (donutGlassPass) {
+        donutGlassPass.uniforms.uMouse.value.set(linkCenterX, linkCenterY);
+        
+        const thickness = 120;
+        const outerR = baseRadius + thickness / 2;
+        const innerR = Math.max(5, baseRadius - thickness / 2);
+        
+        donutGlassPass.uniforms.uInner.value = innerR;
+        donutGlassPass.uniforms.uOuter.value = outerR;
+    }
+}
+
+function showMagnetEffectForSection(linkEl) {
+    magnetEffect.currentLinkEl = linkEl;
+    
+    const count = 1 + Math.floor(Math.random() * 4);
+    createMagnetParticles(count);
+    
+    magnetEffect.particles.forEach((particle, i) => {
+        setTimeout(() => {
+            particle.el.style.opacity = '0.3';
+            particle.currentX = window.innerWidth / 2;
+            particle.currentY = window.innerHeight / 2;
+            particle.baseX = particle.currentX;
+            particle.baseY = particle.currentY;
+        }, particle.delay * 1000);
+    });
+}
+
+createMagnetEffectContainer();
+
+document.addEventListener('mousemove', (e) => {
+    magnetEffect.mouseX = e.clientX;
+    magnetEffect.mouseY = e.clientY;
+    
+    if (donutGlassPass) {
+        donutGlassPass.uniforms.uMouse.value.set(e.clientX, e.clientY);
+    }
 });
 
 let scrollProgress = 0;
@@ -2327,6 +2544,7 @@ function animate() {
     updateTelemetryTerminal(0.016);
     updateSectionTelemetry(currentSection % 5);
     updateFortuitousRect(0.016);
+    updateMagnetParticles(0.016);
     
     if (glitchIntensity > 0.01) {
         glitchIntensity *= 0.95;
@@ -2372,6 +2590,10 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
     composer.setSize(window.innerWidth, window.innerHeight);
+    
+    if (donutGlassPass) {
+        donutGlassPass.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+    }
 });
 
 animate();
