@@ -34,9 +34,6 @@
 {{- define "partials/background.html" -}}
     <div id="background-body"
         role="presentation" aria-hidden="true">
-        <div id="structure-bg">
-            <img src="/images/structure-frame.png" alt="" aria-hidden="true">
-        </div>
         <div class="grain" hidden></div>
         <div id="dwclock" hidden>
             <div id="min">
@@ -47,48 +44,4 @@
             </div>
         </div>
     </div>
-    <style>
-        #structure-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 120%;
-            z-index: -3;
-            overflow: hidden;
-            transform: translateY(-10%);
-        }
-        #structure-bg img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(20px) saturate(1.2);
-            opacity: 0.35;
-        }
-        body > header,
-        #background-header,
-        body > header .background {
-            background-color: transparent !important;
-            border-bottom: none !important;
-        }
-        body > main,
-        #main-article,
-        .pagewidth {
-            background-color: transparent !important;
-        }
-    </style>
-    <script>
-        (function() {
-            const bg = document.getElementById('structure-bg');
-            if (!bg) return;
-            let lastScroll = window.scrollY;
-            window.addEventListener('scroll', function() {
-                const scrolled = window.scrollY;
-                const speed = 0.15;
-                const offset = (scrolled - lastScroll) * speed;
-                bg.style.transform = 'translateY(-10%) translateY(' + offset + 'px)';
-                lastScroll = scrolled;
-            }, { passive: true });
-        })();
-    </script>
 {{- end }}
