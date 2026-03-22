@@ -6,10 +6,30 @@
     <title>{{ .Title }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=VCR+OSD+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=VCR+OSD+Mono&family=Cinzel:wght@700&display=swap" rel="stylesheet">
     <style>
         body, html { margin: 0; padding: 0; overflow: hidden !important; background-color: #111; }
         #three-canvas { width: 100vw; height: 100vh; display: block; }
+        
+        .site-title {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #A0E0FF;
+            text-transform: uppercase;
+            letter-spacing: 90px;
+            white-space: nowrap;
+            text-shadow: 
+                0 0 6px #A0E0FF,
+                0 0 12px rgba(160, 224, 255, 0.8),
+                0 0 24px rgba(160, 224, 255, 0.4);
+            z-index: 1000;
+            pointer-events: none;
+        }
         
         .crt-phosphor {
             font-family: 'VCR OSD Mono', monospace;
@@ -52,6 +72,7 @@
     </style>
 </head>
 <body>
+    <div class="site-title">Matías Collado</div>
     <canvas id="three-canvas"></canvas>
     {{ $appOptions := dict "minify" false "targetPath" "js/sandbox-3d.js" }}
     {{ $appJs := resources.Get "js/sandbox.js" | js.Build $appOptions }}
