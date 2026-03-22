@@ -108,28 +108,20 @@ const DonutGlassShader = {
             vec4 color = texture2D(tDiffuse, uv);
 
             if (mask > 0.01) {
-                vec2 texel = 1.0 / uResolution;
-                float blurSize = 12.0;
-                
-                vec4 blur = vec4(0.0);
-                float total = 0.0;
-                for(float x = -3.0; x <= 3.0; x += 1.0) {
-                    for(float y = -3.0; y <= 3.0; y += 1.0) {
-                        float weight = 1.0 - length(vec2(x, y)) / 5.0;
-                        weight = max(weight, 0.0);
-                        blur += texture2D(tDiffuse, uv + vec2(texel.x * blurSize * x, texel.y * blurSize * y)) * weight;
-                        total += weight;
-                    }
-                }
-                blur /= total;
-
                 vec2 refractDir = normalize(pixelPos - mousePos);
                 vec2 refractUv = uv - (refractDir * 0.02 * mask);
-                vec4 glassColor = texture2D(tDiffuse, refractUv);
-
-                vec4 finalGlass = mix(glassColor, blur, 0.7);
                 
-                color = mix(color, finalGlass, mask); 
+                vec2 texel = 1.0 / uResolution;
+                float spread = 8.0;
+                
+                vec4 blur = texture2D(tDiffuse, refractUv);
+                blur += texture2D(tDiffuse, refractUv + vec2(texel.x * spread, texel.y * spread));
+                blur += texture2D(tDiffuse, refractUv + vec2(-texel.x * spread, texel.y * spread));
+                blur += texture2D(tDiffuse, refractUv + vec2(texel.x * spread, -texel.y * spread));
+                blur += texture2D(tDiffuse, refractUv + vec2(-texel.x * spread, -texel.y * spread));
+                blur /= 5.0;
+
+                color = mix(color, blur + vec4(0.04), mask); 
             }
 
             gl_FragColor = color;
@@ -2212,7 +2204,7 @@ function createMagnetParticles(count) {
     const words = platoText.repeat(8).trim().split(' ');
     
     magnetEffect.innerText = [];
-    const innerWordCount = 50;
+    const innerWordCount = 10;
     for (let i = 0; i < innerWordCount; i++) {
         const letter = document.createElement('div');
         const angle = (Math.PI * 2 / innerWordCount) * i;
@@ -2220,6 +2212,8 @@ function createMagnetParticles(count) {
         letter.textContent = words[wordIndex];
         letter.style.cssText = `
             position: absolute;
+            top: 0;
+            left: 0;
             color: rgba(255, 255, 255, 0.95);
             font-size: 11px;
             font-family: 'Times New Roman', serif;
@@ -2233,7 +2227,7 @@ function createMagnetParticles(count) {
     }
     
     magnetEffect.outerText = [];
-    const outerWordCount = 60;
+    const outerWordCount = 15;
     for (let i = 0; i < outerWordCount; i++) {
         const letter = document.createElement('div');
         const angle = (Math.PI * 2 / outerWordCount) * i;
@@ -2241,6 +2235,8 @@ function createMagnetParticles(count) {
         letter.textContent = words[wordIndex];
         letter.style.cssText = `
             position: absolute;
+            top: 0;
+            left: 0;
             color: rgba(160, 224, 255, 0.85);
             font-size: 9px;
             font-family: 'Times New Roman', serif;
@@ -2260,15 +2256,17 @@ function createMagnetParticles(count) {
         
         particle.style.cssText = `
             position: absolute;
+            top: 0;
+            left: 0;
             border: 1px solid #A0E0FF;
+            box-shadow: 0 0 15px rgba(160, 224, 255, 0.5);
             ${isLine ? 
                 `width: ${size}px; height: 1px;` : 
                 `width: ${size}px; height: ${size}px; border-radius: 50%;`
             }
             opacity: 0;
             pointer-events: none;
-            transition: transform 0.8s ease-out, opacity 0.5s ease;
-            transform-origin: center center;
+            transition: opacity 0.5s ease;
         `;
         
         magnetEffect.container.appendChild(particle);
@@ -2319,17 +2317,11 @@ function updateMagnetParticles(deltaTime) {
         particle.currentX += (particle.targetX - particle.currentX) * 0.12;
         particle.currentY += (particle.targetY - particle.currentY) * 0.12;
         
-        particle.glowPhase += deltaTime * 4;
-        const glowIntensity = 0.3 + Math.sin(particle.glowPhase) * 0.3;
-        
         const opacity = 0.4 + (1 - distanceRatio) * 0.4;
         const scale = 0.7 + Math.sin(time * 2 + i) * 0.2;
         
-        particle.el.style.left = `${particle.currentX}px`;
-        particle.el.style.top = `${particle.currentY}px`;
-        particle.el.style.transform = `translate(-50%, -50%) rotate(${orbitAngle}rad) scale(${scale})`;
+        particle.el.style.transform = `translate3d(${particle.currentX}px, ${particle.currentY}px, 0) translate(-50%, -50%) rotate(${orbitAngle}rad) scale(${scale})`;
         particle.el.style.opacity = opacity;
-        particle.el.style.boxShadow = `0 0 ${15 + (1-distanceRatio) * 25}px rgba(160, 224, 255, ${glowIntensity})`;
     });
     
     const thickness = 120;
@@ -2363,9 +2355,7 @@ function updateMagnetParticles(deltaTime) {
             const rotatedAngle = angle + time * 0.3;
             const x = Math.cos(rotatedAngle) * innerRingRadius;
             const y = Math.sin(rotatedAngle) * innerRingRadius;
-            item.el.style.left = `${innerRingRadius + x}px`;
-            item.el.style.top = `${innerRingRadius + y}px`;
-            item.el.style.transform = `translate(-50%, -50%) rotate(${rotatedAngle + Math.PI/2}rad)`;
+            item.el.style.transform = `translate3d(${innerRingRadius + x}px, ${innerRingRadius + y}px, 0) translate(-50%, -50%) rotate(${rotatedAngle + Math.PI/2}rad)`;
             item.el.style.opacity = i < innerVisibleCount ? innerTextOpacity : 0;
         });
     }
@@ -2390,9 +2380,7 @@ function updateMagnetParticles(deltaTime) {
             const rotatedAngle = angle - time * 0.5;
             const x = Math.cos(rotatedAngle) * outerTextRadius;
             const y = Math.sin(rotatedAngle) * outerTextRadius;
-            item.el.style.left = `${outerRingRadius + x}px`;
-            item.el.style.top = `${outerRingRadius + y}px`;
-            item.el.style.transform = `translate(-50%, -50%) rotate(${rotatedAngle + Math.PI/2}rad)`;
+            item.el.style.transform = `translate3d(${outerRingRadius + x}px, ${outerRingRadius + y}px, 0) translate(-50%, -50%) rotate(${rotatedAngle + Math.PI/2}rad)`;
             item.el.style.opacity = i < outerVisibleCount ? outerTextOpacity : 0;
         });
     }
