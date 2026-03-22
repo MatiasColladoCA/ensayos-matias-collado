@@ -13,6 +13,12 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+const CRT_COLOR = {
+    primary: '#A0E0FF',
+    secondary: '#70B8DD',
+    tertiary: '#4088AA'
+};
+
 const canvas = document.getElementById('three-canvas');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x030303);
@@ -48,6 +54,39 @@ const bloomPass = new UnrealBloomPass(
     0.35
 );
 composer.addPass(bloomPass);
+
+const purpleTintShader = {
+    uniforms: {
+        tDiffuse: { value: null },
+        uTintIntensity: { value: 0.90 }
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform float uTintIntensity;
+        varying vec2 vUv;
+        
+        void main() {
+            vec4 color = texture2D(tDiffuse, vUv);
+            
+            vec3 tint = vec3(0.85, 0.7, 0.95);
+            float luminance = dot(color.rgb, vec3(0.299, 0.587, 0.114));
+            vec3 tinted = mix(color.rgb, color.rgb * tint, uTintIntensity * (0.5 + luminance * 0.5));
+            
+            gl_FragColor = vec4(tinted, 1.0);
+        }
+    `
+};
+
+const purpleTintPass = new ShaderPass(purpleTintShader);
+purpleTintPass.renderToScreen = true;
+composer.addPass(purpleTintPass);
 
 let mirrorCube, cubeCamera;
 const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(1024, {
@@ -783,14 +822,14 @@ function renderTerminalLine(index) {
     terminalCtx.clearRect(0, 0, 512, 32);
     
     if (group === LINE_GROUP.CLOSE) {
-        terminalCtx.font = 'bold 24px "JetBrains Mono", monospace';
-        terminalCtx.fillStyle = `hsla(170, 80%, 65%, 1)`;
+        terminalCtx.font = 'bold 24px "VCR OSD Mono", monospace';
+        terminalCtx.fillStyle = '#A0E0FF';
     } else if (group === LINE_GROUP.MID) {
-        terminalCtx.font = '16px "JetBrains Mono", monospace';
-        terminalCtx.fillStyle = `hsla(160, 70%, 55%, 1)`;
+        terminalCtx.font = '16px "VCR OSD Mono", monospace';
+        terminalCtx.fillStyle = '#70B8DD';
     } else {
-        terminalCtx.font = '12px "JetBrains Mono", monospace';
-        terminalCtx.fillStyle = `hsla(150, 60%, 45%, 1)`;
+        terminalCtx.font = '12px "VCR OSD Mono", monospace';
+        terminalCtx.fillStyle = '#4088AA';
     }
     
     terminalCtx.fillText(text, 8, 22);
@@ -823,19 +862,179 @@ function updateTerminalLines(deltaTime, time) {
         if (line.group === LINE_GROUP.CLOSE) {
             sprite.material.uniforms.uOpacity.value = 0.9;
             sprite.material.uniforms.uResolution.value = 0.3;
-            sprite.renderOrder = 10;
+            sprite.renderOrder = 1;
         } else if (line.group === LINE_GROUP.MID) {
             sprite.material.uniforms.uOpacity.value = 0.6;
             sprite.material.uniforms.uResolution.value = 0.7;
-            sprite.renderOrder = 5;
+            sprite.renderOrder = 0;
         } else {
             sprite.material.uniforms.uOpacity.value = 0.3;
             sprite.material.uniforms.uResolution.value = 1.0;
-            sprite.renderOrder = -10;
+            sprite.renderOrder = -1;
         }
         
         renderTerminalLine(i);
     }
+}
+
+const hudSpriteCanvas = document.createElement('canvas');
+hudSpriteCanvas.width = 400;
+hudSpriteCanvas.height = 390;
+const hudSpriteCtx = hudSpriteCanvas.getContext('2d');
+
+const hudSpriteTexture = new THREE.CanvasTexture(hudSpriteCanvas);
+hudSpriteTexture.minFilter = THREE.LinearFilter;
+
+const hudSpriteMaterial = new THREE.MeshBasicMaterial({
+    map: hudSpriteTexture,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide
+});
+
+const hudSprite = new THREE.Mesh(
+    new THREE.PlaneGeometry(40, 39),
+    hudSpriteMaterial
+);
+hudSprite.position.set(-48, -14, 111);
+hudSprite.renderOrder = 0;
+scene.add(hudSprite);
+
+function renderHudSprite() {
+    const t = Date.now() * 0.001;
+    
+    hudSpriteCtx.clearRect(0, 0, 400, 390);
+    
+    hudSpriteCtx.fillStyle = '#A0E0FF';
+    hudSpriteCtx.font = '8px "VCR OSD Mono", monospace';
+    hudSpriteCtx.fillText('[SECT-INFO]', 15, 24);
+    
+    hudSpriteCtx.fillStyle = '#A0E0FF';
+    hudSpriteCtx.font = '8px "VCR OSD Mono", monospace';
+    hudSpriteCtx.fillText(techSections[currentSection % 10]?.subtitle || '[NO_DATA]', 15, 40);
+    
+    const tech = techSections[currentSection % 10];
+    if (tech?.telemetry) {
+        hudSpriteCtx.fillStyle = '#70B8DD';
+        hudSpriteCtx.font = '7px "VCR OSD Mono", monospace';
+        tech.telemetry.forEach((label, i) => {
+            const val = ((Math.sin(t * 2 + i) * 0.5 + 0.5) * 999.999).toFixed(3);
+            hudSpriteCtx.fillText(`${label}: ${val}`, 15, 60 + i * 12);
+        });
+    }
+    
+    hudSpriteCtx.fillStyle = '#4088AA';
+    hudSpriteCtx.font = '7px "VCR OSD Mono", monospace';
+    hudSpriteCtx.fillText(`CPU: ${((Math.sin(t * 5) * 0.5 + 0.5) * 100).toFixed(1)}%`, 15, 110);
+    hudSpriteCtx.fillText(`MEM: ${((Math.sin(t * 3 + 1) * 0.5 + 0.5) * 8192).toFixed(0)}MB`, 15, 125);
+    hudSpriteCtx.fillText(`NET: ${((Math.sin(t * 4 + 2) * 0.5 + 0.5) * 1000).toFixed(0)}KB/s`, 15, 140);
+    hudSpriteCtx.fillText(`SYS: ${((Math.sin(t * 2.5) * 0.5 + 0.5) * 999).toFixed(0)}ms`, 15, 155);
+    hudSpriteCtx.fillText(`GPU: ${((Math.sin(t * 6 + 3) * 0.5 + 0.5) * 100).toFixed(1)}%`, 15, 170);
+    hudSpriteCtx.fillText(`DISK: ${((Math.sin(t * 1.5 + 4) * 0.5 + 0.5) * 100).toFixed(0)}%`, 15, 185);
+    hudSpriteCtx.fillText(`NET: ${((Math.sin(t * 3.5 + 5) * 0.5 + 0.5) * 500).toFixed(0)}K`, 15, 200);
+    hudSpriteCtx.fillText(`TEMP: ${((Math.sin(t * 2) * 0.5 + 0.5) * 85 + 15).toFixed(1)}°C`, 15, 215);
+    
+    hudSpriteCtx.fillStyle = '#70B8DD';
+    hudSpriteCtx.font = '7px "VCR OSD Mono", monospace';
+    hudSpriteCtx.fillText(techSections[currentSection % 10]?.description?.substring(0, 35) || '', 15, 240);
+    
+    hudSpriteCtx.fillText(`SECT: ${currentSection}/10`, 15, 260);
+    
+    hudSpriteTexture.needsUpdate = true;
+}
+
+const systemLogCanvas = document.createElement('canvas');
+systemLogCanvas.width = 320;
+systemLogCanvas.height = 468;
+const systemLogCtx = systemLogCanvas.getContext('2d');
+
+const systemLogTexture = new THREE.CanvasTexture(systemLogCanvas);
+systemLogTexture.minFilter = THREE.LinearFilter;
+
+const systemLogMaterial = new THREE.MeshBasicMaterial({
+    map: systemLogTexture,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide
+});
+
+const systemLogSprite = new THREE.Mesh(
+    new THREE.PlaneGeometry(32, 47),
+    systemLogMaterial
+);
+systemLogSprite.position.set(55, -14, 111);
+systemLogSprite.renderOrder = 0;
+scene.add(systemLogSprite);
+
+const systemLogLines = [];
+const maxLogLines = 10;
+let logScrollY = 0;
+let logScrollSpeed = 0;
+let lastLogTime = 0;
+
+function addLogLine(currentTime = 0) {
+    const templates = [
+        '> FPS: ' + fps + ' | MEM: ' + (performance.memory ? (performance.memory.usedJSHeapSize / 1048576).toFixed(1) : 'N/A') + 'MB',
+        '> TRIANGLES: ' + renderer.info.render.triangles + ' | CALLS: ' + renderer.info.render.calls,
+        '> TIME: ' + currentTime.toFixed(1) + 's | SCROLL: ' + scrollProgress.toFixed(2),
+        '> SECTION: ' + currentSection + ' | AUTO: ' + (autoModeActiveScrolly ? 'ON' : 'OFF'),
+        '> ORBIT: ' + (orbitControls.enabled ? 'ON' : 'OFF'),
+        '> STRUCTURE: ' + params.spikeScale.toFixed(1) + ' | FREQ: ' + params.spikeFreq.toFixed(1),
+        '> CAM: [' + camera.position.x.toFixed(0) + ', ' + camera.position.y.toFixed(0) + ', ' + camera.position.z.toFixed(0) + ']',
+        '> LIGHT: ' + coreLight.intensity + ' | MIRROR: ' + mirrorMaterial.envMapIntensity.toFixed(2)
+    ];
+    systemLogLines.push({
+        text: templates[Math.floor(Math.random() * templates.length)],
+        y: 180
+    });
+    
+    if (systemLogLines.length > maxLogLines) {
+        logScrollSpeed = 6;
+    }
+}
+
+function renderSystemLog(time) {
+    if (systemLogLines.length < 4) {
+        addLogLine(time);
+        addLogLine(time);
+        addLogLine(time);
+    }
+    
+    if (time - lastLogTime > 0.4) {
+        addLogLine(time);
+        lastLogTime = time;
+    }
+    
+    if (logScrollSpeed > 0) {
+        logScrollY += logScrollSpeed;
+        systemLogLines.forEach(line => {
+            line.y -= logScrollSpeed;
+        });
+        
+        const toRemove = systemLogLines.filter(line => line.y < 30);
+        toRemove.forEach(line => {
+            const idx = systemLogLines.indexOf(line);
+            if (idx > -1) systemLogLines.splice(idx, 1);
+        });
+        
+        logScrollSpeed *= 0.95;
+        if (logScrollSpeed < 0.1) logScrollSpeed = 0;
+    }
+    
+    systemLogCtx.clearRect(0, 0, 320, 468);
+    
+    systemLogCtx.fillStyle = '#A0E0FF';
+    systemLogCtx.font = 'bold 8px "VCR OSD Mono", monospace';
+    systemLogCtx.fillText('[SYSTEM_LOG]', 10, 18);
+    
+    systemLogCtx.fillStyle = '#A0E0FF';
+    systemLogCtx.font = '7px "VCR OSD Mono", monospace';
+    
+    systemLogLines.forEach((line, i) => {
+        systemLogCtx.fillText(line.text, 10, 35 + i * 16);
+    });
+    
+    systemLogTexture.needsUpdate = true;
 }
 
 function syncMaterials() {
@@ -953,7 +1152,7 @@ let targetOrganicIntensity = semMaterial.uniforms.uOrganicIntensity.value;
 const panel = document.createElement('div');
 panel.id = 'control-panel';
 panel.className = 'crt-scanlines';
-panel.style.cssText = 'position:fixed;top:10px;right:75px;font-family:"VCR OSD Mono",monospace;font-size:9px;background:rgba(0,8,0,0.95);padding:10px;border:1px solid #87E90F40;z-index:1000;min-width:180px;max-height:95vh;overflow-y:auto;display:none;color:#87E90F;';
+panel.style.cssText = 'position:fixed;top:10px;right:75px;font-family:"VCR OSD Mono",monospace;font-size:9px;background:rgba(0,8,0,0.95);padding:10px;border:1px solid #A0E0FF40;z-index:1000;min-width:180px;max-height:95vh;overflow-y:auto;display:none;color:#A0E0FF;';
 document.body.appendChild(panel);
 
 let sliderLabels2 = {};
@@ -978,7 +1177,7 @@ function createSlider(name, min, max, step, value, callback, decimals = 2) {
     slider.value = value;
     slider.style.width = '160px';
     slider.style.height = '4px';
-    slider.style.accentColor = '#87E90F';
+    slider.style.accentColor = '#A0E0FF';
     slider.style.cursor = 'pointer';
     
     slider.addEventListener('input', () => {
@@ -1004,7 +1203,7 @@ function createToggle(name, checked, callback) {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = checked;
-    checkbox.style.accentColor = '#87E90F';
+    checkbox.style.accentColor = '#A0E0FF';
     checkbox.style.cursor = 'pointer';
     
     const label = document.createElement('span');
@@ -1025,7 +1224,7 @@ function createSectionHeader(text) {
     const header = document.createElement('div');
     header.className = 'crt-phosphor';
     header.textContent = text;
-    header.style.cssText = 'font-size:9px;margin:12px 0 8px 0;padding-bottom:3px;border-bottom:1px solid #87E90F30;letter-spacing:1px;';
+    header.style.cssText = 'font-size:9px;margin:12px 0 8px 0;padding-bottom:3px;border-bottom:1px solid #A0E0FF30;letter-spacing:1px;';
     panel.appendChild(header);
 }
 
@@ -1151,7 +1350,7 @@ createSlider('coreLightIntensity', 0, 500, 10, 40, (val) => {
 const refreshMirrorBtn = document.createElement('button');
 refreshMirrorBtn.textContent = '[REFRESH]';
 refreshMirrorBtn.className = 'crt-phosphor';
-refreshMirrorBtn.style.cssText = 'font-size:8px;background:transparent;padding:4px 8px;border:1px solid #87E90F;cursor:pointer;margin-top:8px;';
+refreshMirrorBtn.style.cssText = 'font-size:8px;background:transparent;padding:4px 8px;border:1px solid #A0E0FF;cursor:pointer;margin-top:8px;';
 refreshMirrorBtn.addEventListener('click', () => {
     updateCubeCamera();
 });
@@ -1191,7 +1390,7 @@ createToggle('HUD Telemetry', true, (val) => {
 const perfStats = document.createElement('div');
 perfStats.id = 'perf-stats';
 perfStats.className = 'crt-phosphor-dim';
-perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;background:rgba(0,8,0,0.85);padding:6px 10px;border:1px solid #87E90F40;z-index:1001;pointer-events:none;';
+perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;background:rgba(0,8,0,0.85);padding:6px 10px;border:1px solid #A0E0FF40;z-index:1001;pointer-events:none;';
 document.body.appendChild(perfStats);
 
 let frameCount = 0;
@@ -1201,7 +1400,7 @@ let fps = 0;
 const instructions = document.createElement('div');
 instructions.id = 'instructions';
 instructions.className = 'crt-phosphor-dim';
-instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;background:rgba(0,8,0,0.85);padding:10px 20px;border:1px solid #87E90F40;pointer-events:none;z-index:1000;';
+instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;background:rgba(0,8,0,0.85);padding:10px 20px;border:1px solid #A0E0FF40;pointer-events:none;z-index:1000;';
 instructions.innerHTML = 'DRAG TO ORBIT | SCROLL TO NAVIGATE';
 document.body.appendChild(instructions);
 
@@ -1209,7 +1408,7 @@ const toggleBtn = document.createElement('button');
 toggleBtn.textContent = '[SYS]';
 toggleBtn.id = 'toggle-btn';
 toggleBtn.className = 'crt-phosphor';
-toggleBtn.style.cssText = 'position:fixed;top:10px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #87E90F;cursor:pointer;z-index:1001;letter-spacing:1px;';
+toggleBtn.style.cssText = 'position:fixed;top:10px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #A0E0FF;cursor:pointer;z-index:1001;letter-spacing:1px;';
 toggleBtn.addEventListener('click', () => {
     panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 });
@@ -1477,9 +1676,9 @@ document.body.appendChild(cornerMarkers);
 const telemetryTerminal = document.createElement('div');
 telemetryTerminal.id = 'telemetry-terminal';
 telemetryTerminal.className = 'crt-scanlines';
-telemetryTerminal.style.cssText = 'position:fixed;bottom:60px;right:40px;width:320px;height:180px;background:rgba(0,8,0,0.85);border:1px solid #87E90F40;z-index:503;pointer-events:none;overflow:hidden;';
+telemetryTerminal.style.cssText = 'position:fixed;bottom:60px;right:40px;width:320px;height:180px;background:rgba(0,8,0,0.85);border:1px solid #A0E0FF40;z-index:490;pointer-events:none;overflow:hidden;display:none;';
 telemetryTerminal.innerHTML = `
-    <div class="crt-phosphor" style="padding:8px 12px;border-bottom:1px solid #87E90F30;font-size:11px;letter-spacing:1px;">[SYSTEM_LOG]</div>
+    <div class="crt-phosphor" style="padding:8px 12px;border-bottom:1px solid #A0E0FF30;font-size:11px;letter-spacing:1px;">[SYSTEM_LOG]</div>
     <div id="telem-output" class="crt-phosphor-dim" style="padding:8px 12px;line-height:1.6;height:calc(100% - 30px);overflow:hidden;font-size:10px;"></div>
 `;
 document.body.appendChild(telemetryTerminal);
@@ -1627,7 +1826,7 @@ const TYPEWRITER_SPEED = 0.03;
 
 const hudTelemetry = document.createElement('div');
 hudTelemetry.id = 'hud-telemetry';
-hudTelemetry.style.cssText = 'position:fixed;bottom:60px;left:40px;z-index:504;pointer-events:none;max-width:400px;';
+hudTelemetry.style.cssText = 'position:fixed;bottom:60px;left:40px;z-index:490;pointer-events:none;max-width:400px;display:none;';
 hudTelemetry.innerHTML = `
     <div id="telem-title" class="crt-phosphor-dim" style="font-size:10px;letter-spacing:1px;margin-bottom:6px;"></div>
     <div id="telem-description" class="crt-phosphor-dim" style="font-size:10px;line-height:1.6;margin-bottom:10px;max-width:380px;"></div>
@@ -1666,7 +1865,7 @@ function activateSection(techIdx, legacyIdx) {
             barContainer.innerHTML = `
                 <span style="width:90px;">${label}</span>
                 <div style="flex:1;height:2px;background:rgba(135,233,15,0.15);position:relative;">
-                    <div class="telem-fill-${techIdx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#87E90F;transition:width 1s ease;"></div>
+                    <div class="telem-fill-${techIdx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#A0E0FF;transition:width 1s ease;"></div>
                 </div>
                 <span class="telem-value-${techIdx}-${j}" style="min-width:50px;text-align:right;">0.000</span>
             `;
@@ -1801,7 +2000,7 @@ sections.forEach((section, i) => {
     contentWrapper.style.cssText = 'text-align:center;max-width:600px;';
     
     const titleEl = document.createElement('div');
-    titleEl.style.cssText = 'color:#fff;font-size:32px;font-weight:bold;letter-spacing:6px;margin-bottom:8px;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #87E90F, 0 0 20px rgba(135,233,15,0.5);';
+    titleEl.style.cssText = 'color:#fff;font-size:32px;font-weight:bold;letter-spacing:6px;margin-bottom:8px;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #A0E0FF, 0 0 20px rgba(135,233,15,0.5);';
     titleEl.textContent = section.title;
     
     const subtitleEl = document.createElement('div');
@@ -1823,7 +2022,7 @@ sections.forEach((section, i) => {
     const linkEl = document.createElement('a');
     linkEl.href = section.link;
     linkEl.className = 'crt-phosphor';
-    linkEl.style.cssText = 'text-decoration:none;font-size:12px;letter-spacing:2px;padding:10px 20px;border:1px solid #87E90F;transition:all 0.3s ease;pointer-events:auto;display:inline-block;margin-bottom:20px;';
+    linkEl.style.cssText = 'text-decoration:none;font-size:12px;letter-spacing:2px;padding:10px 20px;border:1px solid #A0E0FF;transition:all 0.3s ease;pointer-events:auto;display:inline-block;margin-bottom:20px;';
     linkEl.innerHTML = '> ACCEDER <span style="opacity:0.5;">></span>';
     linkEl.addEventListener('mouseenter', () => {
         linkEl.style.background = 'rgba(135,233,15,0.15)';
@@ -2020,7 +2219,7 @@ let autoModeActiveScrolly = false;
 const scrollyAutoBtn = document.createElement('button');
 scrollyAutoBtn.textContent = '[AUTO]';
 scrollyAutoBtn.className = 'crt-phosphor';
-scrollyAutoBtn.style.cssText = 'position:fixed;top:30px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #87E90F;cursor:pointer;z-index:1001;letter-spacing:1px;';
+scrollyAutoBtn.style.cssText = 'position:fixed;top:30px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #A0E0FF;cursor:pointer;z-index:1001;letter-spacing:1px;';
 scrollyAutoBtn.addEventListener('click', () => {
     autoModeActiveScrolly = !autoModeActiveScrolly;
     scrollyAutoBtn.textContent = autoModeActiveScrolly ? '[RUN]' : '[AUTO]';
@@ -2076,6 +2275,8 @@ function animate() {
     glitchPass.uniforms.uIntensity.value = glitchIntensity;
     updateDripParticles(0.016, time);
     updateTerminalLines(0.016, time);
+    renderHudSprite();
+    renderSystemLog(time);
     
     camera.position.lerp(targetCameraPos, 0.03);
     camera.lookAt(0, 0, 0);
@@ -2131,17 +2332,17 @@ function animate() {
 const orbitControlsBtn = document.createElement('button');
 orbitControlsBtn.textContent = '[ORB]';
 orbitControlsBtn.className = 'crt-phosphor-dim';
-orbitControlsBtn.style.cssText = 'position:fixed;top:50px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #87E90F40;cursor:pointer;z-index:1001;letter-spacing:1px;';
+orbitControlsBtn.style.cssText = 'position:fixed;top:50px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #A0E0FF40;cursor:pointer;z-index:1001;letter-spacing:1px;';
 orbitControlsBtn.addEventListener('click', () => {
     orbitControls.enabled = !orbitControls.enabled;
     if (orbitControls.enabled) {
         orbitControlsBtn.textContent = '[ORB*]';
         orbitControlsBtn.className = 'crt-phosphor';
-        orbitControlsBtn.style.borderColor = '#87E90F';
+        orbitControlsBtn.style.borderColor = '#A0E0FF';
     } else {
         orbitControlsBtn.textContent = '[ORB]';
         orbitControlsBtn.className = 'crt-phosphor-dim';
-        orbitControlsBtn.style.borderColor = '#87E90F40';
+        orbitControlsBtn.style.borderColor = '#A0E0FF40';
     }
 });
 document.body.appendChild(orbitControlsBtn);
