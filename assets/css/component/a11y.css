@@ -4,6 +4,12 @@
     margin-right: auto;
 }
 
+body > footer#body-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 #has-a11y-summary {
     padding: .6ex 1ex;
     font-weight: 700;

@@ -53,10 +53,10 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 120%;
+            height: 200%;
             z-index: -3;
             overflow: hidden;
-            transform: translateY(-10%);
+            background-color: #030303;
         }
         #structure-bg img {
             width: 100%;
@@ -64,6 +64,16 @@
             object-fit: cover;
             filter: blur(20px) saturate(1.2);
             opacity: 0.35;
+        }
+        #structure-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            pointer-events: none;
         }
         body > header,
         #background-header,
@@ -81,13 +91,47 @@
         (function() {
             const bg = document.getElementById('structure-bg');
             if (!bg) return;
-            let lastScroll = window.scrollY;
             window.addEventListener('scroll', function() {
                 const scrolled = window.scrollY;
-                const speed = 0.15;
-                const offset = (scrolled - lastScroll) * speed;
-                bg.style.transform = 'translateY(-10%) translateY(' + offset + 'px)';
-                lastScroll = scrolled;
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollProgress = scrolled / maxScroll;
+                const parallaxOffset = -scrollProgress * (bg.offsetHeight - window.innerHeight);
+                bg.style.transform = 'translateY(' + parallaxOffset + 'px)';
+            }, { passive: true });
+        })();
+        (function() {
+            const header = document.querySelector('body > header');
+            if (!header) return;
+            let lastScroll = 0;
+            header.style.transition = 'transform 0.3s ease';
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.scrollY;
+                if (currentScroll > lastScroll && currentScroll > 50) {
+                    header.style.transform = 'translateY(-100%)';
+                } else {
+                    header.style.transform = 'translateY(0)';
+                }
+                lastScroll = currentScroll;
+            }, { passive: true });
+        })();
+        (function() {
+            const footer = document.querySelector('#body-footer');
+            const toTop = document.querySelector('#to-top');
+            if (!footer || !toTop) return;
+            let lastScroll = 0;
+            footer.style.transition = 'transform 0.3s ease';
+            toTop.style.position = 'fixed';
+            toTop.style.bottom = '20px';
+            toTop.style.right = '20px';
+            toTop.style.zIndex = '1002';
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.scrollY;
+                if (currentScroll > lastScroll && currentScroll > 50) {
+                    footer.style.transform = 'translateY(100%)';
+                } else {
+                    footer.style.transform = 'translateY(0)';
+                }
+                lastScroll = currentScroll;
             }, { passive: true });
         })();
     </script>

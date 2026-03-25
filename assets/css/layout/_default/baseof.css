@@ -96,6 +96,7 @@ body > header {
     align-items: center;
     justify-content: space-between;
     height: var(--vhead);
+    background: linear-gradient(to bottom, #000000, transparent);
 }
 
 body > main {
@@ -132,6 +133,7 @@ body > footer {
     z-index: 2;
     height: var(--vfoot);
     font-size: var(--small);
+    background: linear-gradient(to top, #000000, transparent);
 }
 
 body.focus > header,
