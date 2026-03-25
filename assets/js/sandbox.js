@@ -2391,6 +2391,8 @@ bakeStructureWithWorker(() => {
             setTimeout(() => loadingEl.remove(), 800);
         }
         hudUI.style.opacity = '1';
+        const siteTitle = document.querySelector('.site-title');
+        if (siteTitle) siteTitle.style.opacity = '1';
     }, 2000);
     
     mirrorCube.visible = false;
