@@ -759,6 +759,23 @@ const aiVerbs = ['INIT', 'SYNC', 'LOAD', 'RUN', 'SEND', 'RECV', 'PUSH', 'PULL', 
 const aiNouns = ['BUFFER', 'STACK', 'QUEUE', 'CACHE', 'TABLE', 'INDEX', 'BLOCK', 'FRAME', 'PACKET', 'TOKEN', 'STREAM', 'HANDLE', 'PORT', 'SOCKET'];
 const aiSymbols = ['->', '=>', '::', '[]', '{}', '()', '<>', '...', '***', '###', '===', '---', ':::', '<<<', '>>>'];
 
+const greekWords = [
+    'μετὰ', 'ταῦτα', 'δή', 'εἶπον', 'ἀπείκασον', 'τοιούτῳ', 'πάθει', 'τὴν', 'ἡμετέραν',
+    'φύσιν', 'παιδείας', 'πέρι', 'ἀπαιδευσίας', 'ἰδὲ', 'γὰρ', 'ἀνθρώπους', 'οἷον',
+    'καταγείῳ', 'οἰκήσει', 'σπηλαιώδει', 'ἔννομον', 'γεγονός', 'εἴδωλον', 'σκιά',
+    'ἀλήθεια', 'δόξα', 'ἔστιν', 'εἶναι', 'μὴ', 'ὄν', 'γένοιτο', 'ἔδει', 'χρὴ',
+    'πῶς', 'οὕτως', 'ὥστε', 'διότι', 'ἐπεί', 'γάρ', 'οὖν', 'ἄρα', 'μέν', 'δέ'
+];
+
+function generateGreekText() {
+    const wordCount = Math.floor(Math.random() * 3) + 2;
+    const result = [];
+    for (let i = 0; i < wordCount; i++) {
+        result.push(greekWords[Math.floor(Math.random() * greekWords.length)]);
+    }
+    return result.join(' ');
+}
+
 function generateAISyntax() {
     const patterns = Math.floor(Math.random() * 4);
     
@@ -789,8 +806,11 @@ function generateAISyntax() {
     }
 }
 
-const terminalLineCount = 30;
+const terminalLineCount = 35;
 const terminalLines = [];
+
+const greekChars = ['Α','Β','Γ','Δ','Ε','Ζ','Η','Θ','Ι','Κ','Λ','Μ','Ν','Ξ','Ο','Π','Ρ','Σ','Τ','Υ','Φ','Χ','Ψ','Ω',
+                   'α','β','γ','δ','ε','ζ','η','θ','ι','κ','λ','μ','ν','ξ','ο','π','ρ','σ','τ','υ','φ','χ','ψ','ω'];
 
 const terminalVertexShader = `
     varying vec2 vUv;
@@ -804,37 +824,25 @@ const terminalFragmentShader = `
     varying vec2 vUv;
     uniform sampler2D uTexture;
     uniform float uOpacity;
-    uniform float uResolution;
     
     void main() {
-        vec2 uv = vUv;
-        if (uResolution < 1.0) {
-            uv = floor(uv * 128.0) / 128.0;
-        }
-        vec4 color = texture2D(uTexture, uv);
+        vec4 color = texture2D(uTexture, vUv);
         gl_FragColor = vec4(color.rgb, color.a * uOpacity);
     }
 `;
-
-const terminalCanvas = document.createElement('canvas');
-terminalCanvas.width = 512;
-terminalCanvas.height = 32;
-const terminalCtx = terminalCanvas.getContext('2d');
 
 const terminalTextures = [];
 const terminalMaterials = [];
 const terminalSprites = [];
 
-const LINE_GROUP = {
-    CLOSE: 0,
-    MID: 1,
-    FAR: 2
-};
-
 for (let i = 0; i < terminalLineCount; i++) {
-    const group = i < 10 ? LINE_GROUP.CLOSE : (i < 20 ? LINE_GROUP.MID : LINE_GROUP.FAR);
-    
-    const texture = new THREE.CanvasTexture(terminalCanvas);
+    const canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 1200;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 32, 1200);
+
+    const texture = new THREE.CanvasTexture(canvas);
     texture.needsUpdate = true;
     terminalTextures.push(texture);
     
@@ -843,114 +851,82 @@ for (let i = 0; i < terminalLineCount; i++) {
         fragmentShader: terminalFragmentShader,
         uniforms: {
             uTexture: { value: texture },
-            uOpacity: { value: 0 },
-            uResolution: { value: 1 }
+            uOpacity: { value: 0.85 }
         },
         transparent: true,
         depthWrite: false
     });
     terminalMaterials.push(material);
     
-    const sprite = new THREE.Sprite(material);
+    const spreadX = 450;
+    const spreadZ = 20 + (i / terminalLineCount) * 130;
     
-    if (group === LINE_GROUP.CLOSE) {
-        sprite.position.set(
-            (Math.random() - 0.5) * 160,
-            100 - (i % 10) * 12,
-            10 + Math.random() * 20
-        );
-        sprite.scale.set(180, 12, 1);
-    } else if (group === LINE_GROUP.MID) {
-        sprite.position.set(
-            (Math.random() - 0.5) * 180,
-            100 - (i % 10) * 12,
-            50 + Math.random() * 30
-        );
-        sprite.scale.set(100, 8, 1);
-    } else {
-        sprite.position.set(
-            (Math.random() - 0.5) * 200,
-            100 - (i % 10) * 12,
-            160 + Math.random() * 50
-        );
-        sprite.scale.set(60, 5, 1);
-    }
+    const sprite = new THREE.Sprite(material);
+    sprite.position.set(
+        (Math.random() - 0.5) * spreadX,
+        0,
+        spreadZ
+    );
+    sprite.scale.set(3, 120, 1);
     
     scene.add(sprite);
     terminalSprites.push(sprite);
     
+    const baseY = -50 - (i / terminalLineCount) * 450;
     terminalLines.push({
-        group: group,
-        y: sprite.position.y,
-        speed: group === LINE_GROUP.CLOSE ? 1.5 : (group === LINE_GROUP.MID ? 2.5 : 3.5),
-        text: generateAISyntax(),
-        stepTimer: 0,
-        stepInterval: 0.04 + Math.random() * 0.08,
-        baseX: sprite.position.x,
-        xDrift: 0
+        canvas: canvas,
+        ctx: ctx,
+        yPos: -Math.random() * 100 - 50,
+        dropInterval: 0.02 + Math.random() * 0.03,
+        lastUpdate: 0,
+        active: true,
+        fadeCounter: 0
     });
-}
-
-function renderTerminalLine(index) {
-    const line = terminalLines[index];
-    const text = line.text;
-    const group = line.group;
-    
-    terminalCtx.clearRect(0, 0, 512, 32);
-    
-    if (group === LINE_GROUP.CLOSE) {
-        terminalCtx.font = 'bold 24px "VCR OSD Mono", monospace';
-        terminalCtx.fillStyle = '#A0E0FF';
-    } else if (group === LINE_GROUP.MID) {
-        terminalCtx.font = '16px "VCR OSD Mono", monospace';
-        terminalCtx.fillStyle = '#70B8DD';
-    } else {
-        terminalCtx.font = '12px "VCR OSD Mono", monospace';
-        terminalCtx.fillStyle = '#4088AA';
-    }
-    
-    terminalCtx.fillText(text, 8, 22);
-    
-    terminalTextures[index].needsUpdate = true;
 }
 
 function updateTerminalLines(deltaTime, time) {
     for (let i = 0; i < terminalLineCount; i++) {
         const line = terminalLines[i];
+        const ctx = line.ctx;
         const sprite = terminalSprites[i];
-        
-        line.stepTimer += deltaTime;
-        
-        if (line.stepTimer >= line.stepInterval) {
-            line.stepTimer = 0;
-            line.y -= line.speed;
-            line.xDrift = (Math.random() - 0.5) * 0.5;
+
+        line.lastUpdate += deltaTime;
+        if (line.lastUpdate > line.dropInterval) {
+            line.lastUpdate = 0;
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+            ctx.fillRect(0, 0, 32, 1200);
+
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.font = 'bold 20px "VCR OSD Mono", monospace';
+            ctx.textAlign = 'center';
+
+            if (line.yPos < 1220 && line.yPos > -30) {
+                const charTrail = greekChars[Math.floor(Math.random() * greekChars.length)];
+                ctx.fillStyle = 'rgba(160, 224, 255, 0.7)';
+                ctx.fillText(charTrail, 16, line.yPos - 20);
+
+                const charHead = greekChars[Math.floor(Math.random() * greekChars.length)];
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText(charHead, 16, line.yPos);
+            }
+
+            line.yPos += 20;
+
+            if (line.yPos > 1220) {
+                line.fadeCounter++;
+            }
+
+            if (line.fadeCounter > 60) {
+                line.yPos = -Math.random() * 100 - 50;
+                line.fadeCounter = 0;
+                sprite.position.z = 20 + Math.random() * 130;
+                sprite.position.x = (Math.random() - 0.5) * 450;
+            }
+
+            terminalTextures[i].needsUpdate = true;
         }
-        
-        if (line.y < -120) {
-            line.y = 110 + Math.random() * 20;
-            line.text = generateAISyntax();
-            line.baseX = (Math.random() - 0.5) * 160;
-        }
-        
-        sprite.position.y = line.y;
-        sprite.position.x = line.baseX + Math.sin(time * 0.5 + i) * line.xDrift * 5;
-        
-        if (line.group === LINE_GROUP.CLOSE) {
-            sprite.material.uniforms.uOpacity.value = 0.9;
-            sprite.material.uniforms.uResolution.value = 0.3;
-            sprite.renderOrder = 1;
-        } else if (line.group === LINE_GROUP.MID) {
-            sprite.material.uniforms.uOpacity.value = 0.6;
-            sprite.material.uniforms.uResolution.value = 0.7;
-            sprite.renderOrder = 0;
-        } else {
-            sprite.material.uniforms.uOpacity.value = 0.3;
-            sprite.material.uniforms.uResolution.value = 1.0;
-            sprite.renderOrder = -1;
-        }
-        
-        renderTerminalLine(i);
     }
 }
 
@@ -2160,6 +2136,8 @@ const magnetEffect = {
     currentLinkEl: null,
     mouseX: window.innerWidth / 2,
     mouseY: window.innerHeight / 2,
+    normalizedX: 0,
+    normalizedY: 0,
     maxDistance: 300,
     particleCount: 0
 };
@@ -2425,6 +2403,8 @@ createMagnetEffectContainer();
 document.addEventListener('mousemove', (e) => {
     magnetEffect.mouseX = e.clientX;
     magnetEffect.mouseY = e.clientY;
+    magnetEffect.normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
+    magnetEffect.normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
     
     if (donutGlassPass) {
         donutGlassPass.uniforms.uMouse.value.set(e.clientX, e.clientY);
@@ -2648,7 +2628,10 @@ function animate() {
     renderHudSprite();
     renderSystemLog(time);
     
-    camera.position.lerp(targetCameraPos, 0.03);
+    const mouseParallaxStrength = 30;
+    const targetX = targetCameraPos.x - magnetEffect.normalizedX * mouseParallaxStrength;
+    const targetY = targetCameraPos.y + magnetEffect.normalizedY * mouseParallaxStrength;
+    camera.position.set(targetX, targetY, targetCameraPos.z);
     camera.lookAt(0, 0, 0);
     
     if (camera.position.distanceTo(targetCameraPos) < 1.0 && cubeCameraDirty) {
