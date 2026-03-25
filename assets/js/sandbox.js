@@ -180,6 +180,7 @@ const coreLight = new THREE.PointLight(0xffffff, 40, 300);
 coreLight.position.set(0, 0, 0);
 scene.add(coreLight);
 
+/*
 const lensflare = new Lensflare();
 lensflare.addElement(new LensflareElement(createFlareTexture(), 200, 0, coreLight.color));
 lensflare.addElement(new LensflareElement(createFlareTexture(), 100, 0.2, coreLight.color));
@@ -188,6 +189,9 @@ lensflare.addElement(new LensflareElement(createFlareTexture(), 80, 0.6, coreLig
 lensflare.addElement(new LensflareElement(createFlareTexture(), 120, 0.8, coreLight.color));
 lensflare.addElement(new LensflareElement(createFlareTexture(), 60, 1.0, coreLight.color));
 coreLight.add(lensflare);
+*/
+
+const lensflare = { visible: false }; // Placeholder para evitar errores en el menú de variables
 
 function createFlareTexture() {
     const canvas = document.createElement('canvas');
@@ -603,12 +607,27 @@ const semMaterial = new THREE.ShaderMaterial({
     side: THREE.DoubleSide
 });
 
+const sectionParams = [
+    { spikeScale: 2.5, spikeFreq: 5.0, organicScale: 0.08, organicIntensity: 3.0, isolation: 0.1, macroScale: 1.5, organicSpeed: 0.08, distOffset: 0.5 },
+    { spikeScale: 4.0, spikeFreq: 3.0, organicScale: 0.12, organicIntensity: 5.0, isolation: 0.2, macroScale: 1.3, organicSpeed: 0.15, distOffset: 0.4 },
+    { spikeScale: 1.5, spikeFreq: 7.0, organicScale: 0.05, organicIntensity: 2.0, isolation: 0.05, macroScale: 1.7, organicSpeed: 0.05, distOffset: 0.7 },
+    { spikeScale: 3.5, spikeFreq: 4.0, organicScale: 0.10, organicIntensity: 4.0, isolation: 0.15, macroScale: 1.4, organicSpeed: 0.12, distOffset: 0.3 },
+    { spikeScale: 2.0, spikeFreq: 6.0, organicScale: 0.06, organicIntensity: 2.5, isolation: 0.1, macroScale: 1.6, organicSpeed: 0.07, distOffset: 0.6 },
+    { spikeScale: 3.0, spikeFreq: 8.0, organicScale: 0.09, organicIntensity: 3.5, isolation: 0.25, macroScale: 1.2, organicSpeed: 0.18, distOffset: 0.2 },
+    { spikeScale: 1.8, spikeFreq: 4.5, organicScale: 0.11, organicIntensity: 4.2, isolation: 0.08, macroScale: 1.8, organicSpeed: 0.10, distOffset: 0.55 },
+    { spikeScale: 4.2, spikeFreq: 5.5, organicScale: 0.07, organicIntensity: 2.8, isolation: 0.12, macroScale: 1.4, organicSpeed: 0.09, distOffset: 0.45 },
+    { spikeScale: 2.8, spikeFreq: 7.5, organicScale: 0.13, organicIntensity: 5.5, isolation: 0.2, macroScale: 1.5, organicSpeed: 0.20, distOffset: 0.35 },
+    { spikeScale: 2.2, spikeFreq: 4.0, organicScale: 0.08, organicIntensity: 3.2, isolation: 0.1, macroScale: 1.3, organicSpeed: 0.11, distOffset: 0.5 }
+];
+
+// Sincronización inicial con la Sección 0 para evitar estado "diminuto" al arrancar
+const initialP = sectionParams[0];
 let params = {
-    macroScale: 1.1,
-    spikeScale: 3.0,
-    spikeFreq: 5.7,
+    macroScale: initialP.macroScale,
+    spikeScale: initialP.spikeScale,
+    spikeFreq: initialP.spikeFreq,
     distAtten: 0.2,
-    distOffset: 1.0,
+    distOffset: initialP.distOffset,
     autoInterval: 30
 };
 
@@ -621,7 +640,7 @@ instanceMaterial.push(mat);
 
 const effect = new MarchingCubes(resolution, mat, false, false, 300000);
 effect.scale.set(75, 75, 75);
-effect.isolation = 0;
+effect.isolation = initialP.isolation;
 effect.position.set(0, 0, 0);
 
 instances.push(effect);
@@ -675,8 +694,8 @@ const dripVertexShader = `
         float cycle = 6.0;
         float t = mod(uTime * 0.4 + offset, cycle);
         
-        // Simulación de gravedad simple
-        pos.y -= t * speed;
+        // Simulación de flotación (hacia arriba)
+        pos.y += t * speed;
         
         vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
         gl_PointSize = size * (300.0 / -mvPosition.z);
@@ -695,7 +714,7 @@ const dripFragmentShader = `
         if (dist > 0.5) discard;
         
         float alpha = smoothstep(0.5, 0.0, dist) * vAlpha;
-        gl_FragColor = vec4(0.7, 0.9, 1.0, alpha * 0.6);
+        gl_FragColor = vec4(0.7, 0.9, 1.0, alpha * 0.4);
     }
 `;
 
@@ -1207,6 +1226,9 @@ function createSlider(name, min, max, step, value, callback, decimals = 2) {
     slider.style.accentColor = '#7496c9';
     slider.style.cursor = 'pointer';
     
+    // Almacenamos el elemento para actualizarlo externamente
+    sliderElements[name] = slider;
+    
     slider.addEventListener('input', () => {
         const val = parseFloat(slider.value);
         label.textContent = `${name.toUpperCase()} ${val.toFixed(decimals)}`;
@@ -1257,6 +1279,10 @@ function createSectionHeader(text) {
 
 createSectionHeader('[ STRUCTURE ]');
 
+createSlider('isolation', 0.0, 1.0, 0.01, effect.isolation, (val) => {
+    effect.isolation = val;
+});
+
 createSlider('spikeScale', 0.0, 5.0, 0.1, params.spikeScale, (val) => {
     params.spikeScale = val;
     currentSpikeScale = val;
@@ -1271,14 +1297,14 @@ createSlider('spikeFreq', 1.0, 10.0, 0.1, params.spikeFreq, (val) => {
     bakeStructure();
 });
 
-createSlider('macroScale', 0.5, 3.0, 0.1, params.macroScale, (val) => {
+createSlider('macroScale', 1.2, 3.0, 0.1, params.macroScale, (val) => {
     params.macroScale = val;
     currentMacroScale = val;
     targetMacroScale = val;
     bakeStructure();
 });
 
-createSlider('distOffset', -0.5, 2.0, 0.05, params.distOffset, (val) => {
+createSlider('distOffset', 0.0, 1.0, 0.05, params.distOffset, (val) => {
     params.distOffset = val;
     bakeStructure();
 });
@@ -1403,16 +1429,16 @@ createToggle('Mirror Cube', true, (val) => {
     if (val) cubeCameraDirty = true;
 });
 
+/*
 createToggle('Lensflare', true, (val) => {
     lensflare.visible = val;
 });
 
-
-
-createToggle('HUD Telemetry', true, (val) => {
+createToggle('HUD Telemetry', false, (val) => {
     telemetryTerminal.style.display = val ? 'block' : 'none';
     hudTelemetry.style.display = val ? 'block' : 'none';
 });
+*/
 
 const perfStats = document.createElement('div');
 perfStats.id = 'perf-stats';
@@ -1761,11 +1787,16 @@ function updateLoaderText(timestamp) {
 updateLoaderText();
 document.body.appendChild(loadingOverlay);
 
+/*
 const hudUI = document.createElement('div');
 hudUI.id = 'hud-container';
 hudUI.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:500;font-family:"JetBrains Mono","Fira Code",monospace;opacity:0;transition:opacity 0.5s ease;';
 document.body.appendChild(hudUI);
+*/
 
+const hudTelemetry = { style: { display: 'none' } }; // Placeholder para evitar errores en el menú de variables
+
+/*
 const telemetryTerminal = document.createElement('div');
 telemetryTerminal.id = 'telemetry-terminal';
 telemetryTerminal.className = 'crt-scanlines';
@@ -1775,6 +1806,9 @@ telemetryTerminal.innerHTML = `
     <div id="telem-output" class="crt-phosphor-dim" style="padding:8px 12px;line-height:1.6;height:calc(100% - 30px);overflow:hidden;font-size:10px;"></div>
 `;
 document.body.appendChild(telemetryTerminal);
+*/
+
+const telemetryTerminal = { style: { display: 'none' } }; // Placeholder para evitar errores en el menú de variables
 
 const telemMessages = [
     'INIT: RENDERER_CORE_ACTIVE',
@@ -1934,6 +1968,7 @@ let scrollVelocity = 0;
 let typewriterTimer = 0;
 const TYPEWRITER_SPEED = 0.015;
 
+/*
 const hudTelemetry = document.createElement('div');
 hudTelemetry.id = 'hud-telemetry';
 hudTelemetry.style.cssText = 'position:fixed;bottom:60px;left:40px;z-index:490;pointer-events:none;max-width:400px;display:none;';
@@ -1943,6 +1978,9 @@ hudTelemetry.innerHTML = `
     <div id="telem-bars" style="display:flex;flex-direction:column;gap:4px;"></div>
 `;
 document.body.appendChild(hudTelemetry);
+*/
+
+const hudTelemetryDummy = { style: { display: 'none' } }; // Dummy object if needed
 
 function activateSection(techIdx, legacyIdx) {
     if (legacyIdx === undefined || legacyIdx === null) {
@@ -2022,6 +2060,20 @@ function activateSection(techIdx, legacyIdx) {
     });
     
     currentSection = techIdx;
+    
+    // Sincronización inmediata de parámetros físicos para evitar inicio erróneo
+    const baseP = sectionParams[techIdx % sectionParams.length];
+    if (baseP) {
+        params.spikeScale = baseP.spikeScale;
+        params.spikeFreq = baseP.spikeFreq;
+        params.macroScale = baseP.macroScale;
+        params.distOffset = baseP.distOffset;
+        effect.isolation = baseP.isolation;
+        
+        semMaterial.uniforms.uOrganicScale.value = baseP.organicScale;
+        semMaterial.uniforms.uOrganicIntensity.value = baseP.organicIntensity;
+        semMaterial.uniforms.uOrganicSpeed.value = baseP.organicSpeed;
+    }
     
     cubeCameraDirty = true;
 }
@@ -2265,19 +2317,6 @@ let targetCameraPos = new THREE.Vector3(0, 0, 180);
 let autoMutate = true;
 let mutationTimer = 0;
 
-const sectionParams = [
-    { spikeScale: 2.5, spikeFreq: 5.0, organicScale: 0.08, organicIntensity: 3.0 },
-    { spikeScale: 4.0, spikeFreq: 3.0, organicScale: 0.12, organicIntensity: 5.0 },
-    { spikeScale: 1.5, spikeFreq: 7.0, organicScale: 0.05, organicIntensity: 2.0 },
-    { spikeScale: 3.5, spikeFreq: 4.0, organicScale: 0.10, organicIntensity: 4.0 },
-    { spikeScale: 2.0, spikeFreq: 6.0, organicScale: 0.06, organicIntensity: 2.5 },
-    { spikeScale: 3.0, spikeFreq: 8.0, organicScale: 0.09, organicIntensity: 3.5 },
-    { spikeScale: 1.8, spikeFreq: 4.5, organicScale: 0.11, organicIntensity: 4.2 },
-    { spikeScale: 4.2, spikeFreq: 5.5, organicScale: 0.07, organicIntensity: 2.8 },
-    { spikeScale: 2.8, spikeFreq: 7.5, organicScale: 0.13, organicIntensity: 5.5 },
-    { spikeScale: 2.2, spikeFreq: 4.0, organicScale: 0.08, organicIntensity: 3.2 }
-];
-
 let wheelCount = 0;
 
 function handleScrollInput(deltaY) {
@@ -2393,7 +2432,7 @@ bakeStructureWithWorker(() => {
             loadingEl.style.opacity = '0';
             setTimeout(() => loadingEl.remove(), 800);
         }
-        hudUI.style.opacity = '1';
+        // hudUI.style.opacity = '1'; // Comentado previamente
         const siteTitle = document.querySelector('.site-title');
         if (siteTitle) siteTitle.style.opacity = '1';
     }, 2000);
@@ -2414,6 +2453,7 @@ console.log('[INIT] Total waypoints:', waypoints.length);
 sections.forEach((s, i) => console.log(`[INIT] Section ${i}: ${s.title}`));
 
 activateSection(0);
+bakeStructure();
 
 let autoModeActiveScrolly = false;
 
@@ -2479,17 +2519,47 @@ function animate() {
     if (autoMutate) {
         mutationTimer += 0.016;
         
-        const sp = currentSection;
+        const sp = currentSection % sectionParams.length;
         const baseParams = sectionParams[sp];
         
-        const wave1 = Math.sin(mutationTimer * 0.7) * 0.3 + 0.7;
-        const wave2 = Math.sin(mutationTimer * 1.3) * 0.2 + 0.8;
-        const wave3 = Math.sin(mutationTimer * 0.5) * 0.4 + 0.6;
+        // Ondas rítmicas para comportamiento "vivo"
+        const pulse = Math.sin(mutationTimer * 0.45) * 0.5 + 0.5; // 0 a 1
+        const microPulse = Math.sin(mutationTimer * 1.2) * 0.5 + 0.5;
         
-        params.spikeScale = baseParams.spikeScale * wave1;
-        params.spikeFreq = baseParams.spikeFreq * wave2;
-        semMaterial.uniforms.uOrganicScale.value = baseParams.organicScale * wave3;
-        semMaterial.uniforms.uOrganicIntensity.value = baseParams.organicIntensity * wave1;
+        // Variación de Estructura Física
+        params.spikeScale = baseParams.spikeScale * (0.8 + microPulse * 0.4);
+        params.spikeFreq = baseParams.spikeFreq * (0.9 + pulse * 0.2);
+        params.macroScale = Math.max(1.2, baseParams.macroScale * (0.95 + pulse * 0.1));
+        params.distOffset = baseParams.distOffset + (Math.sin(mutationTimer * 0.3) * 0.3); // Variación libre
+        params.distOffset = Math.max(0, Math.min(1, params.distOffset)); // Clampear 0-1
+        
+        // Variación de Isolation (Suave vs Filoso)
+        effect.isolation = baseParams.isolation + pulse * 0.12;
+        
+        // Pulsación de Escala (Crecimiento/Achicamiento)
+        const currentScale = 75 + pulse * 8;
+        effect.scale.set(currentScale, currentScale, currentScale);
+        
+        // Variación de Desplazamiento (Shader)
+        semMaterial.uniforms.uOrganicScale.value = baseParams.organicScale * (0.85 + microPulse * 0.3);
+        semMaterial.uniforms.uOrganicIntensity.value = baseParams.organicIntensity * (0.7 + pulse * 0.6);
+        semMaterial.uniforms.uOrganicSpeed.value = baseParams.organicSpeed * (0.8 + pulse * 0.4);
+
+        // Sincronizar UI si el panel está visible
+        if (panel.style.display !== 'none') {
+            const updateUI = (name, val, dec = 2) => {
+                if (sliderElements[name]) sliderElements[name].value = val;
+                if (sliderLabels2[name]) sliderLabels2[name].textContent = `${name.toUpperCase()} ${val.toFixed(dec)}`;
+            };
+            updateUI('spikeScale', params.spikeScale);
+            updateUI('spikeFreq', params.spikeFreq);
+            updateUI('macroScale', params.macroScale);
+            updateUI('isolation', effect.isolation);
+            updateUI('distOffset', params.distOffset);
+            updateUI('organicScale', semMaterial.uniforms.uOrganicScale.value);
+            updateUI('organicIntensity', semMaterial.uniforms.uOrganicIntensity.value);
+            updateUI('organicSpeed', semMaterial.uniforms.uOrganicSpeed.value);
+        }
     }
     
     syncMaterials();
