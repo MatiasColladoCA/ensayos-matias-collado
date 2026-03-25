@@ -627,26 +627,63 @@ effect.position.set(0, 0, 0);
 instances.push(effect);
 scene.add(effect);
 
-const dripParticleCount = 200;
-const dripPositions = new Float32Array(dripParticleCount * 3);
-const dripVelocities = new Float32Array(dripParticleCount * 3);
-const dripLifetimes = new Float32Array(dripParticleCount);
+const dripParticleCount = 1000;
+const dripInitPos = new Float32Array(dripParticleCount * 3);
+const dripSpeeds = new Float32Array(dripParticleCount);
+const dripOffsets = new Float32Array(dripParticleCount);
 const dripSizes = new Float32Array(dripParticleCount);
 
+function randomPointOnSphere(radius) {
+    const u = Math.random();
+    const v = Math.random();
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2 * v - 1);
+    const r = radius * (0.85 + Math.random() * 0.3);
+    return {
+        x: r * Math.sin(phi) * Math.cos(theta),
+        y: r * Math.sin(phi) * Math.sin(theta),
+        z: r * Math.cos(phi)
+    };
+}
+
+for (let i = 0; i < dripParticleCount; i++) {
+    const point = randomPointOnSphere(75);
+    dripInitPos[i * 3] = point.x;
+    dripInitPos[i * 3 + 1] = point.y;
+    dripInitPos[i * 3 + 2] = point.z;
+    
+    dripSpeeds[i] = 20.0 + Math.random() * 40.0;
+    dripOffsets[i] = Math.random() * 20.0;
+    dripSizes[i] = 0.5 + Math.random() * 3.0;
+}
+
 const dripGeometry = new THREE.BufferGeometry();
-dripGeometry.setAttribute('position', new THREE.BufferAttribute(dripPositions, 3));
+dripGeometry.setAttribute('position', new THREE.BufferAttribute(dripInitPos, 3));
+dripGeometry.setAttribute('speed', new THREE.BufferAttribute(dripSpeeds, 1));
+dripGeometry.setAttribute('offset', new THREE.BufferAttribute(dripOffsets, 1));
 dripGeometry.setAttribute('size', new THREE.BufferAttribute(dripSizes, 1));
 
 const dripVertexShader = `
     attribute float size;
+    attribute float speed;
+    attribute float offset;
     varying float vAlpha;
     uniform float uTime;
     
     void main() {
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (200.0 / -mvPosition.z);
+        vec3 pos = position;
+        float cycle = 6.0;
+        float t = mod(uTime * 0.4 + offset, cycle);
+        
+        // Simulación de gravedad simple
+        pos.y -= t * speed;
+        
+        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+        gl_PointSize = size * (300.0 / -mvPosition.z);
         gl_Position = projectionMatrix * mvPosition;
-        vAlpha = size / 3.0;
+        
+        // Desvanecimiento al final del ciclo
+        vAlpha = smoothstep(cycle, cycle * 0.7, t);
     }
 `;
 
@@ -658,7 +695,7 @@ const dripFragmentShader = `
         if (dist > 0.5) discard;
         
         float alpha = smoothstep(0.5, 0.0, dist) * vAlpha;
-        gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
+        gl_FragColor = vec4(0.7, 0.9, 1.0, alpha * 0.6);
     }
 `;
 
@@ -676,67 +713,8 @@ const dripMaterial = new THREE.ShaderMaterial({
 const dripParticles = new THREE.Points(dripGeometry, dripMaterial);
 scene.add(dripParticles);
 
-function randomPointOnSphere(radius) {
-    const u = Math.random();
-    const v = Math.random();
-    const theta = 2 * Math.PI * u;
-    const phi = Math.acos(2 * v - 1);
-    const r = radius * (0.85 + Math.random() * 0.3);
-    return {
-        x: r * Math.sin(phi) * Math.cos(theta),
-        y: r * Math.sin(phi) * Math.sin(theta),
-        z: r * Math.cos(phi)
-    };
-}
-
-for (let i = 0; i < dripParticleCount; i++) {
-    const point = randomPointOnSphere(75);
-    dripPositions[i * 3] = point.x;
-    dripPositions[i * 3 + 1] = point.y;
-    dripPositions[i * 3 + 2] = point.z;
-    
-    dripVelocities[i * 3] = (Math.random() - 0.5) * 0.15;
-    dripVelocities[i * 3 + 1] = 0.25 + Math.random() * 0.75;
-    dripVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.15;
-    
-    dripLifetimes[i] = Math.random();
-    dripSizes[i] = 0.5 + Math.random() * 2.5;
-}
-
 function updateDripParticles(deltaTime, time) {
     dripMaterial.uniforms.uTime.value = time;
-    
-    const gravity = 1.0;
-    const damping = 0.98;
-    
-    for (let i = 0; i < dripParticleCount; i++) {
-        dripLifetimes[i] -= deltaTime * 0.3;
-        
-        dripVelocities[i * 3 + 1] += gravity * deltaTime;
-        
-        dripPositions[i * 3] += dripVelocities[i * 3] * deltaTime;
-        dripPositions[i * 3 + 1] += dripVelocities[i * 3 + 1] * deltaTime;
-        dripPositions[i * 3 + 2] += dripVelocities[i * 3 + 2] * deltaTime;
-        
-        dripVelocities[i * 3] *= damping;
-        dripVelocities[i * 3 + 2] *= damping;
-        
-        if (dripLifetimes[i] <= 0 || dripPositions[i * 3 + 1] > 150) {
-            const point = randomPointOnSphere(75);
-            dripPositions[i * 3] = point.x;
-            dripPositions[i * 3 + 1] = point.y;
-            dripPositions[i * 3 + 2] = point.z;
-            
-            dripVelocities[i * 3] = (Math.random() - 0.5) * 0.25;
-            dripVelocities[i * 3 + 1] = 0.15 + Math.random() * 0.4;
-            dripVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.25;
-            
-            dripLifetimes[i] = 0.8 + Math.random() * 1.5;
-            dripSizes[i] = 0.5 + Math.random() * 2.0;
-        }
-    }
-    
-    dripGeometry.attributes.position.needsUpdate = true;
 }
 
 const aiPrefixes = ['SYS', 'CORE', 'NODE', 'PROC', 'EXEC', 'LINK', 'NET', 'DATA', 'MEM', 'CPU', 'IO', 'API', 'SVC', 'DAEMON', 'KERNEL', 'DRIVER'];
@@ -797,70 +775,60 @@ const terminalLines = [];
 const greekChars = ['Α','Β','Γ','Δ','Ε','Ζ','Η','Θ','Ι','Κ','Λ','Μ','Ν','Ξ','Ο','Π','Ρ','Σ','Τ','Υ','Φ','Χ','Ψ','Ω',
                    'α','β','γ','δ','ε','ζ','η','θ','ι','κ','λ','μ','ν','ξ','ο','π','ρ','σ','τ','υ','φ','χ','ψ','ω'];
 
-const terminalVertexShader = `
-    varying vec2 vUv;
-    void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-`;
+const terminalAtlasCanvas = document.createElement('canvas');
+terminalAtlasCanvas.width = 32 * terminalLineCount;
+terminalAtlasCanvas.height = 1200;
+const atlasCtx = terminalAtlasCanvas.getContext('2d');
 
-const terminalFragmentShader = `
-    varying vec2 vUv;
-    uniform sampler2D uTexture;
-    uniform float uOpacity;
-    
-    void main() {
-        vec4 color = texture2D(uTexture, vUv);
-        gl_FragColor = vec4(color.rgb, color.a * uOpacity);
-    }
-`;
+const terminalAtlasTexture = new THREE.CanvasTexture(terminalAtlasCanvas);
+terminalAtlasTexture.minFilter = THREE.LinearFilter;
 
-const terminalTextures = [];
-const terminalMaterials = [];
-const terminalSprites = [];
+const terminalInstancedMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+        uTexture: { value: terminalAtlasTexture },
+        uOpacity: { value: 0.85 },
+        uAtlasCols: { value: terminalLineCount }
+    },
+    vertexShader: `
+        attribute float instanceID;
+        varying vec2 vUv;
+        uniform float uAtlasCols;
+        void main() {
+            vUv = uv;
+            vUv.x = (vUv.x + instanceID) / uAtlasCols;
+            gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        varying vec2 vUv;
+        uniform sampler2D uTexture;
+        uniform float uOpacity;
+        void main() {
+            vec4 color = texture2D(uTexture, vUv);
+            gl_FragColor = vec4(color.rgb, color.a * uOpacity);
+        }
+    `,
+    transparent: true,
+    depthWrite: false
+});
+
+const terminalGeo = new THREE.PlaneGeometry(3, 120);
+const terminalMesh = new THREE.InstancedMesh(terminalGeo, terminalInstancedMaterial, terminalLineCount);
+const instanceIDs = new Float32Array(terminalLineCount);
+const dummy = new THREE.Object3D();
 
 for (let i = 0; i < terminalLineCount; i++) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 32;
-    canvas.height = 1200;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, 32, 1200);
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.needsUpdate = true;
-    terminalTextures.push(texture);
-    
-    const material = new THREE.ShaderMaterial({
-        vertexShader: terminalVertexShader,
-        fragmentShader: terminalFragmentShader,
-        uniforms: {
-            uTexture: { value: texture },
-            uOpacity: { value: 0.85 }
-        },
-        transparent: true,
-        depthWrite: false
-    });
-    terminalMaterials.push(material);
+    instanceIDs[i] = i;
     
     const spreadX = 450;
     const spreadZ = 20 + (i / terminalLineCount) * 130;
     
-    const sprite = new THREE.Sprite(material);
-    sprite.position.set(
-        (Math.random() - 0.5) * spreadX,
-        0,
-        spreadZ
-    );
-    sprite.scale.set(3, 120, 1);
+    dummy.position.set((Math.random() - 0.5) * spreadX, 0, spreadZ);
+    dummy.updateMatrix();
+    terminalMesh.setMatrixAt(i, dummy.matrix);
     
-    scene.add(sprite);
-    terminalSprites.push(sprite);
-    
-    const baseY = -50 - (i / terminalLineCount) * 450;
     terminalLines.push({
-        canvas: canvas,
-        ctx: ctx,
+        atlasIdx: i,
         yPos: -Math.random() * 100 - 50,
         dropInterval: 0.02 + Math.random() * 0.03,
         lastUpdate: 0,
@@ -869,32 +837,38 @@ for (let i = 0; i < terminalLineCount; i++) {
     });
 }
 
+terminalGeo.setAttribute('instanceID', new THREE.InstancedBufferAttribute(instanceIDs, 1));
+scene.add(terminalMesh);
+
 function updateTerminalLines(deltaTime, time) {
+    let atlasNeedsUpdate = false;
     for (let i = 0; i < terminalLineCount; i++) {
         const line = terminalLines[i];
-        const ctx = line.ctx;
-        const sprite = terminalSprites[i];
-
+        
         line.lastUpdate += deltaTime;
         if (line.lastUpdate > line.dropInterval) {
             line.lastUpdate = 0;
+            atlasNeedsUpdate = true;
+            
+            const startX = line.atlasIdx * 32;
+            
+            // Efecto de desvanecimiento en el atlas
+            atlasCtx.globalCompositeOperation = 'destination-out';
+            atlasCtx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+            atlasCtx.fillRect(startX, 0, 32, 1200);
 
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
-            ctx.fillRect(0, 0, 32, 1200);
-
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.font = 'bold 20px "VCR OSD Mono", monospace';
-            ctx.textAlign = 'center';
+            atlasCtx.globalCompositeOperation = 'source-over';
+            atlasCtx.font = 'bold 20px "VCR OSD Mono", monospace';
+            atlasCtx.textAlign = 'center';
 
             if (line.yPos < 1220 && line.yPos > -30) {
                 const charTrail = greekChars[Math.floor(Math.random() * greekChars.length)];
-                ctx.fillStyle = 'rgba(160, 224, 255, 0.7)';
-                ctx.fillText(charTrail, 16, line.yPos - 20);
+                atlasCtx.fillStyle = 'rgba(160, 224, 255, 0.7)';
+                atlasCtx.fillText(charTrail, startX + 16, line.yPos - 20);
 
                 const charHead = greekChars[Math.floor(Math.random() * greekChars.length)];
-                ctx.fillStyle = '#FFFFFF';
-                ctx.fillText(charHead, 16, line.yPos);
+                atlasCtx.fillStyle = '#FFFFFF';
+                atlasCtx.fillText(charHead, startX + 16, line.yPos);
             }
 
             line.yPos += 20;
@@ -906,12 +880,19 @@ function updateTerminalLines(deltaTime, time) {
             if (line.fadeCounter > 60) {
                 line.yPos = -Math.random() * 100 - 50;
                 line.fadeCounter = 0;
-                sprite.position.z = 20 + Math.random() * 130;
-                sprite.position.x = (Math.random() - 0.5) * 450;
+                
+                // Reposicionar instancia si es necesario
+                const spreadX = 450;
+                dummy.position.set((Math.random() - 0.5) * spreadX, 0, 20 + Math.random() * 130);
+                dummy.updateMatrix();
+                terminalMesh.setMatrixAt(i, dummy.matrix);
+                terminalMesh.instanceMatrix.needsUpdate = true;
             }
-
-            terminalTextures[i].needsUpdate = true;
         }
+    }
+    
+    if (atlasNeedsUpdate) {
+        terminalAtlasTexture.needsUpdate = true;
     }
 }
 
@@ -984,8 +965,6 @@ function renderHudSprite() {
     hudSpriteCtx.fillText(techSections[currentSection % 10]?.description?.substring(0, 35) || 'ANALYZING_BEHAVIORAL_PATTERNS...', 15, 230);
     
     hudSpriteCtx.fillText(`STRATUM: 0${currentSection}/10`, 15, 260);
-    
-    hudSpriteTexture.needsUpdate = true;
 }
 
 const systemLogCanvas = document.createElement('canvas');
@@ -1927,6 +1906,10 @@ function updateTelemetryTerminal(deltaTime) {
                 child.textContent = newText;
             }
         }
+        
+        // Solo actualizamos la textura del HUD cuando cambian los datos de telemetría
+        updateHUDTexture();
+        hudSpriteTexture.needsUpdate = true;
     }
 }
 
