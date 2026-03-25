@@ -30,9 +30,8 @@ const sitePrefix = getSitePrefix();
 console.log('[SITE_PREFIX] Detected:', sitePrefix);
 
 const CRT_COLOR = {
-    primary: '#A0E0FF',
-    secondary: '#70B8DD',
-    tertiary: '#4088AA'
+    primary: '#98b2ea',
+    dim: '#6e85b3'
 };
 
 const canvas = document.getElementById('three-canvas');
@@ -955,7 +954,7 @@ function renderHudSprite() {
     hudSpriteCtx.font = '8px "VCR OSD Mono", monospace';
     hudSpriteCtx.fillText(techSections[currentSection % 10]?.subtitle || '[EGO_BOUNDARY_DISSOLUTION]', 15, 40);
     
-    hudSpriteCtx.fillStyle = '#70B8DD';
+    hudSpriteCtx.fillStyle = '#5a7499';
     hudSpriteCtx.font = '8px "VCR OSD Mono", monospace';
     
     const epistemic = (Math.sin(t * 0.5) * Math.cos(t * 1.2) * 0.5 + 0.5) * 100;
@@ -984,7 +983,7 @@ function renderHudSprite() {
         hudSpriteCtx.fillText(`SYSTEMIC_STRESS: ${stressBar} NOMINAL`, 15, 195);
     }
 
-    hudSpriteCtx.fillStyle = '#70B8DD';
+    hudSpriteCtx.fillStyle = '#5a7499';
     hudSpriteCtx.font = '7px "VCR OSD Mono", monospace';
     hudSpriteCtx.fillText(techSections[currentSection % 10]?.description?.substring(0, 35) || 'ANALYZING_BEHAVIORAL_PATTERNS...', 15, 230);
     
@@ -1149,7 +1148,7 @@ function bakeStructureWithWorker(callback) {
     if (isCalculating) return;
     isCalculating = true;
     
-    const worker = new Worker('/js/marching-cubes-worker.js');
+    const worker = new Worker('./js/marching-cubes-worker.js');
     
     worker.onmessage = function(e) {
         if (e.data.type === 'progress') {
@@ -1210,7 +1209,7 @@ let targetOrganicIntensity = semMaterial.uniforms.uOrganicIntensity.value;
 const panel = document.createElement('div');
 panel.id = 'control-panel';
 panel.className = 'crt-scanlines';
-panel.style.cssText = 'position:fixed;top:10px;right:75px;font-family:"VCR OSD Mono",monospace;font-size:9px;background:rgba(0,8,0,0.95);padding:10px;border:1px solid #A0E0FF40;z-index:1000;min-width:180px;max-height:95vh;overflow-y:auto;display:none;color:#A0E0FF;';
+panel.style.cssText = 'position:fixed;top:10px;right:75px;font-family:"VCR OSD Mono",monospace;font-size:9px;background:rgba(0,8,0,0.95);padding:10px;border:1px solid #7496c940;z-index:1000;min-width:180px;max-height:95vh;overflow-y:auto;display:none;color:#7496c9;';
 document.body.appendChild(panel);
 
 let sliderLabels2 = {};
@@ -1235,7 +1234,7 @@ function createSlider(name, min, max, step, value, callback, decimals = 2) {
     slider.value = value;
     slider.style.width = '160px';
     slider.style.height = '4px';
-    slider.style.accentColor = '#A0E0FF';
+    slider.style.accentColor = '#7496c9';
     slider.style.cursor = 'pointer';
     
     slider.addEventListener('input', () => {
@@ -1261,7 +1260,7 @@ function createToggle(name, checked, callback) {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = checked;
-    checkbox.style.accentColor = '#A0E0FF';
+    checkbox.style.accentColor = '#7496c9';
     checkbox.style.cursor = 'pointer';
     
     const label = document.createElement('span');
@@ -1282,7 +1281,7 @@ function createSectionHeader(text) {
     const header = document.createElement('div');
     header.className = 'crt-phosphor';
     header.textContent = text;
-    header.style.cssText = 'font-size:9px;margin:12px 0 8px 0;padding-bottom:3px;border-bottom:1px solid #A0E0FF30;letter-spacing:1px;';
+    header.style.cssText = 'font-size:9px;margin:12px 0 8px 0;padding-bottom:3px;border-bottom:1px solid #7496c930;letter-spacing:1px;';
     panel.appendChild(header);
 }
 
@@ -1408,7 +1407,7 @@ createSlider('coreLightIntensity', 0, 500, 10, 40, (val) => {
 const refreshMirrorBtn = document.createElement('button');
 refreshMirrorBtn.textContent = '[REFRESH]';
 refreshMirrorBtn.className = 'crt-phosphor';
-refreshMirrorBtn.style.cssText = 'font-size:8px;background:transparent;padding:4px 8px;border:1px solid #A0E0FF;cursor:pointer;margin-top:8px;';
+refreshMirrorBtn.style.cssText = 'font-size:8px;background:transparent;padding:4px 8px;border:1px solid #7496c9;cursor:pointer;margin-top:8px;';
 refreshMirrorBtn.addEventListener('click', () => {
     updateCubeCamera();
 });
@@ -1448,7 +1447,7 @@ createToggle('HUD Telemetry', true, (val) => {
 const perfStats = document.createElement('div');
 perfStats.id = 'perf-stats';
 perfStats.className = 'crt-phosphor-dim';
-perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;background:rgba(0,8,0,0.85);padding:6px 10px;border:1px solid #A0E0FF40;z-index:1001;pointer-events:none;';
+perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;background:rgba(0,8,0,0.85);padding:6px 10px;border:1px solid #7496c940;z-index:1001;pointer-events:none;';
 document.body.appendChild(perfStats);
 
 let frameCount = 0;
@@ -1458,7 +1457,7 @@ let fps = 0;
 const instructions = document.createElement('div');
 instructions.id = 'instructions';
 instructions.className = 'crt-phosphor-dim';
-instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;background:rgba(0,8,0,0.85);padding:10px 20px;border:1px solid #A0E0FF40;pointer-events:none;z-index:1000;';
+instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;background:rgba(0,8,0,0.85);padding:10px 20px;border:1px solid #7496c940;pointer-events:none;z-index:1000;';
 instructions.innerHTML = 'DRAG TO ORBIT | SCROLL TO NAVIGATE';
 document.body.appendChild(instructions);
 
@@ -1466,7 +1465,7 @@ const toggleBtn = document.createElement('button');
 toggleBtn.textContent = '[SYS]';
 toggleBtn.id = 'toggle-btn';
 toggleBtn.className = 'crt-phosphor';
-toggleBtn.style.cssText = 'position:fixed;top:10px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #A0E0FF;cursor:pointer;z-index:1001;letter-spacing:1px;';
+toggleBtn.style.cssText = 'position:fixed;top:10px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #7496c9;cursor:pointer;z-index:1001;letter-spacing:1px;';
 toggleBtn.addEventListener('click', () => {
     panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 });
@@ -1696,10 +1695,10 @@ const loadingOverlay = document.createElement('div');
 loadingOverlay.id = 'loading-overlay';
 loadingOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(3,3,3,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.8s ease;font-family:"JetBrains Mono",monospace;';
 loadingOverlay.innerHTML = `
-    <div style="color:#00ffcc;font-size:14px;letter-spacing:4px;margin-bottom:20px;">[CALCULATING TOPOLOGY]</div>
+    <div style="color:#7496c9;font-size:14px;letter-spacing:4px;margin-bottom:20px;">[CALCULATING TOPOLOGY]</div>
     <div id="loading-status" style="color:#5a8a5a;font-size:12px;">INITIALIZING WORKER...</div>
     <div style="width:200px;height:2px;background:#1a1a1a;margin-top:16px;position:relative;">
-        <div id="loading-bar" style="position:absolute;top:0;left:0;height:100%;width:0%;background:linear-gradient(90deg,#00ffcc,#ff00ff);transition:width 0.3s ease;"></div>
+        <div id="loading-bar" style="position:absolute;top:0;left:0;height:100%;width:0%;background:linear-gradient(90deg,#7496c9,#ff00ff);transition:width 0.3s ease;"></div>
     </div>
 `;
 document.body.appendChild(loadingOverlay);
@@ -1712,31 +1711,31 @@ document.body.appendChild(hudUI);
 const cornerMarkers = document.createElement('div');
 cornerMarkers.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:501;';
 cornerMarkers.innerHTML = `
-    <div style="position:absolute;top:16px;left:16px;color:#00ffcc;font-family:'JetBrains Mono',monospace;font-size:11px;">
-        <span style="color:#00ffcc;">┌─</span><span style="color:#333;">────────────────────</span><span style="color:#00ffcc;">─┐</span>
+    <div style="position:absolute;top:16px;left:16px;color:#7496c9;font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <span style="color:#7496c9;">┌─</span><span style="color:#333;">────────────────────</span><span style="color:#7496c9;">─┐</span>
     </div>
-    <div style="position:absolute;top:16px;right:16px;color:#00ffcc;font-family:'JetBrains Mono',monospace;font-size:11px;">
-        <span style="color:#00ffcc;">┌─</span><span style="color:#333;">────────────────────</span><span style="color:#00ffcc;">─┐</span>
+    <div style="position:absolute;top:16px;right:16px;color:#7496c9;font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <span style="color:#7496c9;">┌─</span><span style="color:#333;">────────────────────</span><span style="color:#7496c9;">─┐</span>
     </div>
-    <div style="position:absolute;bottom:16px;left:16px;color:#00ffcc;font-family:'JetBrains Mono',monospace;font-size:11px;">
-        <span style="color:#00ffcc;">└─</span><span style="color:#333;">────────────────────</span><span style="color:#00ffcc;">─┘</span>
+    <div style="position:absolute;bottom:16px;left:16px;color:#7496c9;font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <span style="color:#7496c9;">└─</span><span style="color:#333;">────────────────────</span><span style="color:#7496c9;">─┘</span>
     </div>
-    <div style="position:absolute;bottom:16px;right:16px;color:#00ffcc;font-family:'JetBrains Mono',monospace;font-size:11px;">
-        <span style="color:#00ffcc;">└─</span><span style="color:#333;">────────────────────</span><span style="color:#00ffcc;">─┘</span>
+    <div style="position:absolute;bottom:16px;right:16px;color:#7496c9;font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <span style="color:#7496c9;">└─</span><span style="color:#333;">────────────────────</span><span style="color:#7496c9;">─┘</span>
     </div>
-    <div style="position:absolute;top:50%;left:8px;transform:translateY(-50%);color:#00ffcc;font-size:20px;font-family:'JetBrains Mono',monospace;">│</div>
-    <div style="position:absolute;top:50%;right:8px;transform:translateY(-50%);color:#00ffcc;font-size:20px;font-family:'JetBrains Mono',monospace;">│</div>
-    <div style="position:absolute;left:50%;top:8px;transform:translateX(-50%);color:#00ffcc;font-size:20px;font-family:'JetBrains Mono',monospace;">─</div>
-    <div style="position:absolute;left:50%;bottom:8px;transform:translateX(-50%);color:#00ffcc;font-size:20px;font-family:'JetBrains Mono',monospace;">─</div>
+    <div style="position:absolute;top:50%;left:8px;transform:translateY(-50%);color:#7496c9;font-size:20px;font-family:'JetBrains Mono',monospace;">│</div>
+    <div style="position:absolute;top:50%;right:8px;transform:translateY(-50%);color:#7496c9;font-size:20px;font-family:'JetBrains Mono',monospace;">│</div>
+    <div style="position:absolute;left:50%;top:8px;transform:translateX(-50%);color:#7496c9;font-size:20px;font-family:'JetBrains Mono',monospace;">─</div>
+    <div style="position:absolute;left:50%;bottom:8px;transform:translateX(-50%);color:#7496c9;font-size:20px;font-family:'JetBrains Mono',monospace;">─</div>
 `;
 document.body.appendChild(cornerMarkers);
 
 const telemetryTerminal = document.createElement('div');
 telemetryTerminal.id = 'telemetry-terminal';
 telemetryTerminal.className = 'crt-scanlines';
-telemetryTerminal.style.cssText = 'position:fixed;bottom:60px;right:40px;width:320px;height:180px;background:rgba(0,8,0,0.85);border:1px solid #A0E0FF40;z-index:490;pointer-events:none;overflow:hidden;display:none;';
+telemetryTerminal.style.cssText = 'position:fixed;bottom:60px;right:40px;width:320px;height:180px;background:rgba(0,8,0,0.85);border:1px solid #7496c940;z-index:490;pointer-events:none;overflow:hidden;display:none;';
 telemetryTerminal.innerHTML = `
-    <div class="crt-phosphor" style="padding:8px 12px;border-bottom:1px solid #A0E0FF30;font-size:11px;letter-spacing:1px;">[CONSCIOUSNESS_STREAM]</div>
+    <div class="crt-phosphor" style="padding:8px 12px;border-bottom:1px solid #7496c930;font-size:11px;letter-spacing:1px;">[CONSCIOUSNESS_STREAM]</div>
     <div id="telem-output" class="crt-phosphor-dim" style="padding:8px 12px;line-height:1.6;height:calc(100% - 30px);overflow:hidden;font-size:10px;"></div>
 `;
 document.body.appendChild(telemetryTerminal);
@@ -1868,7 +1867,7 @@ document.body.appendChild(progressBar);
 
 sections.forEach((_, i) => {
     const dot = document.createElement('div');
-    dot.style.cssText = 'width:8px;height:8px;border:1px solid #00ffcc;opacity:0.3;';
+    dot.style.cssText = 'width:8px;height:8px;border:1px solid #7496c9;opacity:0.3;';
     dot.id = `progress-dot-${i}`;
     progressBar.appendChild(dot);
 });
@@ -1923,7 +1922,7 @@ function activateSection(techIdx, legacyIdx) {
             barContainer.innerHTML = `
                 <span style="width:90px;">${label}</span>
                 <div style="flex:1;height:2px;background:rgba(135,233,15,0.15);position:relative;">
-                    <div class="telem-fill-${techIdx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#A0E0FF;transition:width 1s ease;"></div>
+                    <div class="telem-fill-${techIdx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#7496c9;transition:width 1s ease;"></div>
                 </div>
                 <span class="telem-value-${techIdx}-${j}" style="min-width:50px;text-align:right;">0.000</span>
             `;
@@ -1954,14 +1953,18 @@ function activateSection(techIdx, legacyIdx) {
     sections.forEach((_, i) => {
         const sectionDiv = document.getElementById(`section-${i}`);
         if (sectionDiv) {
-            sectionDiv.style.opacity = i === legacyIdx ? '1' : '0';
-            sectionDiv.style.transform = i === legacyIdx ? 'translateY(0)' : 'translateY(20px)';
+            const isActive = i === legacyIdx;
+            sectionDiv.style.opacity = isActive ? '1' : '0';
+            sectionDiv.style.transform = isActive ? 'translateY(0)' : 'translateY(20px)';
+            sectionDiv.style.pointerEvents = isActive ? 'auto' : 'none';
         }
     });
     
+    sectionsWrapper.style.pointerEvents = 'auto';
+    
     document.querySelectorAll('[id^="progress-dot-"]').forEach((el, i) => {
         el.style.opacity = i === legacyIdx ? '1' : '0.3';
-        el.style.background = i === legacyIdx ? '#00ffcc' : 'transparent';
+        el.style.background = i === legacyIdx ? '#7496c9' : 'transparent';
     });
     
     currentSection = techIdx;
@@ -2041,7 +2044,7 @@ cursorStyle.textContent = `
         display:inline-block;
         width:8px;
         height:16px;
-        background:#00ffcc;
+        background:#7496c9;
         animation:blink 1s step-end infinite;
         vertical-align:text-bottom;
         margin-left:2px;
@@ -2061,7 +2064,7 @@ sections.forEach((section, i) => {
     topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;';
 
     const titleEl = document.createElement('div');
-    titleEl.style.cssText = 'flex:0 0 50%;text-align:left;color:#fff;font-size:clamp(18px, 3vw, 36px);font-weight:bold;letter-spacing:-1px;line-height:0.9;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #A0E0FF, 0 0 20px rgba(135,233,15,0.5);';
+    titleEl.style.cssText = 'flex:0 0 50%;text-align:left;color:#fff;font-size:clamp(18px, 3vw, 36px);font-weight:bold;letter-spacing:-1px;line-height:0.9;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #7496c9, 0 0 20px rgba(135,233,15,0.5);';
     titleEl.innerHTML = section.title.replace(/ /g, '<br>');
     topRow.appendChild(titleEl);
 
@@ -2091,11 +2094,11 @@ sections.forEach((section, i) => {
             const row = document.createElement('div');
             row.style.cssText = 'display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:9px;width:100%;';
             row.innerHTML = `
-                <span style="color:#A0E0FF;width:70px;text-align:right;">${label}</span>
-                <div style="width:100px;height:2px;background:#A0E0FF30;position:relative;">
-                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#A0E0FF;transition:width 1s ease;"></div>
+                <span style="color:#7496c9;width:70px;text-align:right;">${label}</span>
+                <div style="width:100px;height:2px;background:#7496c930;position:relative;">
+                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#7496c9;transition:width 1s ease;"></div>
                 </div>
-                <span class="sec-telem-val-${i}-${j}" style="color:#A0E0FF;width:40px;text-align:left;">0.000</span>
+                <span class="sec-telem-val-${i}-${j}" style="color:#7496c9;width:40px;text-align:left;">0.000</span>
             `;
             sectionTelemetry.appendChild(row);
         });
@@ -2106,36 +2109,40 @@ sections.forEach((section, i) => {
     linkEl.href = section.link;
 
     linkEl.className = 'crt-phosphor';
-    linkEl.style.cssText = 'display:block;margin-left:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #A0E0FF;color:#A0E0FF;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);';
+    linkEl.style.cssText = 'display:block;margin-left:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #7496c9;color:#7496c9;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);position:relative;overflow:hidden;z-index:10;';
     linkEl.innerHTML = '> ACCEDER <span style="opacity:0.5;">></span>';
 
     const originalText = '> ACCEDER <span style="opacity:0.5;">></span>';
+    const loaderChars = ['▌', '▐', '█', '▓', '▒', '░', '>', '·'];
     
     linkEl.addEventListener('mouseenter', () => {
+        console.log('[HOVER] ACCEDER button - Section:', section.title);
         if (linkEl.loadingInterval) return;
         
-        let progress = 0;
-        const chars = '█▓░▒█░▓▒░█▓▒░';
+        let tick = 0;
         
+        linkEl.style.color = '#87ef0f';
+        linkEl.style.borderColor = '#87ef0f';
+        linkEl.style.background = 'rgba(135,233,15,0.2)';
+        
+        console.log('[LOADER] Starting for:', section.title);
         linkEl.loadingInterval = setInterval(() => {
-            progress++;
-            const barWidth = Math.floor((progress / 30) * 12);
-            const barStr = chars.substring(0, barWidth).padEnd(12, '░');
-            linkEl.innerHTML = `[${barStr}] ${Math.floor((progress / 30) * 100)}%`;
+            tick++;
+            const char = loaderChars[tick % loaderChars.length];
+            const bar = '█'.repeat(tick % 11).padEnd(10, '░');
+            const pct = Math.min(98, tick * 2);
+            linkEl.textContent = char + ' CARGANDO [' + bar + '] ' + pct + '%';
             
-            if (progress >= 30) {
-                clearInterval(linkEl.loadingInterval);
-                linkEl.loadingInterval = null;
-            }
-        }, 50);
-        
-        linkEl.style.background = 'rgba(135,233,15,0.15)';
+            if (tick % 10 === 0) console.log('[LOADER] tick:', tick, 'text:', linkEl.textContent);
+        }, 80);
     });
     linkEl.addEventListener('mouseleave', () => {
         if (linkEl.loadingInterval) {
             clearInterval(linkEl.loadingInterval);
             linkEl.loadingInterval = null;
         }
+        linkEl.style.color = '#7496c9';
+        linkEl.style.borderColor = '#7496c9';
         linkEl.style.background = 'rgba(0,0,0,0.3)';
         linkEl.innerHTML = originalText;
     });
@@ -2326,7 +2333,7 @@ let autoModeActiveScrolly = false;
 const scrollyAutoBtn = document.createElement('button');
 scrollyAutoBtn.textContent = '[AUTO]';
 scrollyAutoBtn.className = 'crt-phosphor';
-scrollyAutoBtn.style.cssText = 'position:fixed;top:30px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #A0E0FF;cursor:pointer;z-index:1001;letter-spacing:1px;';
+scrollyAutoBtn.style.cssText = 'position:fixed;top:30px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #7496c9;cursor:pointer;z-index:1001;letter-spacing:1px;';
 scrollyAutoBtn.addEventListener('click', () => {
     autoModeActiveScrolly = !autoModeActiveScrolly;
     scrollyAutoBtn.textContent = autoModeActiveScrolly ? '[RUN]' : '[AUTO]';
@@ -2443,17 +2450,17 @@ function animate() {
 const orbitControlsBtn = document.createElement('button');
 orbitControlsBtn.textContent = '[ORB]';
 orbitControlsBtn.className = 'crt-phosphor-dim';
-orbitControlsBtn.style.cssText = 'position:fixed;top:50px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #A0E0FF40;cursor:pointer;z-index:1001;letter-spacing:1px;';
+orbitControlsBtn.style.cssText = 'position:fixed;top:50px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #7496c940;cursor:pointer;z-index:1001;letter-spacing:1px;';
 orbitControlsBtn.addEventListener('click', () => {
     orbitControls.enabled = !orbitControls.enabled;
     if (orbitControls.enabled) {
         orbitControlsBtn.textContent = '[ORB*]';
         orbitControlsBtn.className = 'crt-phosphor';
-        orbitControlsBtn.style.borderColor = '#A0E0FF';
+        orbitControlsBtn.style.borderColor = '#7496c9';
     } else {
         orbitControlsBtn.textContent = '[ORB]';
         orbitControlsBtn.className = 'crt-phosphor-dim';
-        orbitControlsBtn.style.borderColor = '#A0E0FF40';
+        orbitControlsBtn.style.borderColor = '#7496c940';
     }
 });
 document.body.appendChild(orbitControlsBtn);

@@ -25,6 +25,11 @@
         })();
     </script>
     <style>
+        :root {
+            --color-primary: #98b2ea;
+            --color-dim: #6e85b3;
+            --color-primary-rgb: 152, 178, 234;
+        }
         body, html { margin: 0; padding: 0; overflow: hidden !important; background-color: #111; }
         #three-canvas { width: 100vw; height: 100vh; display: block; }
         
@@ -36,36 +41,36 @@
             font-family: 'Aroba Modern', sans-serif;
             font-size: 28px;
             font-weight: normal;
-            color: #A0E0FF;
+            color: var(--color-primary);
             text-transform: uppercase;
             letter-spacing: 90px;
             white-space: nowrap;
             padding-right: 45px;
             box-sizing: border-box;
             text-shadow: 
-                0 0 6px #A0E0FF,
-                0 0 12px rgba(160, 224, 255, 0.8),
-                0 0 24px rgba(160, 224, 255, 0.4);
+                0 0 6px var(--color-primary),
+                0 0 12px rgba(var(--color-primary-rgb), 0.8),
+                0 0 24px rgba(var(--color-primary-rgb), 0.4);
             z-index: 1000;
             pointer-events: none;
         }
         
         .crt-phosphor {
             font-family: 'VCR OSD Mono', monospace;
-            color: #A0E0FF;
+            color: var(--color-primary);
             text-shadow: 
-                0 0 2px #A0E0FF,
-                0 0 4px #A0E0FF,
-                0 0 8px rgba(160, 224, 255, 0.6),
-                0 0 16px rgba(160, 224, 255, 0.3);
+                0 0 2px var(--color-primary),
+                0 0 4px var(--color-primary),
+                0 0 8px rgba(var(--color-primary-rgb), 0.6),
+                0 0 16px rgba(var(--color-primary-rgb), 0.3);
         }
         
         .crt-phosphor-dim {
             font-family: 'VCR OSD Mono', monospace;
-            color: #70B8DD;
+            color: var(--color-dim);
             text-shadow: 
-                0 0 1px #70B8DD,
-                0 0 3px rgba(112, 184, 221, 0.5);
+                0 0 1px var(--color-dim),
+                0 0 3px rgba(90, 116, 153, 0.5);
         }
         
         .crt-scanlines {
