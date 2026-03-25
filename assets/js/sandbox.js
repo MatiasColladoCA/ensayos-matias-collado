@@ -1009,6 +1009,32 @@ systemLogSprite.position.set(55, -14, 111);
 systemLogSprite.renderOrder = 0;
 scene.add(systemLogSprite);
 
+// --- SYS VARIABLES SPRITE (RIGHT FACE) ---
+const sysSpriteCanvas = document.createElement('canvas');
+sysSpriteCanvas.width = 400;
+sysSpriteCanvas.height = 390;
+const sysSpriteCtx = sysSpriteCanvas.getContext('2d');
+
+const sysSpriteTexture = new THREE.CanvasTexture(sysSpriteCanvas);
+sysSpriteTexture.minFilter = THREE.LinearFilter;
+
+const sysSpriteMaterial = new THREE.MeshBasicMaterial({
+    map: sysSpriteTexture,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide
+});
+
+const sysSprite = new THREE.Mesh(
+    new THREE.PlaneGeometry(40, 39),
+    sysSpriteMaterial
+);
+// Posicionado en la cara derecha de la estructura (ajustando para que se vea de lado)
+sysSprite.position.set(80, -14, 20);
+sysSprite.rotation.y = Math.PI / 2;
+sysSprite.renderOrder = 0;
+scene.add(sysSprite);
+
 const systemLogLines = [];
 const maxLogLines = 10;
 let logScrollY = 0;
@@ -1086,6 +1112,47 @@ function renderSystemLog(time) {
     });
     
     systemLogTexture.needsUpdate = true;
+}
+
+function renderSysSprite(time) {
+    sysSpriteCtx.clearRect(0, 0, 400, 390);
+
+    sysSpriteCtx.fillStyle = '#A0E0FF';
+    sysSpriteCtx.font = 'bold 11px "VCR OSD Mono", monospace';
+    sysSpriteCtx.fillText('[SYS_VARIABLES_NODE]', 15, 24);
+
+    sysSpriteCtx.fillStyle = '#5a7499';
+    sysSpriteCtx.font = 'bold 9px "VCR OSD Mono", monospace';
+    sysSpriteCtx.fillText('// TOPOLOGY_STRUCTURE', 15, 55);
+
+    sysSpriteCtx.fillStyle = '#A0E0FF';
+    sysSpriteCtx.font = '9px "VCR OSD Mono", monospace';
+    
+    const isolation = instances.length > 0 ? instances[0].isolation : 0;
+    
+    sysSpriteCtx.fillText(`ISOLATION:    ${isolation.toFixed(3)}`, 15, 75);
+    sysSpriteCtx.fillText(`MACRO_SCALE:  ${params.macroScale.toFixed(3)}`, 15, 90);
+    sysSpriteCtx.fillText(`SPIKE_SCALE:  ${params.spikeScale.toFixed(3)}`, 15, 105);
+    sysSpriteCtx.fillText(`SPIKE_FREQ:   ${params.spikeFreq.toFixed(3)}`, 15, 120);
+    sysSpriteCtx.fillText(`DIST_OFFSET:  ${params.distOffset.toFixed(3)}`, 15, 135);
+
+    sysSpriteCtx.fillStyle = '#5a7499';
+    sysSpriteCtx.font = 'bold 9px "VCR OSD Mono", monospace';
+    sysSpriteCtx.fillText('// VERTEX_DISPLACEMENT', 15, 165);
+
+    sysSpriteCtx.fillStyle = '#A0E0FF';
+    sysSpriteCtx.font = '9px "VCR OSD Mono", monospace';
+    
+    sysSpriteCtx.fillText(`ORG_SPEED:    ${semMaterial.uniforms.uOrganicSpeed.value.toFixed(3)}`, 15, 185);
+    sysSpriteCtx.fillText(`ORG_SCALE:    ${semMaterial.uniforms.uOrganicScale.value.toFixed(3)}`, 15, 200);
+    sysSpriteCtx.fillText(`ORG_INTENS:   ${semMaterial.uniforms.uOrganicIntensity.value.toFixed(3)}`, 15, 215);
+
+    const dots = '.'.repeat(Math.floor(time * 5) % 5);
+    sysSpriteCtx.fillStyle = '#FF4444';
+    sysSpriteCtx.font = 'bold 8px "VCR OSD Mono", monospace';
+    sysSpriteCtx.fillText(`SYNCING${dots}`, 15, 245);
+
+    sysSpriteTexture.needsUpdate = true;
 }
 
 function syncMaterials() {
@@ -1198,7 +1265,7 @@ let targetOrganicIntensity = semMaterial.uniforms.uOrganicIntensity.value;
 const panel = document.createElement('div');
 panel.id = 'control-panel';
 panel.className = 'crt-scanlines';
-panel.style.cssText = 'position:fixed;top:10px;right:75px;font-family:"VCR OSD Mono",monospace;font-size:9px;background:rgba(0,8,0,0.95);padding:10px;border:1px solid #7496c940;z-index:1000;min-width:180px;max-height:95vh;overflow-y:auto;display:none;color:#7496c9;';
+panel.style.cssText = 'position:fixed;top:10px;right:75px;font-family:"VCR OSD Mono",monospace;font-size:9px;background:rgba(0,8,0,0.95);padding:10px;border:1px solid #7496c940;z-index:1000;min-width:180px;max-height:95vh;overflow-y:auto;display:none;color:#7496c9;pointer-events:none;';
 document.body.appendChild(panel);
 
 let sliderLabels2 = {};
@@ -2496,7 +2563,7 @@ function updateCubeCamera() {
 
 function animate() {
     requestAnimationFrame(animate);
-    
+
     const time = clock.getElapsedTime();
     semMaterial.uniforms.uTime.value = time;
     glitchPass.uniforms.uTime.value = time;
@@ -2505,7 +2572,7 @@ function animate() {
     updateTerminalLines(0.016, time);
     renderHudSprite();
     renderSystemLog(time);
-    
+    renderSysSprite(time);    
     const mouseParallaxStrength = 30;
     const targetX = targetCameraPos.x - mouseParallax.normalizedX * mouseParallaxStrength;
     const targetY = targetCameraPos.y + mouseParallax.normalizedY * mouseParallaxStrength;
