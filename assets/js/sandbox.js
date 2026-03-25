@@ -1442,8 +1442,8 @@ createToggle('HUD Telemetry', true, (val) => {
 
 const perfStats = document.createElement('div');
 perfStats.id = 'perf-stats';
-perfStats.className = 'crt-phosphor-dim';
-perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;background:rgba(0,8,0,0.85);padding:6px 10px;border:1px solid #7496c940;z-index:1001;pointer-events:none;';
+perfStats.className = 'crt-phosphor';
+perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;background:rgba(0,8,0,0.85);padding:6px 10px;border:1px solid #7496c940;z-index:1001;pointer-events:none;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
 document.body.appendChild(perfStats);
 
 let frameCount = 0;
@@ -1452,8 +1452,8 @@ let fps = 0;
 
 const instructions = document.createElement('div');
 instructions.id = 'instructions';
-instructions.className = 'crt-phosphor-dim';
-instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;background:rgba(0,8,0,0.85);padding:10px 20px;border:1px solid #7496c940;pointer-events:none;z-index:1000;';
+instructions.className = 'crt-phosphor';
+instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;background:rgba(0,8,0,0.85);padding:10px 20px;border:1px solid #7496c940;pointer-events:none;z-index:1000;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
 instructions.innerHTML = 'DRAG TO ORBIT | SCROLL TO NAVIGATE';
 document.body.appendChild(instructions);
 
@@ -2061,7 +2061,7 @@ sections.forEach((section, i) => {
     topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;';
 
     const titleEl = document.createElement('div');
-    titleEl.style.cssText = 'flex:0 0 50%;text-align:left;color:#fff;font-size:clamp(18px, 3vw, 36px);font-weight:bold;letter-spacing:-1px;line-height:0.9;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #7496c9, 0 0 20px rgba(135,233,15,0.5);';
+    titleEl.style.cssText = 'flex:0 0 50%;text-align:left;color:#fff;font-size:clamp(18px, 3vw, 36px);font-weight:bold;letter-spacing:-1px;line-height:0.9;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #98b2ea, 0 0 20px rgba(152,178,234,0.5), 0 0 30px rgba(152,178,234,0.3);';
     titleEl.innerHTML = section.title.replace(/ /g, '<br>');
     topRow.appendChild(titleEl);
 
@@ -2069,15 +2069,15 @@ sections.forEach((section, i) => {
     rightCol.style.cssText = 'flex:0 0 45%;text-align:right;';
 
     const subtitleEl = document.createElement('div');
-    subtitleEl.className = 'crt-phosphor-dim';
-    subtitleEl.style.cssText = 'font-size:9px;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;';
+    subtitleEl.className = 'crt-phosphor';
+    subtitleEl.style.cssText = 'font-size:9px;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
     subtitleEl.textContent = section.subtitle;
     rightCol.appendChild(subtitleEl);
 
     const typewriterContainer = document.createElement('div');
     typewriterContainer.id = `typewriter-${i}`;
     typewriterContainer.style.cssText = 'text-align:right;';
-    typewriterContainer.innerHTML = '<span id="typewriter-text-' + i + '" class="crt-phosphor-dim" style="font-size:11px;line-height:1.4;letter-spacing:1px;"></span><span class="cursor-blink"></span>';
+    typewriterContainer.innerHTML = '<span id="typewriter-text-' + i + '" class="crt-phosphor" style="font-size:11px;line-height:1.4;letter-spacing:1px;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);"></span><span class="cursor-blink"></span>';
     rightCol.appendChild(typewriterContainer);
     topRow.appendChild(rightCol);
     wrapper.appendChild(topRow);
@@ -2090,12 +2090,13 @@ sections.forEach((section, i) => {
         section.telemetry.forEach((label, j) => {
             const row = document.createElement('div');
             row.style.cssText = 'display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:9px;width:100%;';
+            const fixedValue = (Math.random() * 80 + 20).toFixed(1);
             row.innerHTML = `
-                <span style="color:#7496c9;width:70px;text-align:right;">${label}</span>
-                <div style="width:100px;height:2px;background:#7496c930;position:relative;">
-                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#7496c9;transition:width 1s ease;"></div>
+                <span style="color:#98b2ea;width:70px;text-align:right;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);">${label}</span>
+                <div style="width:100px;height:3px;background:#7496c920;position:relative;border-radius:1px;">
+                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:${fixedValue}%;background:#98b2ea;transition:width 1s ease;box-shadow:0 0 6px #98b2ea,0 0 12px rgba(152,178,234,0.5);border-radius:1px;"></div>
                 </div>
-                <span class="sec-telem-val-${i}-${j}" style="color:#7496c9;width:40px;text-align:left;">0.000</span>
+                <span class="sec-telem-val-${i}-${j}" style="color:#98b2ea;width:40px;text-align:left;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);">${fixedValue}</span>
             `;
             sectionTelemetry.appendChild(row);
         });
@@ -2106,7 +2107,7 @@ sections.forEach((section, i) => {
     linkEl.href = section.link;
 
     linkEl.className = 'crt-phosphor';
-    linkEl.style.cssText = 'display:block;margin-left:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #7496c9;color:#7496c9;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);position:relative;overflow:hidden;z-index:10;';
+    linkEl.style.cssText = 'display:block;margin-left:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #98b2ea;color:#98b2ea;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);position:relative;overflow:hidden;z-index:10;text-shadow:0 0 6px #98b2ea,0 0 12px rgba(152,178,234,0.5);box-shadow:0 0 6px rgba(152,178,234,0.3),inset 0 0 6px rgba(152,178,234,0.1);';
     linkEl.innerHTML = '> ACCEDER <span style="opacity:0.5;">></span>';
 
     const originalText = '> ACCEDER <span style="opacity:0.5;">></span>';
@@ -2121,18 +2122,23 @@ sections.forEach((section, i) => {
         linkEl.style.color = '#87ef0f';
         linkEl.style.borderColor = '#87ef0f';
         linkEl.style.background = 'rgba(135,233,15,0.2)';
+        linkEl.style.textShadow = '0 0 8px #87ef0f,0 0 16px rgba(135,233,15,0.6)';
+        linkEl.style.boxShadow = '0 0 8px rgba(135,233,15,0.5),inset 0 0 8px rgba(135,233,15,0.2)';
         
+        let tick = 0;
         linkEl.loadingInterval = setInterval(() => {
             progress += 2;
+            tick++;
             if (progress > 100) progress = 100;
             
+            const char = loaderChars[tick % loaderChars.length];
             const btnWidth = linkEl.offsetWidth;
             const charWidth = 8;
             const maxBarChars = Math.floor((btnWidth * 0.8) / charWidth);
             const barWidth = Math.floor((progress / 100) * maxBarChars);
             const bar = '█'.repeat(barWidth).padEnd(maxBarChars, '░');
             const padding = ' '.repeat(Math.floor((maxBarChars - barWidth) / 2));
-            linkEl.textContent = padding + bar + ' ' + progress + '%' + padding;
+            linkEl.textContent = padding + char + ' ' + bar + ' ' + progress + '%' + padding;
         }, 50);
     });
     linkEl.addEventListener('mouseleave', () => {
@@ -2140,9 +2146,11 @@ sections.forEach((section, i) => {
             clearInterval(linkEl.loadingInterval);
             linkEl.loadingInterval = null;
         }
-        linkEl.style.color = '#7496c9';
-        linkEl.style.borderColor = '#7496c9';
+        linkEl.style.color = '#98b2ea';
+        linkEl.style.borderColor = '#98b2ea';
         linkEl.style.background = 'rgba(0,0,0,0.3)';
+        linkEl.style.textShadow = '0 0 6px #98b2ea,0 0 12px rgba(152,178,234,0.5)';
+        linkEl.style.boxShadow = '0 0 6px rgba(152,178,234,0.3),inset 0 0 6px rgba(152,178,234,0.1)';
         linkEl.innerHTML = originalText;
     });
     linkEl.addEventListener('click', (e) => {
