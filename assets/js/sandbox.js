@@ -945,43 +945,50 @@ scene.add(hudSprite);
 
 function renderHudSprite() {
     const t = Date.now() * 0.001;
-    
     hudSpriteCtx.clearRect(0, 0, 400, 390);
     
     hudSpriteCtx.fillStyle = '#A0E0FF';
-    hudSpriteCtx.font = '8px "VCR OSD Mono", monospace';
-    hudSpriteCtx.fillText('[SECT-INFO]', 15, 24);
+    hudSpriteCtx.font = 'bold 9px "VCR OSD Mono", monospace';
+    hudSpriteCtx.fillText('[PSYCHOMETRIC_NODE_ACTIVE]', 15, 24);
     
     hudSpriteCtx.fillStyle = '#A0E0FF';
     hudSpriteCtx.font = '8px "VCR OSD Mono", monospace';
-    hudSpriteCtx.fillText(techSections[currentSection % 10]?.subtitle || '[NO_DATA]', 15, 40);
-    
-    const tech = techSections[currentSection % 10];
-    if (tech?.telemetry) {
-        hudSpriteCtx.fillStyle = '#70B8DD';
-        hudSpriteCtx.font = '7px "VCR OSD Mono", monospace';
-        tech.telemetry.forEach((label, i) => {
-            const val = ((Math.sin(t * 2 + i) * 0.5 + 0.5) * 999.999).toFixed(3);
-            hudSpriteCtx.fillText(`${label}: ${val}`, 15, 60 + i * 12);
-        });
-    }
-    
-    hudSpriteCtx.fillStyle = '#4088AA';
-    hudSpriteCtx.font = '7px "VCR OSD Mono", monospace';
-    hudSpriteCtx.fillText(`CPU: ${((Math.sin(t * 5) * 0.5 + 0.5) * 100).toFixed(1)}%`, 15, 110);
-    hudSpriteCtx.fillText(`MEM: ${((Math.sin(t * 3 + 1) * 0.5 + 0.5) * 8192).toFixed(0)}MB`, 15, 125);
-    hudSpriteCtx.fillText(`NET: ${((Math.sin(t * 4 + 2) * 0.5 + 0.5) * 1000).toFixed(0)}KB/s`, 15, 140);
-    hudSpriteCtx.fillText(`SYS: ${((Math.sin(t * 2.5) * 0.5 + 0.5) * 999).toFixed(0)}ms`, 15, 155);
-    hudSpriteCtx.fillText(`GPU: ${((Math.sin(t * 6 + 3) * 0.5 + 0.5) * 100).toFixed(1)}%`, 15, 170);
-    hudSpriteCtx.fillText(`DISK: ${((Math.sin(t * 1.5 + 4) * 0.5 + 0.5) * 100).toFixed(0)}%`, 15, 185);
-    hudSpriteCtx.fillText(`NET: ${((Math.sin(t * 3.5 + 5) * 0.5 + 0.5) * 500).toFixed(0)}K`, 15, 200);
-    hudSpriteCtx.fillText(`TEMP: ${((Math.sin(t * 2) * 0.5 + 0.5) * 85 + 15).toFixed(1)}°C`, 15, 215);
+    hudSpriteCtx.fillText(techSections[currentSection % 10]?.subtitle || '[EGO_BOUNDARY_DISSOLUTION]', 15, 40);
     
     hudSpriteCtx.fillStyle = '#70B8DD';
-    hudSpriteCtx.font = '7px "VCR OSD Mono", monospace';
-    hudSpriteCtx.fillText(techSections[currentSection % 10]?.description?.substring(0, 35) || '', 15, 240);
+    hudSpriteCtx.font = '8px "VCR OSD Mono", monospace';
     
-    hudSpriteCtx.fillText(`SECT: ${currentSection}/10`, 15, 260);
+    const epistemic = (Math.sin(t * 0.5) * Math.cos(t * 1.2) * 0.5 + 0.5) * 100;
+    const entropy = (Math.sin(t * 0.2) * 0.3 + 0.7) * 99;
+    const neuro = (Math.sin(t * 3.0) * 0.1 + 0.9) * 140;
+    const dialec = (Math.sin(t * 0.8 + 2) * 0.5 + 0.5) * 1000;
+    const somatic = (Math.sin(t * 0.1) * 0.5 + 0.5) * 100;
+
+    hudSpriteCtx.fillText(`EPISTEMIC_CERTAINTY: ${epistemic.toFixed(2)}%`, 15, 80);
+    hudSpriteCtx.fillText(`SOCIAL_ENTROPY_IDX:  ${entropy.toFixed(3)}Δ`, 15, 95);
+    hudSpriteCtx.fillText(`NEUROPLASTICITY:     ${neuro.toFixed(1)}Hz`, 15, 110);
+    hudSpriteCtx.fillText(`DIALECTIC_SYNTHESIS: ${dialec.toFixed(0)} rad/s`, 15, 125);
+    hudSpriteCtx.fillText(`SOMATIC_MUTATION:    ${somatic.toFixed(2)}%`, 15, 140);
+    hudSpriteCtx.fillText(`CORTISOL_SATURATION: ${((Math.sin(t * 1.5) * 0.5 + 0.5) * 85).toFixed(1)} ppm`, 15, 155);
+    hudSpriteCtx.fillText(`SILICATE_BONDING:    STABLE`, 15, 170);
+    
+    const stressLevel = (Math.sin(t * 0.3) * 0.5 + 0.5);
+    const barWidth = Math.floor(stressLevel * 20);
+    const stressBar = '[' + '='.repeat(barWidth) + ' '.repeat(20 - barWidth) + ']';
+    
+    if (stressLevel > 0.8) {
+        hudSpriteCtx.fillStyle = '#FF4444';
+        hudSpriteCtx.fillText(`SYSTEMIC_STRESS: ${stressBar} CRITICAL`, 15, 195);
+    } else {
+        hudSpriteCtx.fillStyle = '#4088AA';
+        hudSpriteCtx.fillText(`SYSTEMIC_STRESS: ${stressBar} NOMINAL`, 15, 195);
+    }
+
+    hudSpriteCtx.fillStyle = '#70B8DD';
+    hudSpriteCtx.font = '7px "VCR OSD Mono", monospace';
+    hudSpriteCtx.fillText(techSections[currentSection % 10]?.description?.substring(0, 35) || 'ANALYZING_BEHAVIORAL_PATTERNS...', 15, 230);
+    
+    hudSpriteCtx.fillText(`STRATUM: 0${currentSection}/10`, 15, 260);
     
     hudSpriteTexture.needsUpdate = true;
 }
@@ -1017,15 +1024,23 @@ let lastLogTime = 0;
 
 function addLogLine(currentTime = 0) {
     const templates = [
-        '> FPS: ' + fps + ' | MEM: ' + (performance.memory ? (performance.memory.usedJSHeapSize / 1048576).toFixed(1) : 'N/A') + 'MB',
-        '> TRIANGLES: ' + renderer.info.render.triangles + ' | CALLS: ' + renderer.info.render.calls,
-        '> TIME: ' + currentTime.toFixed(1) + 's | SCROLL: ' + scrollProgress.toFixed(2),
-        '> SECTION: ' + currentSection + ' | AUTO: ' + (autoModeActiveScrolly ? 'ON' : 'OFF'),
-        '> ORBIT: ' + (orbitControls.enabled ? 'ON' : 'OFF'),
-        '> STRUCTURE: ' + params.spikeScale.toFixed(1) + ' | FREQ: ' + params.spikeFreq.toFixed(1),
-        '> CAM: [' + camera.position.x.toFixed(0) + ', ' + camera.position.y.toFixed(0) + ', ' + camera.position.z.toFixed(0) + ']',
-        '> LIGHT: ' + coreLight.intensity + ' | MIRROR: ' + mirrorMaterial.envMapIntensity.toFixed(2)
+        '> COGNITIVE_DISSONANCE: DETECTED | COMPENSATING...',
+        '> MEMETIC_CONTAGION_RATE: ' + (Math.random() * 4 + 1).toFixed(2) + ' R0',
+        '> WARNING: MORAL_LATENCY EXCEEDS 400ms',
+        '> ENTITY_PROPAGATION: ' + Math.floor(Math.random() * 5000) + ' SYNAPSES FIRED',
+        '> TRUTH_VALUE_VARIANCE: ' + (Math.random() * 0.05).toFixed(4) + ' | RECALIBRATING',
+        '> RAMPANCY_STAGE: MELANCHOLIA | ' + currentTime.toFixed(1) + 's',
+        '> MACRO_STRUCTURE: ORGANIC_FUSION_IMMINENT',
+        '> COLLECTIVE_UNCONSCIOUS_DEPTH: ' + (Math.random() * 100).toFixed(1) + ' FATHOMS',
+        '> PANOPTICON_PRESSURE: ' + (Math.random() * 99).toFixed(1) + '%',
+        '> SIMULATION_BOUNDARY_INTEGRITY: COMPROMISED'
     ];
+    
+    if (Math.random() > 0.8) {
+        const hexDump = '> 0x' + Math.floor(Math.random()*16777215).toString(16).toUpperCase() + ' MEMORY_FAULT';
+        templates.push(hexDump);
+    }
+
     systemLogLines.push({
         text: templates[Math.floor(Math.random() * templates.length)],
         y: 180
@@ -1068,7 +1083,7 @@ function renderSystemLog(time) {
     
     systemLogCtx.fillStyle = '#A0E0FF';
     systemLogCtx.font = 'bold 8px "VCR OSD Mono", monospace';
-    systemLogCtx.fillText('[SYSTEM_LOG]', 10, 18);
+    systemLogCtx.fillText('[CONSCIOUSNESS_STREAM]', 10, 18);
     
     systemLogCtx.fillStyle = '#A0E0FF';
     systemLogCtx.font = '7px "VCR OSD Mono", monospace';
@@ -1721,7 +1736,7 @@ telemetryTerminal.id = 'telemetry-terminal';
 telemetryTerminal.className = 'crt-scanlines';
 telemetryTerminal.style.cssText = 'position:fixed;bottom:60px;right:40px;width:320px;height:180px;background:rgba(0,8,0,0.85);border:1px solid #A0E0FF40;z-index:490;pointer-events:none;overflow:hidden;display:none;';
 telemetryTerminal.innerHTML = `
-    <div class="crt-phosphor" style="padding:8px 12px;border-bottom:1px solid #A0E0FF30;font-size:11px;letter-spacing:1px;">[SYSTEM_LOG]</div>
+    <div class="crt-phosphor" style="padding:8px 12px;border-bottom:1px solid #A0E0FF30;font-size:11px;letter-spacing:1px;">[CONSCIOUSNESS_STREAM]</div>
     <div id="telem-output" class="crt-phosphor-dim" style="padding:8px 12px;line-height:1.6;height:calc(100% - 30px);overflow:hidden;font-size:10px;"></div>
 `;
 document.body.appendChild(telemetryTerminal);
