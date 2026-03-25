@@ -939,7 +939,7 @@ const hudSprite = new THREE.Mesh(
     new THREE.PlaneGeometry(40, 39),
     hudSpriteMaterial
 );
-hudSprite.position.set(-48, -14, 111);
+hudSprite.position.set(-48, -14, 106);
 hudSprite.renderOrder = 0;
 scene.add(hudSprite);
 
@@ -1967,11 +1967,6 @@ function activateSection(techIdx, legacyIdx) {
     currentSection = techIdx;
     
     cubeCameraDirty = true;
-    
-    const linkEl = document.querySelector(`#section-${legacyIdx} a.crt-phosphor`);
-    if (linkEl) {
-        showMagnetEffectForSection(linkEl);
-    }
 }
 
 function updateTypewriter(deltaTime) {
@@ -2114,31 +2109,40 @@ sections.forEach((section, i) => {
     linkEl.style.cssText = 'display:block;margin-left:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #A0E0FF;color:#A0E0FF;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);';
     linkEl.innerHTML = '> ACCEDER <span style="opacity:0.5;">></span>';
 
-    linkEl.dataset.hoverActive = 'false';
+    const originalText = '> ACCEDER <span style="opacity:0.5;">></span>';
+    
     linkEl.addEventListener('mouseenter', () => {
-        if (linkEl.dataset.hoverActive === 'true') return;
-        linkEl.dataset.hoverActive = 'true';
+        if (linkEl.loadingInterval) return;
         
-        const rect = linkEl.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        magnetEffect.donuts.push({
-            currentRadius: 20,
-            targetRadius: 1500,
-            linkEl: linkEl,
-            linkCenterX: centerX,
-            linkCenterY: centerY,
-            active: true
-        });
+        let progress = 0;
+        const chars = '█▓░▒█░▓▒░█▓▒░';
+        
+        linkEl.loadingInterval = setInterval(() => {
+            progress++;
+            const barWidth = Math.floor((progress / 30) * 12);
+            const barStr = chars.substring(0, barWidth).padEnd(12, '░');
+            linkEl.innerHTML = `[${barStr}] ${Math.floor((progress / 30) * 100)}%`;
+            
+            if (progress >= 30) {
+                clearInterval(linkEl.loadingInterval);
+                linkEl.loadingInterval = null;
+            }
+        }, 50);
+        
         linkEl.style.background = 'rgba(135,233,15,0.15)';
     });
     linkEl.addEventListener('mouseleave', () => {
-        linkEl.dataset.hoverActive = 'false';
+        if (linkEl.loadingInterval) {
+            clearInterval(linkEl.loadingInterval);
+            linkEl.loadingInterval = null;
+        }
         linkEl.style.background = 'rgba(0,0,0,0.3)';
+        linkEl.innerHTML = originalText;
     });
-    linkEl.addEventListener('click', () => {
+    linkEl.addEventListener('click', (e) => {
+        e.preventDefault();
         console.log('[LINK_CLICK] Section:', section.title, '| URL:', linkEl.href);
+        window.location.href = linkEl.href;
     });
     console.log('[SECTION_LINK] Index:', i, '| Title:', section.title, '| Link:', section.link);
     wrapper.appendChild(linkEl);
@@ -2154,246 +2158,14 @@ sections.forEach((section, i) => {
     };
 });
 
-const magnetEffect = {
-    container: null,
-    particles: [],
-    currentLinkEl: null,
-    mouseX: window.innerWidth / 2,
-    mouseY: window.innerHeight / 2,
+const mouseParallax = {
     normalizedX: 0,
-    normalizedY: 0,
-    maxDistance: 300,
-    particleCount: 0,
-    donuts: []
+    normalizedY: 0
 };
 
-function createMagnetEffectContainer() {
-    magnetEffect.container = document.createElement('div');
-    magnetEffect.container.id = 'magnet-effect';
-    magnetEffect.container.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 503;
-        overflow: hidden;
-    `;
-    document.body.appendChild(magnetEffect.container);
-}
-
-function createMagnetParticles(count) {
-    magnetEffect.container.innerHTML = '';
-    magnetEffect.particles = [];
-    magnetEffect.particleCount = count;
-    
-    magnetEffect.innerRing = document.createElement('div');
-    magnetEffect.innerRing.id = 'magnet-inner-ring';
-    magnetEffect.innerRing.style.cssText = `
-        position: absolute;
-        pointer-events: none;
-        opacity: 0;
-        z-index: 510;
-    `;
-    magnetEffect.container.appendChild(magnetEffect.innerRing);
-    
-    magnetEffect.outerDashedRing = document.createElement('div');
-    magnetEffect.outerDashedRing.id = 'magnet-outer-dashed';
-    magnetEffect.outerDashedRing.style.cssText = `
-        position: absolute;
-        pointer-events: none;
-        opacity: 0;
-        z-index: 510;
-    `;
-    magnetEffect.container.appendChild(magnetEffect.outerDashedRing);
-    
-    const platoText = 'μετὰ ταῦτα δή, εἶπον, ἀπείκασον τοιούτῳ πάθει τὴν ἡμετέραν φύσιν παιδείας τε πέρι καὶ ἀπαιδευσίας. ἰδὲ γὰρ ἀνθρώπους οἷον ἐν καταγείῳ οἰκήσει σπηλαιώδει ';
-    const words = platoText.repeat(8).trim().split(' ');
-    
-    magnetEffect.innerText = [];
-    const innerWordCount = 10;
-    for (let i = 0; i < innerWordCount; i++) {
-        const letter = document.createElement('div');
-        const angle = (Math.PI * 2 / innerWordCount) * i;
-        const wordIndex = i % words.length;
-        letter.textContent = words[wordIndex];
-        letter.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 11px;
-            font-family: 'Times New Roman', serif;
-            pointer-events: none;
-            text-shadow: 0 0 10px rgba(160, 224, 255, 1);
-            white-space: nowrap;
-            z-index: 515;
-        `;
-        magnetEffect.innerRing.appendChild(letter);
-        magnetEffect.innerText.push({ el: letter, baseAngle: angle });
-    }
-    
-    magnetEffect.outerText = [];
-    const outerWordCount = 15;
-    for (let i = 0; i < outerWordCount; i++) {
-        const letter = document.createElement('div');
-        const angle = (Math.PI * 2 / outerWordCount) * i;
-        const wordIndex = i % words.length;
-        letter.textContent = words[wordIndex];
-        letter.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            color: rgba(160, 224, 255, 0.85);
-            font-size: 9px;
-            font-family: 'Times New Roman', serif;
-            pointer-events: none;
-            white-space: nowrap;
-            z-index: 515;
-        `;
-        magnetEffect.outerDashedRing.appendChild(letter);
-        magnetEffect.outerText.push({ el: letter, baseAngle: angle });
-    }
-    
-    for (let i = 0; i < count; i++) {
-        const particle = document.createElement('div');
-        const isLine = Math.random() > 0.5;
-        const size = 20 + Math.random() * 40;
-        const delay = i * 0.15;
-        
-        particle.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            border: 1px solid #A0E0FF;
-            box-shadow: 0 0 15px rgba(160, 224, 255, 0.5);
-            ${isLine ? 
-                `width: ${size}px; height: 1px;` : 
-                `width: ${size}px; height: ${size}px; border-radius: 50%;`
-            }
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        `;
-        
-        magnetEffect.container.appendChild(particle);
-        magnetEffect.particles.push({
-            el: particle,
-            isLine: isLine,
-            baseSize: size,
-            angle: (Math.PI * 2 / count) * i + Math.random() * 0.5,
-            delay: delay,
-            currentX: 0,
-            currentY: 0,
-            targetX: 0,
-            targetY: 0,
-            baseX: 0,
-            baseY: 0,
-            glowPhase: Math.random() * Math.PI * 2
-        });
-    }
-}
-
-function updateMagnetParticles(deltaTime) {
-    if (magnetEffect.donuts.length === 0) return;
-    
-    if (!donutGlassPass) return;
-    
-    if (magnetEffect.donuts.length > 5) {
-        magnetEffect.donuts = magnetEffect.donuts.slice(-5);
-    }
-    
-    let innerValues = [];
-    let outerValues = [];
-    let centerXTotal = 0;
-    let centerYTotal = 0;
-    let activeCount = 0;
-    let newestDonut = null;
-    let newestRadius = 0;
-    
-    for (let i = magnetEffect.donuts.length - 1; i >= 0; i--) {
-        const donut = magnetEffect.donuts[i];
-        
-        if (!donut.active) continue;
-        
-        if (donut.currentRadius >= 1490) {
-            donut.active = false;
-            continue;
-        }
-        
-        donut.currentRadius += (donut.targetRadius - donut.currentRadius) * 0.3;
-        
-        if (donut.currentRadius > newestRadius) {
-            newestRadius = donut.currentRadius;
-            newestDonut = donut;
-        }
-        
-        const thickness = 150;
-        const outerR = donut.currentRadius + thickness / 2;
-        const innerR = Math.max(10, donut.currentRadius - thickness / 2);
-        
-        innerValues.push(innerR);
-        outerValues.push(outerR);
-        centerXTotal += donut.linkCenterX;
-        centerYTotal += donut.linkCenterY;
-        activeCount++;
-    }
-    
-    if (activeCount === 0) {
-        magnetEffect.donuts = [];
-        donutGlassPass.uniforms.uInner.value = 0;
-        donutGlassPass.uniforms.uOuter.value = 0;
-        return;
-    }
-    
-    if (newestDonut && activeCount > 1) {
-        donutGlassPass.uniforms.uMouse.value.set(newestDonut.linkCenterX, newestDonut.linkCenterY);
-        donutGlassPass.uniforms.uInner.value = newestDonut.currentRadius - 75;
-        donutGlassPass.uniforms.uOuter.value = newestDonut.currentRadius + 75;
-    } else {
-        donutGlassPass.uniforms.uMouse.value.set(centerXTotal / activeCount, centerYTotal / activeCount);
-        donutGlassPass.uniforms.uInner.value = Math.max(...innerValues) - 75;
-        donutGlassPass.uniforms.uOuter.value = Math.max(...outerValues) + 75;
-    }
-}
-
-function showMagnetEffectForSection(linkEl) {
-    magnetEffect.currentLinkEl = linkEl;
-    
-    const count = 1 + Math.floor(Math.random() * 4);
-    createMagnetParticles(count);
-    
-    magnetEffect.particles.forEach((particle, i) => {
-        setTimeout(() => {
-            particle.el.style.opacity = '0.3';
-            particle.currentX = window.innerWidth / 2;
-            particle.currentY = window.innerHeight / 2;
-            particle.baseX = particle.currentX;
-            particle.baseY = particle.currentY;
-        }, particle.delay * 1000);
-    });
-    
-    if (magnetEffect.innerRing) {
-        setTimeout(() => {
-            magnetEffect.innerRing.style.opacity = '0.6';
-        }, 200);
-    }
-    
-    if (magnetEffect.outerDashedRing) {
-        setTimeout(() => {
-            magnetEffect.outerDashedRing.style.opacity = '0.6';
-        }, 200);
-    }
-}
-
-createMagnetEffectContainer();
-
 document.addEventListener('mousemove', (e) => {
-    magnetEffect.mouseX = e.clientX;
-    magnetEffect.mouseY = e.clientY;
-    magnetEffect.normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
-    magnetEffect.normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
+    mouseParallax.normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseParallax.normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
 });
 
 let scrollProgress = 0;
@@ -2614,8 +2386,8 @@ function animate() {
     renderSystemLog(time);
     
     const mouseParallaxStrength = 30;
-    const targetX = targetCameraPos.x - magnetEffect.normalizedX * mouseParallaxStrength;
-    const targetY = targetCameraPos.y + magnetEffect.normalizedY * mouseParallaxStrength;
+    const targetX = targetCameraPos.x - mouseParallax.normalizedX * mouseParallaxStrength;
+    const targetY = targetCameraPos.y + mouseParallax.normalizedY * mouseParallaxStrength;
     camera.position.set(targetX, targetY, targetCameraPos.z);
     camera.lookAt(0, 0, 0);
     
