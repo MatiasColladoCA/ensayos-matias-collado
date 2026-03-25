@@ -1438,7 +1438,7 @@ createToggle('HUD Telemetry', true, (val) => {
 const perfStats = document.createElement('div');
 perfStats.id = 'perf-stats';
 perfStats.className = 'crt-phosphor';
-perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;background:rgba(0,8,0,0.85);padding:6px 10px;border:1px solid #7496c940;z-index:1001;pointer-events:none;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
+perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;z-index:1001;pointer-events:none;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
 document.body.appendChild(perfStats);
 
 let frameCount = 0;
@@ -1448,19 +1448,49 @@ let fps = 0;
 const instructions = document.createElement('div');
 instructions.id = 'instructions';
 instructions.className = 'crt-phosphor';
-instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;background:rgba(0,8,0,0.85);padding:10px 20px;border:1px solid #7496c940;pointer-events:none;z-index:1000;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
+instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;pointer-events:none;z-index:1000;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
 instructions.innerHTML = 'DRAG TO ORBIT | SCROLL TO NAVIGATE';
 document.body.appendChild(instructions);
+
+const bottomControls = document.createElement('div');
+bottomControls.style.cssText = 'position:fixed;bottom:20px;right:20px;display:flex;gap:10px;z-index:1001;';
+document.body.appendChild(bottomControls);
 
 const toggleBtn = document.createElement('button');
 toggleBtn.textContent = '[SYS]';
 toggleBtn.id = 'toggle-btn';
 toggleBtn.className = 'crt-phosphor';
-toggleBtn.style.cssText = 'position:fixed;top:10px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #7496c9;cursor:pointer;z-index:1001;letter-spacing:1px;';
+toggleBtn.style.cssText = 'font-size:9px;cursor:pointer;letter-spacing:1px;color:#98b2ea;text-shadow:0 0 4px #98b2ea;background:none;border:none;padding:0;';
 toggleBtn.addEventListener('click', () => {
     panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 });
-document.body.appendChild(toggleBtn);
+bottomControls.appendChild(toggleBtn);
+
+const scrollyAutoBtn = document.createElement('button');
+scrollyAutoBtn.textContent = '[AUTO]';
+scrollyAutoBtn.className = 'crt-phosphor';
+scrollyAutoBtn.style.cssText = 'font-size:9px;cursor:pointer;letter-spacing:1px;color:#98b2ea;text-shadow:0 0 4px #98b2ea;background:none;border:none;padding:0;';
+scrollyAutoBtn.addEventListener('click', () => {
+    autoModeActiveScrolly = !autoModeActiveScrolly;
+    scrollyAutoBtn.textContent = autoModeActiveScrolly ? '[RUN]' : '[AUTO]';
+});
+bottomControls.appendChild(scrollyAutoBtn);
+
+const orbitControlsBtn = document.createElement('button');
+orbitControlsBtn.textContent = '[ORB]';
+orbitControlsBtn.className = 'crt-phosphor';
+orbitControlsBtn.style.cssText = 'font-size:9px;cursor:pointer;letter-spacing:1px;color:#98b2ea;text-shadow:0 0 4px #98b2ea;background:none;border:none;padding:0;';
+orbitControlsBtn.addEventListener('click', () => {
+    orbitControls.enabled = !orbitControls.enabled;
+    if (orbitControls.enabled) {
+        orbitControlsBtn.textContent = '[ORB*]';
+        orbitControlsBtn.style.borderColor = '#7496c9';
+    } else {
+        orbitControlsBtn.textContent = '[ORB]';
+        orbitControlsBtn.style.borderColor = '#7496c940';
+    }
+});
+bottomControls.appendChild(orbitControlsBtn);
 
 const waypoints = [
     { position: new THREE.Vector3(0, 0, 180), target: new THREE.Vector3(0, 0, 0), section: 0 },
@@ -1757,28 +1787,6 @@ hudUI.id = 'hud-container';
 hudUI.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:500;font-family:"JetBrains Mono","Fira Code",monospace;opacity:0;transition:opacity 0.5s ease;';
 document.body.appendChild(hudUI);
 
-const cornerMarkers = document.createElement('div');
-cornerMarkers.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:501;';
-cornerMarkers.innerHTML = `
-    <div style="position:absolute;top:16px;left:16px;color:#7496c9;font-family:'JetBrains Mono',monospace;font-size:11px;">
-        <span style="color:#7496c9;">┌─</span><span style="color:#333;">────────────────────</span><span style="color:#7496c9;">─┐</span>
-    </div>
-    <div style="position:absolute;top:16px;right:16px;color:#7496c9;font-family:'JetBrains Mono',monospace;font-size:11px;">
-        <span style="color:#7496c9;">┌─</span><span style="color:#333;">────────────────────</span><span style="color:#7496c9;">─┐</span>
-    </div>
-    <div style="position:absolute;bottom:16px;left:16px;color:#7496c9;font-family:'JetBrains Mono',monospace;font-size:11px;">
-        <span style="color:#7496c9;">└─</span><span style="color:#333;">────────────────────</span><span style="color:#7496c9;">─┘</span>
-    </div>
-    <div style="position:absolute;bottom:16px;right:16px;color:#7496c9;font-family:'JetBrains Mono',monospace;font-size:11px;">
-        <span style="color:#7496c9;">└─</span><span style="color:#333;">────────────────────</span><span style="color:#7496c9;">─┘</span>
-    </div>
-    <div style="position:absolute;top:50%;left:8px;transform:translateY(-50%);color:#7496c9;font-size:20px;font-family:'JetBrains Mono',monospace;">│</div>
-    <div style="position:absolute;top:50%;right:8px;transform:translateY(-50%);color:#7496c9;font-size:20px;font-family:'JetBrains Mono',monospace;">│</div>
-    <div style="position:absolute;left:50%;top:8px;transform:translateX(-50%);color:#7496c9;font-size:20px;font-family:'JetBrains Mono',monospace;">─</div>
-    <div style="position:absolute;left:50%;bottom:8px;transform:translateX(-50%);color:#7496c9;font-size:20px;font-family:'JetBrains Mono',monospace;">─</div>
-`;
-document.body.appendChild(cornerMarkers);
-
 const telemetryTerminal = document.createElement('div');
 telemetryTerminal.id = 'telemetry-terminal';
 telemetryTerminal.className = 'crt-scanlines';
@@ -1843,7 +1851,7 @@ const telemMessages = [
     'EASE_FUNCTION: CUBIC_INOUT',
     'BEZIER_CTRL_PTS: COMPUTED',
     'GLITCH_COOLDOWN: ' + (Math.random() * 5 + 5).toFixed(1) + 's',
-    'TYPEWRITER_SPEED: 0.03',
+    'TYPEWRITER_SPEED: 0.015',
     'PROGRESS_DOTS: 5 ACTIVE',
     'HUD_OPACITY: 1.0',
     'HUD_Z_INDEX: 504',
@@ -1911,12 +1919,12 @@ function updateTelemetryTerminal(deltaTime) {
 
 const progressBar = document.createElement('div');
 progressBar.id = 'progress-indicator';
-progressBar.style.cssText = 'position:fixed;top:50px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:502;';
+progressBar.style.cssText = 'position:fixed;top:35px;left:50%;transform:translateX(-50%);display:flex;gap:40px;z-index:502;';
 document.body.appendChild(progressBar);
 
 sections.forEach((_, i) => {
     const dot = document.createElement('div');
-    dot.style.cssText = 'width:8px;height:8px;border:1px solid #7496c9;opacity:0.3;';
+    dot.style.cssText = 'width:5px;height:5px;border:1px solid #7496c9;border-radius:50%;opacity:0.3;';
     dot.id = `progress-dot-${i}`;
     progressBar.appendChild(dot);
 });
@@ -1928,7 +1936,7 @@ let glitchIntensity = 0;
 let lastScrollY = 0;
 let scrollVelocity = 0;
 let typewriterTimer = 0;
-const TYPEWRITER_SPEED = 0.03;
+const TYPEWRITER_SPEED = 0.015;
 
 const hudTelemetry = document.createElement('div');
 hudTelemetry.id = 'hud-telemetry';
@@ -2108,13 +2116,13 @@ sections.forEach((section, i) => {
     sectionDiv.id = `section-${i}`;
 
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:40%;';
+    wrapper.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:32%;display:flex;flex-direction:column;justify-content:flex-start;padding-top:20px;';
 
     const topRow = document.createElement('div');
-    topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;';
+    topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;';
 
     const titleEl = document.createElement('div');
-    titleEl.style.cssText = 'flex:0 0 50%;text-align:left;color:#fff;font-size:clamp(18px, 3vw, 36px);font-weight:bold;letter-spacing:-1px;line-height:0.9;font-family:"VCR OSD Mono",monospace;text-shadow:0 0 10px #98b2ea, 0 0 20px rgba(152,178,234,0.5), 0 0 30px rgba(152,178,234,0.3);';
+    titleEl.style.cssText = 'flex:0 0 50%;text-align:left;color:#fff;font-size:clamp(20px, 3.2vw, 38px);font-weight:bold;letter-spacing:2px;line-height:1.2;font-family:ROTHEFIGHT,sans-serif !important;text-shadow:0 0 10px #98b2ea, 0 0 20px rgba(152,178,234,0.5), 0 0 30px rgba(152,178,234,0.3);';
     titleEl.innerHTML = section.title.replace(/ /g, '<br>');
     topRow.appendChild(titleEl);
 
@@ -2136,7 +2144,7 @@ sections.forEach((section, i) => {
     wrapper.appendChild(topRow);
 
     const sectionTelemetry = document.createElement('div');
-    sectionTelemetry.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:flex-start;margin-top:24px;';
+    sectionTelemetry.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:flex-start;margin-top:24px;margin-bottom:30px;';
     sectionTelemetry.id = `section-telem-${i}`;
     
     if (section.telemetry) {
@@ -2160,7 +2168,7 @@ sections.forEach((section, i) => {
     linkEl.href = section.link;
 
     linkEl.className = 'crt-phosphor';
-    linkEl.style.cssText = 'display:block;margin-left:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #98b2ea;color:#98b2ea;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);position:relative;overflow:hidden;z-index:10;text-shadow:0 0 6px #98b2ea,0 0 12px rgba(152,178,234,0.5);box-shadow:0 0 6px rgba(152,178,234,0.3),inset 0 0 6px rgba(152,178,234,0.1);';
+    linkEl.style.cssText = 'display:block;margin-top:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #98b2ea;color:#98b2ea;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);position:relative;overflow:hidden;z-index:10;text-shadow:0 0 6px #98b2ea,0 0 12px rgba(152,178,234,0.5);box-shadow:0 0 6px rgba(152,178,234,0.3),inset 0 0 6px rgba(152,178,234,0.1);width:100%;box-sizing:border-box;';
     linkEl.innerHTML = '> ACCEDER <span style="opacity:0.5;">></span>';
 
     const originalText = '> ACCEDER <span style="opacity:0.5;">></span>';
@@ -2403,18 +2411,6 @@ sections.forEach((s, i) => console.log(`[INIT] Section ${i}: ${s.title}`));
 activateSection(0);
 
 let autoModeActiveScrolly = false;
-const scrollyAutoBtn = document.createElement('button');
-scrollyAutoBtn.textContent = '[AUTO]';
-scrollyAutoBtn.className = 'crt-phosphor';
-scrollyAutoBtn.style.cssText = 'position:fixed;top:30px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #7496c9;cursor:pointer;z-index:1001;letter-spacing:1px;';
-scrollyAutoBtn.addEventListener('click', () => {
-    autoModeActiveScrolly = !autoModeActiveScrolly;
-    scrollyAutoBtn.textContent = autoModeActiveScrolly ? '[RUN]' : '[AUTO]';
-    if (autoModeActiveScrolly) {
-        autoNavigate();
-    }
-});
-document.body.appendChild(scrollyAutoBtn);
 
 let navTimeline = null;
 
@@ -2519,24 +2515,6 @@ function animate() {
         perfStats.textContent = `FPS: ${fps} | MEM: ${mem}MB | DRAWS: ${renderer.info.render.calls}`;
     }
 }
-
-const orbitControlsBtn = document.createElement('button');
-orbitControlsBtn.textContent = '[ORB]';
-orbitControlsBtn.className = 'crt-phosphor-dim';
-orbitControlsBtn.style.cssText = 'position:fixed;top:50px;right:10px;font-size:9px;background:rgba(0,8,0,0.9);padding:5px 8px;border:1px solid #7496c940;cursor:pointer;z-index:1001;letter-spacing:1px;';
-orbitControlsBtn.addEventListener('click', () => {
-    orbitControls.enabled = !orbitControls.enabled;
-    if (orbitControls.enabled) {
-        orbitControlsBtn.textContent = '[ORB*]';
-        orbitControlsBtn.className = 'crt-phosphor';
-        orbitControlsBtn.style.borderColor = '#7496c9';
-    } else {
-        orbitControlsBtn.textContent = '[ORB]';
-        orbitControlsBtn.className = 'crt-phosphor-dim';
-        orbitControlsBtn.style.borderColor = '#7496c940';
-    }
-});
-document.body.appendChild(orbitControlsBtn);
 
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;

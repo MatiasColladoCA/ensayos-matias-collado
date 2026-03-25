@@ -22,6 +22,15 @@
             link.type = 'font/woff2';
             link.crossOrigin = 'anonymous';
             document.head.appendChild(link);
+            var rotUrl = prefix + '/fonts/ROTHEFIGHT.woff2';
+            var rotLink = document.createElement('link');
+            rotLink.rel = 'preload';
+            rotLink.href = rotUrl;
+            rotLink.as = 'font';
+            rotLink.type = 'font/woff2';
+            rotLink.crossOrigin = 'anonymous';
+            document.head.appendChild(rotLink);
+            style.textContent += '@font-face{font-family:"ROTHEFIGHT";src:url("' + rotUrl + '") format("woff2");font-weight:normal;font-style:normal;font-display:swap;}';
         })();
     </script>
     <style>
@@ -35,11 +44,11 @@
         
         .site-title {
             position: fixed;
-            top: 60px;
+            top: 70px;
             left: 50%;
             transform: translateX(-45%);
             font-family: 'Aroba Modern', sans-serif;
-            font-size: 28px;
+            font-size: 22px;
             font-weight: normal;
             color: var(--color-primary);
             text-transform: uppercase;

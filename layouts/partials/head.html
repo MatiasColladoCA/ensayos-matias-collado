@@ -18,7 +18,15 @@
     {{ partialCached "head/css.html" . -}}
     {{ partial "head/css/inline.html" . -}}
     {{ if eq .Type "test" }}
-    <link rel="preload" href="/fonts/ArobaModernDemo-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/ROTHEFIGHT.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <style>
+        @font-face {
+            font-family: 'ROTHEFIGHT';
+            src: url('/fonts/ROTHEFIGHT.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
