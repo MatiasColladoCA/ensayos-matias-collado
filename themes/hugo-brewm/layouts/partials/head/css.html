@@ -97,9 +97,7 @@
 {{- if eq hugo.Environment "development" }}
     <link rel="stylesheet" href="{{ $hugo_brewm.Permalink }}">
 {{- else }}
-    {{- with $hugo_brewm | fingerprint "sha256" }}
-        <link rel="stylesheet" href="{{ $hugo_brewm.Permalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
-    {{- end }}
+    <link rel="stylesheet" href="{{ $hugo_brewm.Permalink }}">
 {{- end }}
 
 {{- /*---------------------- end of css.html -----------------------*/}}
@@ -130,8 +128,6 @@
     {{- if eq hugo.Environment "development" }}
         <link href="{{ $verbatimSty.Permalink }}" rel="stylesheet" type="text/css">
     {{- else }}
-        {{- with $verbatimSty | fingerprint }}
-            <link href="{{ $verbatimSty.Permalink }}" rel="stylesheet" type="text/css" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
-        {{- end }}
+        <link href="{{ $verbatimSty.Permalink }}" rel="stylesheet" type="text/css">
     {{- end }}
 {{- end }}

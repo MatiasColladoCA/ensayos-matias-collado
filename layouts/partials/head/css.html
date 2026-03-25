@@ -2,7 +2,6 @@
 
 {{ "<!-- Font Awesome -->" | safeHTML }}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
       crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- Google Fonts modfont-->
@@ -116,9 +115,7 @@
 {{- if eq hugo.Environment "development" }}
     <link rel="stylesheet" href="{{ $hugo_brewm.Permalink }}">
 {{- else }}
-    {{- with $hugo_brewm | fingerprint "sha256" }}
-        <link rel="stylesheet" href="{{ $hugo_brewm.Permalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
-    {{- end }}
+    <link rel="stylesheet" href="{{ $hugo_brewm.Permalink }}">
 {{- end }}
 
 {{- /*---------------------- end of css.html -----------------------*/}}
@@ -162,8 +159,6 @@
     {{- if eq hugo.Environment "development" }}
         <link href="{{ $verbatimSty.Permalink }}" rel="stylesheet" type="text/css">
     {{- else }}
-        {{- with $verbatimSty | fingerprint }}
-            <link href="{{ $verbatimSty.Permalink }}" rel="stylesheet" type="text/css" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
-        {{- end }}
+        <link href="{{ $verbatimSty.Permalink }}" rel="stylesheet" type="text/css">
     {{- end }}
 {{- end }}

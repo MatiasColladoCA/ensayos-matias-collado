@@ -13,20 +13,16 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-function getSitePrefix() {
-    const pathParts = window.location.pathname.split('/').filter(p => p.length > 0);
-    const indexOfTest = pathParts.indexOf('test');
-    if (indexOfTest !== -1) {
-        return '/' + pathParts.slice(0, indexOfTest).join('/') + '/';
-    }
-    const indexOfSandbox = pathParts.indexOf('sandbox');
-    if (indexOfSandbox !== -1) {
-        return '/' + pathParts.slice(0, indexOfSandbox).join('/') + '/';
-    }
-    return '/';
-}
+const sitePrefix = (function() {
+    const path = window.location.pathname;
+    const lastSlash = path.lastIndexOf('/');
+    const basePath = lastSlash > 0 ? path.substring(0, lastSlash + 1) : '/';
+    return basePath === '/' ? '/' : basePath;
+})();
 
-const sitePrefix = getSitePrefix();
+function buildUrl(path) {
+    return sitePrefix + path;
+}
 console.log('[SITE_PREFIX] Detected:', sitePrefix);
 
 const CRT_COLOR = {
@@ -1489,35 +1485,35 @@ const sections = [
         title: 'SOBRE ESTE PROYECTO',
         subtitle: 'PRESENTACIÓN',
         content: 'Espacio de reflexión y aprendizaje donde comparto investigaciones, intuiciones y pensamientos sobre ciencia, filosofía, psicología y tecnología.',
-        link: sitePrefix + 'about/presentacion/',
+        link: buildUrl('about/presentacion/'),
         telemetry: ['RUNTIME', 'POSTS_COUNT', 'UPDATES']
     },
     {
         title: 'REGISTRO DE CAMBIOS',
         subtitle: 'CHANGELOG',
         content: 'Historial cronológico de modificaciones, correcciones y mejoras realizadas en los artículos. Transparencia en la evolución del pensamiento.',
-        link: sitePrefix + 'changelog/',
+        link: buildUrl('changelog/'),
         telemetry: ['REVISIONS', 'EDIT_COUNT', 'VERSIONS']
     },
     {
         title: 'ENSAYOS',
         subtitle: 'INVESTIGACIONES',
         content: 'Reflexiones profundas y exhaustivas sobre temas que invitan a comprender el mundo y la mente humana. Conocimiento como recurso valioso.',
-        link: sitePrefix + 'ensayos/',
+        link: buildUrl('ensayos/'),
         telemetry: ['ESSAYS', 'READ_TIME', 'COMPLEXITY']
     },
     {
         title: 'OTRAS IDEAS',
         subtitle: 'PENSAMIENTOS SIMPLES',
         content: 'Ideas más digeribles y directas. Críticas, recomendaciones y guías sobre diversos temas sin la profundidad de un ensayo completo.',
-        link: sitePrefix + 'otras-ideas/',
+        link: buildUrl('otras-ideas/'),
         telemetry: ['IDEAS', 'CATEGORIES', 'BREVITY']
     },
     {
         title: 'RECURSOS',
         subtitle: 'BIBLIOTECA',
         content: 'Colección de apuntes, aforismos y materiales de referencia sobre filosofía de la ciencia y otras áreas del conocimiento.',
-        link: sitePrefix + 'recursos/',
+        link: buildUrl('recursos/'),
         telemetry: ['BOOKS', 'NOTES', 'REFERENCES']
     }
 ];
