@@ -1147,12 +1147,7 @@ function bakeStructureWithWorker(callback) {
     const worker = new Worker('./js/marching-cubes-worker.js');
     
     worker.onmessage = function(e) {
-        if (e.data.type === 'progress') {
-            const statusEl = document.getElementById('loading-status');
-            const barEl = document.getElementById('loading-bar');
-            if (statusEl) statusEl.textContent = e.data.message;
-            if (barEl) barEl.style.width = (e.data.progress * 100) + '%';
-        } else if (e.data.type === 'complete') {
+        if (e.data.type === 'complete') {
             const field = e.data.field;
             
             const effect = instances[0];
@@ -1689,14 +1684,72 @@ document.head.appendChild(glitchStyle);
 
 const loadingOverlay = document.createElement('div');
 loadingOverlay.id = 'loading-overlay';
-loadingOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(3,3,3,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.8s ease;font-family:"JetBrains Mono",monospace;';
-loadingOverlay.innerHTML = `
-    <div style="color:#7496c9;font-size:14px;letter-spacing:4px;margin-bottom:20px;">[CALCULATING TOPOLOGY]</div>
-    <div id="loading-status" style="color:#5a8a5a;font-size:12px;">INITIALIZING WORKER...</div>
-    <div style="width:200px;height:2px;background:#1a1a1a;margin-top:16px;position:relative;">
-        <div id="loading-bar" style="position:absolute;top:0;left:0;height:100%;width:0%;background:linear-gradient(90deg,#7496c9,#ff00ff);transition:width 0.3s ease;"></div>
-    </div>
-`;
+loadingOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#030303;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.8s ease;font-family:"JetBrains Mono",monospace;overflow:hidden;';
+
+const ditherCanvas = document.createElement('canvas');
+ditherCanvas.width = 200;
+ditherCanvas.height = 200;
+ditherCanvas.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.15;pointer-events:none;';
+const ditherCtx = ditherCanvas.getContext('2d');
+const ditherChars = ' .:-=+*#%@';
+function drawDither() {
+    ditherCtx.fillStyle = '#030303';
+    ditherCtx.fillRect(0, 0, 200, 200);
+    for (let y = 0; y < 200; y += 4) {
+        for (let x = 0; x < 200; x += 4) {
+            const noise = Math.random();
+            const char = ditherChars[Math.floor(noise * ditherChars.length)];
+            ditherCtx.fillStyle = `rgba(152, 178, 234, ${noise * 0.3})`;
+            ditherCtx.font = '6px monospace';
+            ditherCtx.fillText(char, x, y);
+        }
+    }
+    requestAnimationFrame(drawDither);
+}
+drawDither();
+loadingOverlay.appendChild(ditherCanvas);
+
+const loaderChars = ['▌', '▐', '█', '▓', '▒', '░', '>', '·'];
+let loaderTick = 0;
+const loaderText = document.createElement('div');
+loaderText.style.cssText = 'color:#98b2ea;font-size:14px;letter-spacing:4px;margin-bottom:30px;text-shadow:0 0 10px #98b2ea,0 0 20px rgba(152,178,234,0.6),0 0 30px rgba(152,178,234,0.3);';
+loadingOverlay.appendChild(loaderText);
+
+const loaderBar = document.createElement('div');
+loaderBar.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:12px;color:#98b2ea;text-shadow:0 0 6px #98b2ea,0 0 12px rgba(152,178,234,0.5);letter-spacing:2px;';
+loadingOverlay.appendChild(loaderBar);
+
+let loaderProgress = 0;
+const loaderSpeeds = [0.5, 1.2, 0.3, 1.8, 0.6, 2.0, 0.4, 2.5, 0.5, 3.0, 0.4, 2.2, 0.5, 3.5, 0.3, 2.8, 0.6, 4.0, 0.4, 2.5, 0.5, 3.5, 0.3, 2.0, 0.4, 3.0, 0.5, 4.5, 0.3, 2.2, 0.4, 3.8, 0.5, 3.5, 0.4, 4.2, 0.3, 2.5, 0.4, 3.0, 0.5, 4.0, 0.4, 3.5, 0.3, 2.8, 0.4, 3.2, 0.5, 5.0, 0.4, 3.0, 0.3, 2.5, 0.4, 3.5, 0.5, 4.2, 0.3, 2.0, 0.5, 3.8, 0.4, 4.5, 0.3, 1.8, 0.4, 2.5, 0.5, 3.0, 0.4, 2.2, 0.3, 1.5, 0.4, 1.2, 0.5, 0.8];
+let speedIdx = 0;
+let loaderStartTime = null;
+const LOADER_DURATION = 2000;
+function updateLoaderText(timestamp) {
+    if (!loaderStartTime) loaderStartTime = timestamp;
+    const elapsed = timestamp - loaderStartTime;
+    const progress = Math.min(elapsed / LOADER_DURATION, 1);
+    
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+    loaderProgress = easeOut * 100;
+    
+    const noise = (Math.random() - 0.5) * 8;
+    loaderProgress = Math.max(0, Math.min(100, loaderProgress + noise * (1 - progress)));
+    
+    speedIdx = Math.floor(elapsed / 80);
+    
+    const idx = Math.floor(loaderTick / 12) % 4;
+    const dots = '.'.repeat(idx + 1);
+    loaderText.textContent = `[CALCULATING TOPOLOGY${dots}]`;
+    
+    const char = loaderChars[loaderTick % loaderChars.length];
+    const barLen = 25;
+    const filled = Math.floor((Math.min(loaderProgress, 100) / 100) * barLen);
+    const bar = '█'.repeat(filled).padEnd(barLen, '░');
+    loaderBar.textContent = `${char} COMPUTING [${bar}] ${Math.floor(loaderProgress)}%`;
+    
+    requestAnimationFrame(updateLoaderText);
+}
+updateLoaderText();
 document.body.appendChild(loadingOverlay);
 
 const hudUI = document.createElement('div');
@@ -2117,7 +2170,8 @@ sections.forEach((section, i) => {
         console.log('[HOVER] ACCEDER button - Section:', section.title, '| active:', linkEl.style.pointerEvents);
         if (linkEl.loadingInterval) return;
         
-        let progress = 0;
+        let hoverStartTime = null;
+        const HOVER_DURATION = 3000;
         
         linkEl.style.color = '#87ef0f';
         linkEl.style.borderColor = '#87ef0f';
@@ -2125,20 +2179,26 @@ sections.forEach((section, i) => {
         linkEl.style.textShadow = '0 0 8px #87ef0f,0 0 16px rgba(135,233,15,0.6)';
         linkEl.style.boxShadow = '0 0 8px rgba(135,233,15,0.5),inset 0 0 8px rgba(135,233,15,0.2)';
         
-        let tick = 0;
         linkEl.loadingInterval = setInterval(() => {
-            progress += 2;
-            tick++;
-            if (progress > 100) progress = 100;
+            if (!hoverStartTime) hoverStartTime = Date.now();
+            const elapsed = Date.now() - hoverStartTime;
+            const progress = Math.min(elapsed / HOVER_DURATION, 1);
             
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            let currentProgress = easeOut * 100;
+            
+            const noise = (Math.random() - 0.5) * 8;
+            currentProgress = Math.max(0, Math.min(100, currentProgress + noise * (1 - progress)));
+            
+            const tick = Math.floor(elapsed / 50);
             const char = loaderChars[tick % loaderChars.length];
             const btnWidth = linkEl.offsetWidth;
             const charWidth = 8;
             const maxBarChars = Math.floor((btnWidth * 0.8) / charWidth);
-            const barWidth = Math.floor((progress / 100) * maxBarChars);
+            const barWidth = Math.floor((currentProgress / 100) * maxBarChars);
             const bar = '█'.repeat(barWidth).padEnd(maxBarChars, '░');
             const padding = ' '.repeat(Math.floor((maxBarChars - barWidth) / 2));
-            linkEl.textContent = padding + char + ' ' + bar + ' ' + progress + '%' + padding;
+            linkEl.textContent = padding + char + ' ' + bar + ' ' + Math.floor(currentProgress) + '%' + padding;
         }, 50);
     });
     linkEl.addEventListener('mouseleave', () => {
