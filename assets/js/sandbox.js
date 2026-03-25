@@ -1736,7 +1736,7 @@ function drawDither() {
     }
     requestAnimationFrame(drawDither);
 }
-drawDither();
+// drawDither(); // Temporarily disabled
 loadingOverlay.appendChild(ditherCanvas);
 
 const loaderChars = ['▌', '▐', '█', '▓', '▒', '░', '>', '·'];
@@ -1913,7 +1913,20 @@ function updateTelemetryTerminal(deltaTime) {
         if (telemLines.length > 10) {
             telemLines.shift();
         }
-        telemOutput.innerHTML = telemLines.map(l => `<div>${l.text}</div>`).join('');
+        
+        if (telemOutput.children.length === 0) {
+            for (let i = 0; i < 10; i++) {
+                telemOutput.appendChild(document.createElement('div'));
+            }
+        }
+        
+        for (let i = 0; i < 10; i++) {
+            const child = telemOutput.children[i];
+            const newText = telemLines[i] ? telemLines[i].text : '';
+            if (child.textContent !== newText) {
+                child.textContent = newText;
+            }
+        }
     }
 }
 
@@ -1979,7 +1992,7 @@ function activateSection(techIdx, legacyIdx) {
             barContainer.innerHTML = `
                 <span style="width:90px;">${label}</span>
                 <div style="flex:1;height:2px;background:rgba(135,233,15,0.15);position:relative;">
-                    <div class="telem-fill-${techIdx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#7496c9;transition:width 1s ease;"></div>
+                    <div class="telem-fill-${techIdx}-${j}" style="position:absolute;top:0;left:0;height:100%;width:100%;transform:scaleX(0);transform-origin:left;background:#7496c9;will-change:transform;"></div>
                 </div>
                 <span class="telem-value-${techIdx}-${j}" style="min-width:50px;text-align:right;">0.000</span>
             `;
@@ -1997,7 +2010,7 @@ function activateSection(techIdx, legacyIdx) {
             sections[key].telemetry.forEach((_, j) => {
                 const fill = document.querySelector(`.sec-telem-fill-${key}-${j}`);
                 const val = document.querySelector(`.sec-telem-val-${key}-${j}`);
-                if (fill) fill.style.width = '0%';
+                if (fill) fill.style.transform = 'scaleX(0)';
                 if (val) val.textContent = '0.000';
             });
         }
@@ -2058,7 +2071,7 @@ function updateTelemetry(sectionIdx, progress) {
         const value = document.querySelector(`.telem-value-${sectionIdx}-${telemIdx}`);
         if (fill && value) {
             const val = Math.sin(Date.now() * 0.001 + sectionIdx * 2 + telemIdx) * 0.5 + 0.5;
-            fill.style.width = `${val * 100}%`;
+            fill.style.transform = `scaleX(${val})`;
             value.textContent = (val * 999.999).toFixed(3);
         }
     });
@@ -2155,7 +2168,7 @@ sections.forEach((section, i) => {
             row.innerHTML = `
                 <span style="color:#98b2ea;width:70px;text-align:right;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);">${label}</span>
                 <div style="width:100px;height:3px;background:#7496c920;position:relative;border-radius:1px;">
-                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:${fixedValue}%;background:#98b2ea;transition:width 1s ease;box-shadow:0 0 6px #98b2ea,0 0 12px rgba(152,178,234,0.5);border-radius:1px;"></div>
+                    <div class="sec-telem-fill-${i}-${j}" style="position:absolute;top:0;left:0;height:100%;width:100%;transform:scaleX(${fixedValue / 100});transform-origin:left;background:#98b2ea;box-shadow:0 0 6px #98b2ea,0 0 12px rgba(152,178,234,0.5);border-radius:1px;will-change:transform;"></div>
                 </div>
                 <span class="sec-telem-val-${i}-${j}" style="color:#98b2ea;width:40px;text-align:left;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);">${fixedValue}</span>
             `;
@@ -2251,10 +2264,17 @@ const mouseParallax = {
     normalizedY: 0
 };
 
+let mouseTicking = false;
 document.addEventListener('mousemove', (e) => {
-    mouseParallax.normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseParallax.normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
-});
+    if (!mouseTicking) {
+        requestAnimationFrame(() => {
+            mouseParallax.normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseParallax.normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
+            mouseTicking = false;
+        });
+        mouseTicking = true;
+    }
+}, { passive: true });
 
 let scrollProgress = 0;
 const scrollSensitivity = 0.0001;
