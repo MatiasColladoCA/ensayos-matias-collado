@@ -1149,7 +1149,7 @@ function bakeStructureWithWorker(callback) {
     if (isCalculating) return;
     isCalculating = true;
     
-    const worker = new Worker('./js/marching-cubes-worker.js');
+    const worker = new Worker('/js/marching-cubes-worker.js');
     
     worker.onmessage = function(e) {
         if (e.data.type === 'progress') {
