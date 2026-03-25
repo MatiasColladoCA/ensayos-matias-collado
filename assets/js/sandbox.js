@@ -76,8 +76,8 @@ const DonutGlassShader = {
         'tDiffuse': { value: null },
         'uMouse': { value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2) },
         'uResolution': { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-        'uInner': { value: 60.0 },
-        'uOuter': { value: 140.0 },
+        'uInner': { value: 0 },
+        'uOuter': { value: 0 },
         'uEdge': { value: 20.0 }
     },
     vertexShader: `
@@ -102,26 +102,14 @@ const DonutGlassShader = {
             vec2 mousePos = vec2(uMouse.x, uResolution.y - uMouse.y);
 
             float dist = distance(pixelPos, mousePos);
-
             float mask = smoothstep(uInner - uEdge, uInner, dist) - smoothstep(uOuter, uOuter + uEdge, dist);
 
             vec4 color = texture2D(tDiffuse, uv);
 
             if (mask > 0.01) {
-                vec2 refractDir = normalize(pixelPos - mousePos);
-                vec2 refractUv = uv - (refractDir * 0.02 * mask);
-                
-                vec2 texel = 1.0 / uResolution;
-                float spread = 8.0;
-                
-                vec4 blur = texture2D(tDiffuse, refractUv);
-                blur += texture2D(tDiffuse, refractUv + vec2(texel.x * spread, texel.y * spread));
-                blur += texture2D(tDiffuse, refractUv + vec2(-texel.x * spread, texel.y * spread));
-                blur += texture2D(tDiffuse, refractUv + vec2(texel.x * spread, -texel.y * spread));
-                blur += texture2D(tDiffuse, refractUv + vec2(-texel.x * spread, -texel.y * spread));
-                blur /= 5.0;
-
-                color = mix(color, blur + vec4(0.04), mask); 
+                vec3 negative = vec3(1.0) - color.rgb;
+                color.rgb = mix(color.rgb, negative, mask * 0.9);
+                color.rgb += vec3(0.08) * mask;
             }
 
             gl_FragColor = color;
@@ -129,8 +117,10 @@ const DonutGlassShader = {
     `
 };
 
-const donutGlassPass = new ShaderPass(DonutGlassShader);
-composer.addPass(donutGlassPass);
+// const DonutGlassShader = { ... };
+const donutGlassPass = null;
+// const donutGlassPass = new ShaderPass(DonutGlassShader);
+// composer.addPass(donutGlassPass);
 
 const purpleTintShader = {
     uniforms: {
@@ -2104,13 +2094,32 @@ sections.forEach((section, i) => {
 
     const linkEl = document.createElement('a');
     linkEl.href = section.link;
+
     linkEl.className = 'crt-phosphor';
     linkEl.style.cssText = 'display:block;margin-left:auto;text-decoration:none;font-size:10px;letter-spacing:2px;padding:8px 16px;border:1px solid #A0E0FF;color:#A0E0FF;transition:all 0.3s ease;pointer-events:auto;background:rgba(0,0,0,0.3);';
     linkEl.innerHTML = '> ACCEDER <span style="opacity:0.5;">></span>';
+
+    linkEl.dataset.hoverActive = 'false';
     linkEl.addEventListener('mouseenter', () => {
+        if (linkEl.dataset.hoverActive === 'true') return;
+        linkEl.dataset.hoverActive = 'true';
+        
+        const rect = linkEl.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        magnetEffect.donuts.push({
+            currentRadius: 20,
+            targetRadius: 1500,
+            linkEl: linkEl,
+            linkCenterX: centerX,
+            linkCenterY: centerY,
+            active: true
+        });
         linkEl.style.background = 'rgba(135,233,15,0.15)';
     });
     linkEl.addEventListener('mouseleave', () => {
+        linkEl.dataset.hoverActive = 'false';
         linkEl.style.background = 'rgba(0,0,0,0.3)';
     });
     linkEl.addEventListener('click', () => {
@@ -2139,7 +2148,8 @@ const magnetEffect = {
     normalizedX: 0,
     normalizedY: 0,
     maxDistance: 300,
-    particleCount: 0
+    particleCount: 0,
+    donuts: []
 };
 
 function createMagnetEffectContainer() {
@@ -2271,101 +2281,65 @@ function createMagnetParticles(count) {
 }
 
 function updateMagnetParticles(deltaTime) {
-    if (!magnetEffect.currentLinkEl || magnetEffect.particles.length === 0) return;
+    if (magnetEffect.donuts.length === 0) return;
     
-    const linkRect = magnetEffect.currentLinkEl.getBoundingClientRect();
-    const linkCenterX = linkRect.left + linkRect.width / 2;
-    const linkCenterY = linkRect.top + linkRect.height / 2;
+    if (!donutGlassPass) return;
     
-    const mouseToLinkX = magnetEffect.mouseX - linkCenterX;
-    const mouseToLinkY = magnetEffect.mouseY - linkCenterY;
-    const mouseToLinkDist = Math.sqrt(mouseToLinkX * mouseToLinkX + mouseToLinkY * mouseToLinkY);
-    
-    const minRadius = 30;
-    const maxRadius = 1000;
-    const distanceRatio = Math.min(1, mouseToLinkDist / magnetEffect.maxDistance);
-    
-    const baseRadius = minRadius + (maxRadius - minRadius) * distanceRatio;
-    const time = Date.now() * 0.001;
-    
-    magnetEffect.particles.forEach((particle, i) => {
-        const particleRadius = baseRadius * (0.6 + i * 0.4);
-        const baseAngle = (Math.PI * 2 / magnetEffect.particleCount) * i;
-        const orbitSpeed = 0.5;
-        const orbitAngle = baseAngle + time * orbitSpeed + i * 0.5;
-        
-        particle.targetX = linkCenterX + Math.cos(orbitAngle) * particleRadius;
-        particle.targetY = linkCenterY + Math.sin(orbitAngle) * particleRadius;
-        
-        particle.currentX += (particle.targetX - particle.currentX) * 0.12;
-        particle.currentY += (particle.targetY - particle.currentY) * 0.12;
-        
-        const opacity = 0.4 + (1 - distanceRatio) * 0.4;
-        const scale = 0.7 + Math.sin(time * 2 + i) * 0.2;
-        
-        particle.el.style.transform = `translate3d(${particle.currentX}px, ${particle.currentY}px, 0) translate(-50%, -50%) rotate(${orbitAngle}rad) scale(${scale})`;
-        particle.el.style.opacity = opacity;
-    });
-    
-    const thickness = 120;
-    const outerR = baseRadius + thickness / 2;
-    const innerR = Math.max(5, baseRadius - thickness / 2);
-    
-    if (donutGlassPass) {
-        donutGlassPass.uniforms.uMouse.value.set(linkCenterX, linkCenterY);
-        donutGlassPass.uniforms.uInner.value = innerR;
-        donutGlassPass.uniforms.uOuter.value = outerR;
+    if (magnetEffect.donuts.length > 5) {
+        magnetEffect.donuts = magnetEffect.donuts.slice(-5);
     }
     
-    const innerRingRadius = innerR;
-    const outerRingRadius = outerR;
-    const opacity = 0.3 + (1 - distanceRatio) * 0.4;
+    let innerValues = [];
+    let outerValues = [];
+    let centerXTotal = 0;
+    let centerYTotal = 0;
+    let activeCount = 0;
+    let newestDonut = null;
+    let newestRadius = 0;
     
-    if (magnetEffect.innerRing && magnetEffect.innerText) {
-        magnetEffect.innerRing.style.left = `${linkCenterX}px`;
-        magnetEffect.innerRing.style.top = `${linkCenterY}px`;
-        magnetEffect.innerRing.style.width = `${innerRingRadius * 2}px`;
-        magnetEffect.innerRing.style.height = `${innerRingRadius * 2}px`;
-        magnetEffect.innerRing.style.transform = `translate(-50%, -50%) rotate(${time * 0.3}rad)`;
-        magnetEffect.innerRing.style.opacity = opacity;
+    for (let i = magnetEffect.donuts.length - 1; i >= 0; i--) {
+        const donut = magnetEffect.donuts[i];
         
-        const innerVisibleRatio = Math.min(1, innerRingRadius / 50);
-        const innerVisibleCount = Math.floor(magnetEffect.innerText.length * innerVisibleRatio);
-        const innerTextOpacity = opacity * innerVisibleRatio;
+        if (!donut.active) continue;
         
-        magnetEffect.innerText.forEach((item, i) => {
-            const angle = item.baseAngle;
-            const rotatedAngle = angle + time * 0.3;
-            const x = Math.cos(rotatedAngle) * innerRingRadius;
-            const y = Math.sin(rotatedAngle) * innerRingRadius;
-            item.el.style.transform = `translate3d(${innerRingRadius + x}px, ${innerRingRadius + y}px, 0) translate(-50%, -50%) rotate(${rotatedAngle + Math.PI/2}rad)`;
-            item.el.style.opacity = i < innerVisibleCount ? innerTextOpacity : 0;
-        });
+        if (donut.currentRadius >= 1490) {
+            donut.active = false;
+            continue;
+        }
+        
+        donut.currentRadius += (donut.targetRadius - donut.currentRadius) * 0.3;
+        
+        if (donut.currentRadius > newestRadius) {
+            newestRadius = donut.currentRadius;
+            newestDonut = donut;
+        }
+        
+        const thickness = 150;
+        const outerR = donut.currentRadius + thickness / 2;
+        const innerR = Math.max(10, donut.currentRadius - thickness / 2);
+        
+        innerValues.push(innerR);
+        outerValues.push(outerR);
+        centerXTotal += donut.linkCenterX;
+        centerYTotal += donut.linkCenterY;
+        activeCount++;
     }
     
-    if (magnetEffect.outerDashedRing && magnetEffect.outerText) {
-        magnetEffect.outerDashedRing.style.left = `${linkCenterX}px`;
-        magnetEffect.outerDashedRing.style.top = `${linkCenterY}px`;
-        magnetEffect.outerDashedRing.style.width = `${outerRingRadius * 2}px`;
-        magnetEffect.outerDashedRing.style.height = `${outerRingRadius * 2}px`;
-        magnetEffect.outerDashedRing.style.borderRadius = '50%';
-        magnetEffect.outerDashedRing.style.border = `1px dashed rgba(160, 224, 255, ${opacity})`;
-        magnetEffect.outerDashedRing.style.transform = `translate(-50%, -50%) rotate(${-time * 0.5}rad)`;
-        magnetEffect.outerDashedRing.style.opacity = opacity;
-        
-        const outerTextRadius = outerRingRadius + 12;
-        const outerVisibleRatio = Math.min(1, outerRingRadius / 80);
-        const outerVisibleCount = Math.floor(magnetEffect.outerText.length * outerVisibleRatio);
-        const outerTextOpacity = opacity * outerVisibleRatio;
-        
-        magnetEffect.outerText.forEach((item, i) => {
-            const angle = item.baseAngle;
-            const rotatedAngle = angle - time * 0.5;
-            const x = Math.cos(rotatedAngle) * outerTextRadius;
-            const y = Math.sin(rotatedAngle) * outerTextRadius;
-            item.el.style.transform = `translate3d(${outerRingRadius + x}px, ${outerRingRadius + y}px, 0) translate(-50%, -50%) rotate(${rotatedAngle + Math.PI/2}rad)`;
-            item.el.style.opacity = i < outerVisibleCount ? outerTextOpacity : 0;
-        });
+    if (activeCount === 0) {
+        magnetEffect.donuts = [];
+        donutGlassPass.uniforms.uInner.value = 0;
+        donutGlassPass.uniforms.uOuter.value = 0;
+        return;
+    }
+    
+    if (newestDonut && activeCount > 1) {
+        donutGlassPass.uniforms.uMouse.value.set(newestDonut.linkCenterX, newestDonut.linkCenterY);
+        donutGlassPass.uniforms.uInner.value = newestDonut.currentRadius - 75;
+        donutGlassPass.uniforms.uOuter.value = newestDonut.currentRadius + 75;
+    } else {
+        donutGlassPass.uniforms.uMouse.value.set(centerXTotal / activeCount, centerYTotal / activeCount);
+        donutGlassPass.uniforms.uInner.value = Math.max(...innerValues) - 75;
+        donutGlassPass.uniforms.uOuter.value = Math.max(...outerValues) + 75;
     }
 }
 
@@ -2405,10 +2379,6 @@ document.addEventListener('mousemove', (e) => {
     magnetEffect.mouseY = e.clientY;
     magnetEffect.normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
     magnetEffect.normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
-    
-    if (donutGlassPass) {
-        donutGlassPass.uniforms.uMouse.value.set(e.clientX, e.clientY);
-    }
 });
 
 let scrollProgress = 0;
@@ -2660,7 +2630,7 @@ function animate() {
     updateTelemetryTerminal(0.016);
     updateSectionTelemetry(currentSection % 5);
     updateFortuitousRect(0.016);
-    updateMagnetParticles(0.016);
+    // updateMagnetParticles(0.016); // Donut effect disabled
     
     if (glitchIntensity > 0.01) {
         glitchIntensity *= 0.95;
