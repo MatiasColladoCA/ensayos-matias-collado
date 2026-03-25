@@ -2146,11 +2146,11 @@ function activateSection(techIdx, legacyIdx) {
 }
 
 function updateTypewriter(deltaTime) {
-    if (!typewriterState[currentSection] || !typewriterState[currentSection].active) return;
-    
-    const state = typewriterState[currentSection];
-    const textEl = document.getElementById(state.elementId);
-    if (!textEl) return;
+    const contentIdx = currentSection % 5;
+    if (!typewriterState[contentIdx] || !typewriterState[contentIdx].active) return;
+
+    const state = typewriterState[contentIdx];
+    const textEl = document.getElementById(state.elementId);    if (!textEl) return;
     
     typewriterTimer += deltaTime;
     
@@ -2378,45 +2378,55 @@ document.addEventListener('mousemove', (e) => {
     }
 }, { passive: true });
 
-let scrollProgress = 0;
-const scrollSensitivity = 0.0001;
+let currentSectionIndex = 0;
+let isScrolling = false;
 let targetCameraPos = new THREE.Vector3(0, 0, 180);
 let autoMutate = true;
 let mutationTimer = 0;
 
-let wheelCount = 0;
-
 function handleScrollInput(deltaY) {
-    scrollProgress += deltaY * scrollSensitivity;
-    scrollProgress = Math.max(0, Math.min(1, scrollProgress));
-    
-    const totalSegments = waypoints.length - 1;
-    const segment = Math.min(Math.floor(scrollProgress * totalSegments), totalSegments - 1);
-    const localT = (scrollProgress * totalSegments) - segment;
-    
-    const eased = easeInOutCubic(localT);
-    
-    const pos = cubicBezier(
-        waypoints[segment].position,
-        waypoints[segment + 1].position,
-        ctrlPoints[segment],
-        eased
-    );
-    
-    targetCameraPos.set(pos.x, pos.y, pos.z);
-    
-    const techIndex = Math.min(Math.floor(scrollProgress * 10), 9);
-    const legacyIndex = techIndex % 5;
-    
-    console.log(`[SCROLL] progress: ${scrollProgress.toFixed(3)} | tech: ${techIndex} | legacy: ${legacyIndex}`);
-    
-    if (techIndex !== currentSection) {
-        console.log('[CHANGE] Activating tech', techIndex, '| legacy', legacyIndex, '-', sections[legacyIndex]?.title);
-        activateSection(techIndex, legacyIndex);
+    if (orbitControls.enabled || isScrolling) return;
+
+    // Umbral de activación para evitar micro-scrolls
+    if (Math.abs(deltaY) < 10) return;
+
+    isScrolling = true;
+
+    // Determinar dirección y nueva sección con carrusel infinito
+    const direction = deltaY > 0 ? 1 : -1;
+    let nextIndex = currentSectionIndex + direction;
+
+    if (nextIndex >= waypoints.length) {
+        nextIndex = 0; // Carrusel: de final a principio
+    } else if (nextIndex < 0) {
+        nextIndex = waypoints.length - 1; // Carrusel: de principio a final
     }
-    
+
+    currentSectionIndex = nextIndex;
+    const waypoint = waypoints[currentSectionIndex];
+
+    // Activar sección (Lógica original de secciones)
+    const techIndex = currentSectionIndex % 10;
+    const legacyIndex = currentSectionIndex % 5; // Mapear 0-9 a 0-4
+    activateSection(techIndex, legacyIndex);
+
+    // Animación suave de cámara a la nueva posición
+    gsap.to(targetCameraPos, {
+        x: waypoint.position.x,
+        y: waypoint.position.y,
+        z: waypoint.position.z,
+        duration: 1.5,
+        ease: "power2.inOut",
+        onComplete: () => {
+            isScrolling = false;
+        }
+    });
+
+    // Efecto de glitch proporcional al impacto del scroll
     glitchIntensity = Math.min(Math.abs(deltaY) * 0.005, 1.0);
-    updateTelemetry(techIndex, scrollProgress);
+
+    // Actualizar telemetría
+    updateTelemetry(techIndex, currentSectionIndex / waypoints.length);
 }
 
 window.addEventListener('wheel', (e) => {
@@ -2425,7 +2435,6 @@ window.addEventListener('wheel', (e) => {
     e.stopPropagation();
     handleScrollInput(e.deltaY);
 }, { passive: false });
-
 document.addEventListener('scroll', (e) => {
     if (orbitControls.enabled) return;
     e.preventDefault();
@@ -2519,7 +2528,7 @@ console.log('[INIT] Total sections:', sections.length);
 console.log('[INIT] Total waypoints:', waypoints.length);
 sections.forEach((s, i) => console.log(`[INIT] Section ${i}: ${s.title}`));
 
-activateSection(0);
+activateSection(0, 0);
 bakeStructure();
 
 let autoModeActiveScrolly = false;
