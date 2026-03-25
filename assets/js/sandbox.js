@@ -1951,6 +1951,7 @@ function activateSection(techIdx, legacyIdx) {
         if (sectionDiv) {
             const isActive = i === legacyIdx;
             sectionDiv.style.opacity = isActive ? '1' : '0';
+            sectionDiv.style.visibility = isActive ? 'visible' : 'hidden';
             sectionDiv.style.transform = isActive ? 'translateY(0)' : 'translateY(20px)';
             sectionDiv.style.pointerEvents = isActive ? 'auto' : 'none';
         }
@@ -2050,7 +2051,7 @@ document.head.appendChild(cursorStyle);
 
 sections.forEach((section, i) => {
     const sectionDiv = document.createElement('div');
-    sectionDiv.style.cssText = `position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity 0.5s ease;pointer-events:none;`;
+    sectionDiv.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;visibility:hidden;transition:opacity 0.5s ease;pointer-events:none;';
     sectionDiv.id = `section-${i}`;
 
     const wrapper = document.createElement('div');
@@ -2112,25 +2113,27 @@ sections.forEach((section, i) => {
     const loaderChars = ['▌', '▐', '█', '▓', '▒', '░', '>', '·'];
     
     linkEl.addEventListener('mouseenter', () => {
-        console.log('[HOVER] ACCEDER button - Section:', section.title);
+        console.log('[HOVER] ACCEDER button - Section:', section.title, '| active:', linkEl.style.pointerEvents);
         if (linkEl.loadingInterval) return;
         
-        let tick = 0;
+        let progress = 0;
         
         linkEl.style.color = '#87ef0f';
         linkEl.style.borderColor = '#87ef0f';
         linkEl.style.background = 'rgba(135,233,15,0.2)';
         
-        console.log('[LOADER] Starting for:', section.title);
         linkEl.loadingInterval = setInterval(() => {
-            tick++;
-            const char = loaderChars[tick % loaderChars.length];
-            const bar = '█'.repeat(tick % 11).padEnd(10, '░');
-            const pct = Math.min(98, tick * 2);
-            linkEl.textContent = char + ' CARGANDO [' + bar + '] ' + pct + '%';
+            progress += 2;
+            if (progress > 100) progress = 100;
             
-            if (tick % 10 === 0) console.log('[LOADER] tick:', tick, 'text:', linkEl.textContent);
-        }, 80);
+            const btnWidth = linkEl.offsetWidth;
+            const charWidth = 8;
+            const maxBarChars = Math.floor((btnWidth * 0.8) / charWidth);
+            const barWidth = Math.floor((progress / 100) * maxBarChars);
+            const bar = '█'.repeat(barWidth).padEnd(maxBarChars, '░');
+            const padding = ' '.repeat(Math.floor((maxBarChars - barWidth) / 2));
+            linkEl.textContent = padding + bar + ' ' + progress + '%' + padding;
+        }, 50);
     });
     linkEl.addEventListener('mouseleave', () => {
         if (linkEl.loadingInterval) {
@@ -2152,6 +2155,12 @@ sections.forEach((section, i) => {
 
     sectionDiv.appendChild(wrapper);
     sectionsWrapper.appendChild(sectionDiv);
+    
+    if (i === 0) {
+        sectionDiv.style.opacity = '1';
+        sectionDiv.style.visibility = 'visible';
+        sectionDiv.style.pointerEvents = 'auto';
+    }
     
     typewriterState[i] = { 
         text: section.content, 
