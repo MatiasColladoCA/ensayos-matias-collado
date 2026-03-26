@@ -62,6 +62,64 @@
                 0 0 24px rgba(var(--color-primary-rgb), 0.4);
             z-index: 1000;
             pointer-events: none;
+            text-align: center;
+        }
+
+        .mobile-break {
+            display: none;
+        }
+        
+        /* Mobile Version */
+        @media (max-width: 768px) {
+            .site-title {
+                top: 40px;
+                font-size: 18px;
+                letter-spacing: 20px;
+                padding-right: 10px;
+                transform: translateX(-50%);
+                white-space: normal;
+                width: 100%;
+                line-height: 1.5;
+            }
+
+            .mobile-break {
+                display: block;
+            }
+            
+            /* Stack UI components vertically */
+            .ui-instructions {
+                bottom: 100px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 100%;
+                font-size: 9px !important;
+            }
+            
+            .ui-bottom-controls {
+                bottom: 65px !important;
+                right: 50% !important;
+                transform: translateX(50%) !important;
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .ui-perf-stats {
+                bottom: 30px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 100%;
+                text-align: center !important;
+            }
+            
+            /* Section titles more to the left and wider */
+            .section-wrapper {
+                width: 85% !important;
+                left: 45% !important; /* Move a bit to the left from center */
+            }
+
+            .section-title {
+                font-size: clamp(40px, 6.4vw, 76px) !important;
+            }
         }
         
         .crt-phosphor {
@@ -105,7 +163,7 @@
     </style>
 </head>
 <body>
-    <div class="site-title" style="opacity:0;transition:opacity 0.5s ease;">Matías Collado</div>
+    <div class="site-title" style="opacity:0;transition:opacity 0.5s ease;">Matías<br class="mobile-break">Collado</div>
     <canvas id="three-canvas"></canvas>
     {{ $appOptions := dict "minify" false "targetPath" "js/sandbox-3d.js" }}
     {{ $appJs := resources.Get "js/sandbox.js" | js.Build $appOptions }}

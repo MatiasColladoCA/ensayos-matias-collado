@@ -1625,7 +1625,7 @@ createToggle('HUD Telemetry', false, (val) => {
 
 const perfStats = document.createElement('div');
 perfStats.id = 'perf-stats';
-perfStats.className = 'crt-phosphor';
+perfStats.className = 'crt-phosphor ui-perf-stats';
 perfStats.style.cssText = 'position:fixed;bottom:10px;left:10px;font-size:10px;z-index:1001;pointer-events:none;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
 document.body.appendChild(perfStats);
 
@@ -1635,12 +1635,13 @@ let fps = 0;
 
 const instructions = document.createElement('div');
 instructions.id = 'instructions';
-instructions.className = 'crt-phosphor';
+instructions.className = 'crt-phosphor ui-instructions';
 instructions.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:11px;text-align:center;pointer-events:none;z-index:1000;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);';
 instructions.innerHTML = 'DRAG TO ORBIT | SCROLL TO NAVIGATE';
 document.body.appendChild(instructions);
 
 const bottomControls = document.createElement('div');
+bottomControls.className = 'ui-bottom-controls';
 bottomControls.style.cssText = 'position:fixed;bottom:20px;right:20px;display:flex;gap:10px;z-index:1001;';
 document.body.appendChild(bottomControls);
 
@@ -2347,12 +2348,14 @@ sections.forEach((section, i) => {
     sectionDiv.id = `section-${i}`;
 
     const wrapper = document.createElement('div');
+    wrapper.className = 'section-wrapper';
     wrapper.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:32%;display:flex;flex-direction:column;justify-content:flex-start;padding-top:20px;';
 
     const topRow = document.createElement('div');
     topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;';
 
     const titleEl = document.createElement('div');
+    titleEl.className = 'section-title';
     titleEl.style.cssText = 'flex:0 0 50%;text-align:left;color:#fff;font-size:clamp(20px, 3.2vw, 38px);font-weight:bold;letter-spacing:2px;line-height:1.2;font-family:ROTHEFIGHT,sans-serif !important;text-shadow:0 0 10px #98b2ea, 0 0 20px rgba(152,178,234,0.5), 0 0 30px rgba(152,178,234,0.3);';
     titleEl.innerHTML = section.title.replace(/ /g, '<br>');
     topRow.appendChild(titleEl);
