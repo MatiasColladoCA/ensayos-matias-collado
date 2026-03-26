@@ -1035,6 +1035,122 @@ sysSprite.rotation.y = Math.PI / 2;
 sysSprite.renderOrder = 0;
 scene.add(sysSprite);
 
+// --- SISTEMA DE TELEMETRÍA MULTIAXIAL (CUBICA) ---
+
+function randomizeSpriteFace(mesh, offset = 0) {
+    // Caras disponibles: Atrás, Izquierda, Derecha, Arriba, Abajo (0-4)
+    // Excluimos Frontal (Z+)
+    const face = Math.floor(Math.random() * 5);
+    const dist = 110;
+    const jitter = () => (Math.random() - 0.5) * 40;
+
+    switch(face) {
+        case 0: // Atrás
+            mesh.position.set(jitter(), jitter(), -dist);
+            mesh.rotation.set(0, Math.PI, 0);
+            break;
+        case 1: // Izquierda
+            mesh.position.set(-dist, jitter(), jitter());
+            mesh.rotation.set(0, -Math.PI / 2, 0);
+            break;
+        case 2: // Derecha
+            mesh.position.set(dist, jitter(), jitter());
+            mesh.rotation.set(0, Math.PI / 2, 0);
+            break;
+        case 3: // Arriba
+            mesh.position.set(jitter(), dist, jitter());
+            mesh.rotation.set(-Math.PI / 2, 0, 0);
+            break;
+        case 4: // Abajo
+            mesh.position.set(jitter(), -dist, jitter());
+            mesh.rotation.set(Math.PI / 2, 0, 0);
+            break;
+    }
+}
+
+// 1. BIO_STATUS_NODE (Nuevo: Largo con barras de carga)
+const bioStatusCanvas = document.createElement('canvas');
+bioStatusCanvas.width = 300;
+bioStatusCanvas.height = 600;
+const bioStatusCtx = bioStatusCanvas.getContext('2d');
+const bioStatusTexture = new THREE.CanvasTexture(bioStatusCanvas);
+const bioStatusMaterial = new THREE.MeshBasicMaterial({ map: bioStatusTexture, transparent: true, depthWrite: false, side: THREE.DoubleSide });
+const bioStatusSprite = new THREE.Mesh(new THREE.PlaneGeometry(25, 50), bioStatusMaterial);
+randomizeSpriteFace(bioStatusSprite);
+scene.add(bioStatusSprite);
+
+// 2. NEURAL_STREAM_NODE (Nuevo: Telemetría filosófica rápida)
+const neuralStreamCanvas = document.createElement('canvas');
+neuralStreamCanvas.width = 400;
+neuralStreamCanvas.height = 300;
+const neuralStreamCtx = neuralStreamCanvas.getContext('2d');
+const neuralStreamTexture = new THREE.CanvasTexture(neuralStreamCanvas);
+const neuralStreamMaterial = new THREE.MeshBasicMaterial({ map: neuralStreamTexture, transparent: true, depthWrite: false, side: THREE.DoubleSide });
+const neuralStreamSprite = new THREE.Mesh(new THREE.PlaneGeometry(40, 30), neuralStreamMaterial);
+randomizeSpriteFace(neuralStreamSprite);
+scene.add(neuralStreamSprite);
+
+// Aleatorizar solo los nuevos sprites en las caras laterales/traseras/sup/inf
+randomizeSpriteFace(sysSprite);
+randomizeSpriteFace(bioStatusSprite);
+randomizeSpriteFace(neuralStreamSprite);
+
+// Los antiguos (hudSprite y systemLogSprite) se mantienen en la cara FRONTAL (+Z)
+// hudSprite ya tiene su posición: (-48, -14, 106)
+// systemLogSprite ya tiene su posición: (55, -14, 111)
+
+function renderBioStatus(time) {
+    bioStatusCtx.clearRect(0, 0, 300, 600);
+    bioStatusCtx.fillStyle = '#A0E0FF';
+    bioStatusCtx.font = 'bold 11px "VCR OSD Mono", monospace';
+    bioStatusCtx.fillText('[BIO_METRIC_ARRAY]', 10, 25);
+
+    const metrics = [
+        { label: 'NEURAL_DENSITY', val: Math.sin(time * 0.5) * 0.2 + 0.8 },
+        { label: 'ONTIC_PRESSURE', val: Math.cos(time * 0.3) * 0.3 + 0.5 },
+        { label: 'SEMANTIC_DRIFT', val: (time * 0.1) % 1.0 },
+        { label: 'EGO_DISSOLUTION', val: Math.min(1.0, currentSection / 10 + Math.sin(time) * 0.05) }
+    ];
+
+    bioStatusCtx.font = '9px "VCR OSD Mono", monospace';
+    metrics.forEach((m, i) => {
+        const y = 60 + i * 45;
+        bioStatusCtx.fillStyle = '#5a7499';
+        bioStatusCtx.fillText(m.label, 10, y);
+        
+        const barWidth = 20;
+        const filled = Math.floor(m.val * barWidth);
+        const bar = '[' + '█'.repeat(Math.max(0, filled)) + '░'.repeat(Math.max(0, barWidth - filled)) + ']';
+        bioStatusCtx.fillStyle = '#A0E0FF';
+        bioStatusCtx.fillText(`${bar} ${(m.val * 100).toFixed(1)}%`, 10, y + 15);
+    });
+
+    bioStatusTexture.needsUpdate = true;
+}
+
+function renderNeuralStream(time) {
+    neuralStreamCtx.clearRect(0, 0, 400, 300);
+    neuralStreamCtx.fillStyle = '#FF4444';
+    neuralStreamCtx.font = 'bold 10px "VCR OSD Mono", monospace';
+    neuralStreamCtx.fillText('// CRITICAL_THOUGHT_STREAM', 10, 20);
+
+    const logs = [
+        `> HEIDEGGER_NULL_POINTER: AT ${time.toFixed(3)}s`,
+        `> DECONSTRUCTION_LOOP: ACTIVE`,
+        `> PHENOMENON_CACHING: ${(Math.sin(time)*50+50).toFixed(0)}%`,
+        `> NOUMENA_UNREACHABLE: ERROR 404`,
+        `> DIALECTIC_BUFFER: FLUSHING...`
+    ];
+
+    neuralStreamCtx.fillStyle = '#A0E0FF';
+    neuralStreamCtx.font = '8px "VCR OSD Mono", monospace';
+    logs.forEach((log, i) => {
+        neuralStreamCtx.fillText(log, 10, 50 + i * 18);
+    });
+
+    neuralStreamTexture.needsUpdate = true;
+}
+
 const systemLogLines = [];
 const maxLogLines = 10;
 let logScrollY = 0;
@@ -2581,7 +2697,10 @@ function animate() {
     updateTerminalLines(0.016, time);
     renderHudSprite();
     renderSystemLog(time);
-    renderSysSprite(time);    
+    renderSysSprite(time);
+    renderBioStatus(time);
+    renderNeuralStream(time);
+
     const mouseParallaxStrength = 30;
     const targetX = targetCameraPos.x - mouseParallax.normalizedX * mouseParallaxStrength;
     const targetY = targetCameraPos.y + mouseParallax.normalizedY * mouseParallaxStrength;
@@ -2593,33 +2712,43 @@ function animate() {
     }
     
     if (autoMutate) {
-        mutationTimer += 0.016;
+        // Reducimos la velocidad de mutación en 1/3 (incremento de 0.010 en lugar de 0.016 aprox)
+        mutationTimer += 0.011; 
         
         const sp = currentSection % sectionParams.length;
         const baseParams = sectionParams[sp];
         
-        // Ondas rítmicas para comportamiento "vivo"
-        const pulse = Math.sin(mutationTimer * 0.45) * 0.5 + 0.5; // 0 a 1
-        const microPulse = Math.sin(mutationTimer * 1.2) * 0.5 + 0.5;
+        // Ondas rítmicas más lentas para comportamiento "vivo" y natural
+        const pulse = Math.sin(mutationTimer * 0.3) * 0.5 + 0.5; // Frecuencia reducida de 0.45 a 0.3
+        const microPulse = Math.sin(mutationTimer * 0.8) * 0.5 + 0.5; // Frecuencia reducida de 1.2 a 0.8
         
-        // Variación de Estructura Física
-        params.spikeScale = baseParams.spikeScale * (0.8 + microPulse * 0.4);
-        params.spikeFreq = baseParams.spikeFreq * (0.9 + pulse * 0.2);
-        params.macroScale = Math.max(1.2, baseParams.macroScale * (0.95 + pulse * 0.1));
-        params.distOffset = baseParams.distOffset + (Math.sin(mutationTimer * 0.3) * 0.3); // Variación libre
-        params.distOffset = Math.max(0, Math.min(1, params.distOffset)); // Clampear 0-1
+        // Función de interpolación suave (Lerp) para evitar saltos bruscos
+        const smoothLerp = (current, target, speed = 0.05) => current + (target - current) * speed;
+
+        // Variación de Estructura Física con suavizado
+        const targetSpikeScale = baseParams.spikeScale * (0.8 + microPulse * 0.4);
+        const targetSpikeFreq = baseParams.spikeFreq * (0.9 + pulse * 0.2);
+        const targetMacroScale = Math.max(1.2, baseParams.macroScale * (0.95 + pulse * 0.1));
+        const targetDistOffset = Math.max(0, Math.min(1, baseParams.distOffset + (Math.sin(mutationTimer * 0.2) * 0.3)));
+
+        params.spikeScale = smoothLerp(params.spikeScale, targetSpikeScale, 0.03);
+        params.spikeFreq = smoothLerp(params.spikeFreq, targetSpikeFreq, 0.03);
+        params.macroScale = smoothLerp(params.macroScale, targetMacroScale, 0.03);
+        params.distOffset = smoothLerp(params.distOffset, targetDistOffset, 0.03);
         
-        // Variación de Isolation (Suave vs Filoso)
-        effect.isolation = baseParams.isolation + pulse * 0.12;
+        // Variación de Isolation (Suave vs Filoso) con inercia
+        effect.isolation = smoothLerp(effect.isolation, baseParams.isolation + pulse * 0.12, 0.02);
         
         // Pulsación de Escala (Crecimiento/Achicamiento)
-        const currentScale = 75 + pulse * 8;
-        effect.scale.set(currentScale, currentScale, currentScale);
+        const targetScale = 75 + pulse * 8;
+        const currentS = effect.scale.x;
+        const newS = smoothLerp(currentS, targetScale, 0.02);
+        effect.scale.set(newS, newS, newS);
         
-        // Variación de Desplazamiento (Shader)
-        semMaterial.uniforms.uOrganicScale.value = baseParams.organicScale * (0.85 + microPulse * 0.3);
-        semMaterial.uniforms.uOrganicIntensity.value = baseParams.organicIntensity * (0.7 + pulse * 0.6);
-        semMaterial.uniforms.uOrganicSpeed.value = baseParams.organicSpeed * (0.8 + pulse * 0.4);
+        // Variación de Desplazamiento (Shader) con inercia
+        semMaterial.uniforms.uOrganicScale.value = smoothLerp(semMaterial.uniforms.uOrganicScale.value, baseParams.organicScale * (0.85 + microPulse * 0.3), 0.03);
+        semMaterial.uniforms.uOrganicIntensity.value = smoothLerp(semMaterial.uniforms.uOrganicIntensity.value, baseParams.organicIntensity * (0.7 + pulse * 0.6), 0.03);
+        semMaterial.uniforms.uOrganicSpeed.value = smoothLerp(semMaterial.uniforms.uOrganicSpeed.value, baseParams.organicSpeed * (0.8 + pulse * 0.4), 0.03);
 
         // Sincronizar UI si el panel está visible
         if (panel.style.display !== 'none') {
