@@ -1849,16 +1849,16 @@ function createGlitchBlock() {
     activeGlitchBlocks.push(glitch);
     
     let flickerCount = 0;
-    const maxFlickers = 3 + Math.floor(Math.random() * 4);
+    const maxFlickers = 30 + Math.floor(Math.random() * 40); // Quintuplicado de ~10 a ~50 parpadeos
     
     function flicker() {
         if (flickerCount >= maxFlickers) {
-            glitch.style.transition = 'opacity 0.05s';
+            glitch.style.transition = 'opacity 0.2s'; // Desvanecimiento aún más suave
             glitch.style.opacity = '0';
             setTimeout(() => {
                 if (glitch.parentNode) glitch.parentNode.removeChild(glitch);
                 activeGlitchBlocks = activeGlitchBlocks.filter(g => g !== glitch);
-            }, 50);
+            }, 200);
             return;
         }
         
@@ -1874,7 +1874,7 @@ function createGlitchBlock() {
         }
         
         flickerCount++;
-        setTimeout(flicker, 50 + Math.random() * 100);
+        setTimeout(flicker, 80 + Math.random() * 150);
     }
     
     requestAnimationFrame(() => {
