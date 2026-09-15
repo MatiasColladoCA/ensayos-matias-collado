@@ -1725,12 +1725,6 @@ const waypoints = sections.map((sec, idx) => ({
     target: new THREE.Vector3(0, 0, 0),
     section: idx
 }));
-// Adding one final waypoint to loop back
-waypoints.push({
-    position: new THREE.Vector3(0, 0, 180),
-    target: new THREE.Vector3(0, 0, 0),
-    section: sections.length
-});
 
 const techSections = [
     {
@@ -2138,7 +2132,7 @@ document.body.appendChild(progressBar);
 
 sections.forEach((_, i) => {
     const dot = document.createElement('div');
-    dot.style.cssText = 'width:5px;height:5px;border:1px solid #7496c9;border-radius:50%;opacity:0.3;';
+    dot.style.cssText = 'width:5px !important;height:5px !important;border:1px solid #ffffff !important;border-radius:50% !important;opacity:0.6 !important;transition:all 0.3s ease !important;';
     dot.id = `progress-dot-${i}`;
     progressBar.appendChild(dot);
 });
@@ -2238,9 +2232,13 @@ function activateSection(techIdx, legacyIdx) {
     
     sectionsWrapper.style.pointerEvents = 'auto';
     
-    document.querySelectorAll('[id^="progress-dot-"]').forEach((el, i) => {
-        el.style.opacity = i === legacyIdx ? '1' : '0.3';
-        el.style.background = i === legacyIdx ? '#7496c9' : 'transparent';
+    document.querySelectorAll('[id^="progress-dot-"]').forEach((el) => {
+        const dotId = parseInt(el.id.split('-').pop(), 10);
+        const isActive = dotId === legacyIdx;
+        el.style.setProperty('opacity', isActive ? '1' : '0.6', 'important');
+        el.style.setProperty('background', isActive ? '#ffffff' : 'transparent', 'important');
+        el.style.setProperty('border-color', '#ffffff', 'important');
+        el.style.setProperty('box-shadow', isActive ? '0 0 6px #ffffff, 0 0 12px #98b2ea' : 'none', 'important');
     });
     
     currentSection = techIdx;
@@ -2371,8 +2369,13 @@ sections.forEach((section, i) => {
 
     const typewriterContainer = document.createElement('div');
     typewriterContainer.id = `typewriter-${i}`;
-    typewriterContainer.style.cssText = 'text-align:right;';
-    typewriterContainer.innerHTML = '<span id="typewriter-text-' + i + '" class="crt-phosphor" style="font-size:11px;line-height:1.4;letter-spacing:1px;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);"></span><span class="cursor-blink"></span>';
+    typewriterContainer.style.cssText = 'text-align:right; position:relative;';
+    typewriterContainer.innerHTML = `
+        <span style="font-size:11px;line-height:1.4;letter-spacing:1px;visibility:hidden;">${section.content}</span>
+        <div style="position:absolute;top:0;right:0;width:100%;text-align:right;">
+            <span id="typewriter-text-${i}" class="crt-phosphor" style="font-size:11px;line-height:1.4;letter-spacing:1px;text-shadow:0 0 4px #98b2ea,0 0 8px rgba(152,178,234,0.4);"></span><span class="cursor-blink"></span>
+        </div>
+    `;
     rightCol.appendChild(typewriterContainer);
     topRow.appendChild(rightCol);
     wrapper.appendChild(topRow);
@@ -2526,7 +2529,7 @@ function handleScrollInput(deltaY) {
 
     // Activar sección (Lógica original de secciones)
     const techIndex = currentSectionIndex % 10;
-    const legacyIndex = currentSectionIndex % 5; // Mapear 0-9 a 0-4
+    const legacyIndex = currentSectionIndex % sections.length; // Dynamic mapping
     activateSection(techIndex, legacyIndex);
 
     // Animación suave de cámara a la nueva posición
@@ -2535,11 +2538,13 @@ function handleScrollInput(deltaY) {
         y: waypoint.position.y,
         z: waypoint.position.z,
         duration: 1.5,
-        ease: "power2.inOut",
-        onComplete: () => {
-            isScrolling = false;
-        }
+        ease: "power2.out"
     });
+
+    // Permitir scrollear nuevamente mucho antes de que termine la animación
+    setTimeout(() => {
+        isScrolling = false;
+    }, 400);
 
     // Efecto de glitch proporcional al impacto del scroll
     glitchIntensity = Math.min(Math.abs(deltaY) * 0.005, 1.0);

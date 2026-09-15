@@ -179,7 +179,7 @@
     </script>
 
     {{ $appOptions := dict "minify" false "targetPath" "js/sandbox-3d.js" }}
-    {{ $appJs := resources.Get "js/sandbox.js" | js.Build $appOptions }}
+    {{ $appJs := resources.Get "js/sandbox.js" | js.Build $appOptions | fingerprint }}
     <script type="module" src="{{ $appJs.Permalink }}"></script>
 </body>
 </html>
