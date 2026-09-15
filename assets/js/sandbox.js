@@ -2132,7 +2132,7 @@ document.body.appendChild(progressBar);
 
 sections.forEach((_, i) => {
     const dot = document.createElement('div');
-    dot.style.cssText = 'width:5px !important;height:5px !important;border:1px solid #ffffff !important;border-radius:50% !important;opacity:0.6 !important;transition:all 0.3s ease !important;';
+    dot.style.cssText = 'width:5px !important;height:5px !important;border:2px solid #98b2ea !important;border-radius:50% !important;opacity:0.6 !important;transition:all 0.3s ease !important;';
     dot.id = `progress-dot-${i}`;
     progressBar.appendChild(dot);
 });
@@ -2237,7 +2237,7 @@ function activateSection(techIdx, legacyIdx) {
         const isActive = dotId === legacyIdx;
         el.style.setProperty('opacity', isActive ? '1' : '0.6', 'important');
         el.style.setProperty('background', isActive ? '#ffffff' : 'transparent', 'important');
-        el.style.setProperty('border-color', '#ffffff', 'important');
+        el.style.setProperty('border-color', isActive ? '#ffffff' : '#98b2ea', 'important');
         el.style.setProperty('box-shadow', isActive ? '0 0 6px #ffffff, 0 0 12px #98b2ea' : 'none', 'important');
     });
     
