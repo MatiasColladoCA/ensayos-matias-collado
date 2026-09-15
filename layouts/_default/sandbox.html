@@ -165,6 +165,19 @@
 <body>
     <div class="site-title" style="opacity:0;transition:opacity 0.5s ease;">Matías<br class="mobile-break">Collado</div>
     <canvas id="three-canvas"></canvas>
+    
+    <!-- Inject dynamic sections from Hugo -->
+    <script>
+        {{- $sections := slice }}
+        {{- range .Site.Sections }}
+            {{- if not .Params.hidden }}
+                {{- $sec := dict "title" (.Title | default (title .Type)) "subtitle" (.Params.subtitle | default "SECCIÓN") "content" (.Description | default .Summary | default "") "link" .RelPermalink }}
+                {{- $sections = $sections | append $sec }}
+            {{- end }}
+        {{- end }}
+        window.DYNAMIC_SECTIONS = {{ $sections | jsonify | safeJS }};
+    </script>
+
     {{ $appOptions := dict "minify" false "targetPath" "js/sandbox-3d.js" }}
     {{ $appJs := resources.Get "js/sandbox.js" | js.Build $appOptions }}
     <script type="module" src="{{ $appJs.Permalink }}"></script>

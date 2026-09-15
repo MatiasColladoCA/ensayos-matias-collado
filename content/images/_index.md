@@ -1,5 +1,5 @@
 ---
-title: "id"
+title: "images"
 hidden: true
 build:
   render: never

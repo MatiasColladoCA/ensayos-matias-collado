@@ -1,17 +1,11 @@
 ---
-title: "Post"
-translationKey: post
-sitemap:
-    changeFreq: "always"
+title: "post"
+hidden: true
+build:
+  render: never
+  list: never
+cascade:
+  build:
+    render: never
+    list: never
 ---
-
-This section demonstrates a list view layout.
-The post listing style can be modified by adjusting the sitemap changeFreq parameter to values like "always", "hourly", "daily", or "weekly".
-This section has been set up with the following configuration:
-
-    ---
-    title: "Post"
-    translationKey: post
-    sitemap:
-        changeFreq: "always"
-    ---

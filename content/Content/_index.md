@@ -1,5 +1,5 @@
 ---
-title: "id"
+title: "Content"
 hidden: true
 build:
   render: never

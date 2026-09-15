@@ -16,7 +16,7 @@ defaultContentLanguageInSubdir = false
 ## Show placeholder for missing translations
 enableMissingTranslationPlaceholders = true
 ## Use sections for main menu
-# sectionPagesMenu = 'main'
+sectionPagesMenu = 'main'
 ## Files to ignore when building site
 ignoreFiles = [ '\.i18n', '\.en', '\.redacted', '\.old','\.bak', '\.tmp', '\.swp', '\.DS_Store']
 ## Errors to ignore in logs
@@ -229,30 +229,6 @@ position = "right"
             name = "Inicio"
             url = "/"
             weight = 1
-        [[menu.main]]
-            name = "Acerca de"
-            url = "/about/"
-            weight = 2
-        [[menu.main]]
-            name = "Changelog"
-            url = "/changelog/"
-            weight = 3          
-        # [[menu.main]]
-        #     name = "Todo"
-        #     url = "/all/"
-        #     weight = 4          
-        [[menu.main]]
-            name = "Ensayos"
-            url = "/ensayos/"
-            weight = 5          
-        [[menu.main]]
-            name = "Otras Ideas"
-            url = "/otras-ideas/"
-            weight = 6   
-        [[menu.main]]
-            name = "Recursos"
-            url = "/recursos/"
-            weight = 7
 
 
 

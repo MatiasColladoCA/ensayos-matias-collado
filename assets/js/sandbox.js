@@ -1681,56 +1681,56 @@ orbitControlsBtn.addEventListener('click', () => {
 });
 bottomControls.appendChild(orbitControlsBtn);
 
-const waypoints = [
-    { position: new THREE.Vector3(0, 0, 180), target: new THREE.Vector3(0, 0, 0), section: 0 },
-    { position: new THREE.Vector3(120, 45, 120), target: new THREE.Vector3(0, 0, 0), section: 1 },
-    { position: new THREE.Vector3(150, -30, -60), target: new THREE.Vector3(0, 0, 0), section: 2 },
-    { position: new THREE.Vector3(-90, 75, -90), target: new THREE.Vector3(0, 0, 0), section: 3 },
-    { position: new THREE.Vector3(-150, -45, 60), target: new THREE.Vector3(0, 0, 0), section: 4 },
-    { position: new THREE.Vector3(75, 120, -120), target: new THREE.Vector3(0, 0, 0), section: 5 },
-    { position: new THREE.Vector3(-120, -90, -90), target: new THREE.Vector3(0, 0, 0), section: 6 },
-    { position: new THREE.Vector3(45, -120, 90), target: new THREE.Vector3(0, 0, 0), section: 7 },
-    { position: new THREE.Vector3(-60, 150, 45), target: new THREE.Vector3(0, 0, 0), section: 8 },
-    { position: new THREE.Vector3(0, 0, 180), target: new THREE.Vector3(0, 0, 0), section: 9 }
+const predefinedWaypoints = [
+    new THREE.Vector3(0, 0, 180),
+    new THREE.Vector3(120, 45, 120),
+    new THREE.Vector3(150, -30, -60),
+    new THREE.Vector3(-90, 75, -90),
+    new THREE.Vector3(-150, -45, 60),
+    new THREE.Vector3(75, 120, -120),
+    new THREE.Vector3(-120, -90, -90),
+    new THREE.Vector3(45, -120, 90),
+    new THREE.Vector3(-60, 150, 45)
 ];
 
-const sections = [
-    {
-        title: 'SOBRE ESTE PROYECTO',
-        subtitle: 'PRESENTACIÓN',
-        content: 'Espacio de reflexión y aprendizaje donde comparto investigaciones, intuiciones y pensamientos sobre ciencia, filosofía, psicología y tecnología.',
-        link: buildUrl('about/presentacion/'),
-        telemetry: ['RUNTIME', 'POSTS_COUNT', 'UPDATES']
-    },
-    {
-        title: 'REGISTRO DE CAMBIOS',
-        subtitle: 'CHANGELOG',
-        content: 'Historial cronológico de modificaciones, correcciones y mejoras realizadas en los artículos. Transparencia en la evolución del pensamiento.',
-        link: buildUrl('changelog/'),
-        telemetry: ['REVISIONS', 'EDIT_COUNT', 'VERSIONS']
-    },
-    {
-        title: 'ENSAYOS',
-        subtitle: 'INVESTIGACIONES',
-        content: 'Reflexiones profundas y exhaustivas sobre temas que invitan a comprender el mundo y la mente humana. Conocimiento como recurso valioso.',
-        link: buildUrl('ensayos/'),
-        telemetry: ['ESSAYS', 'READ_TIME', 'COMPLEXITY']
-    },
-    {
-        title: 'OTRAS IDEAS',
-        subtitle: 'PENSAMIENTOS SIMPLES',
-        content: 'Ideas más digeribles y directas. Críticas, recomendaciones y guías sobre diversos temas sin la profundidad de un ensayo completo.',
-        link: buildUrl('otras-ideas/'),
-        telemetry: ['IDEAS', 'CATEGORIES', 'BREVITY']
-    },
-    {
-        title: 'RECURSOS',
-        subtitle: 'BIBLIOTECA',
-        content: 'Colección de apuntes, aforismos y materiales de referencia sobre filosofía de la ciencia y otras áreas del conocimiento.',
-        link: buildUrl('recursos/'),
-        telemetry: ['BOOKS', 'NOTES', 'REFERENCES']
-    }
+const telemetryOptions = [
+    ['RUNTIME', 'POSTS_COUNT', 'UPDATES'],
+    ['REVISIONS', 'EDIT_COUNT', 'VERSIONS'],
+    ['ESSAYS', 'READ_TIME', 'COMPLEXITY'],
+    ['IDEAS', 'CATEGORIES', 'BREVITY'],
+    ['BOOKS', 'NOTES', 'REFERENCES'],
+    ['LOGS', 'BUILD', 'MEMORY']
 ];
+
+const sections = window.DYNAMIC_SECTIONS && window.DYNAMIC_SECTIONS.length > 0 
+    ? window.DYNAMIC_SECTIONS.map((sec, idx) => {
+        sec.telemetry = telemetryOptions[idx % telemetryOptions.length];
+        if (sec.link && sec.link.startsWith('/')) {
+            sec.link = buildUrl(sec.link.substring(1));
+        }
+        return sec;
+    }) 
+    : [
+        {
+            title: 'SOBRE ESTE PROYECTO',
+            subtitle: 'PRESENTACIÓN',
+            content: 'Espacio de reflexión y aprendizaje donde comparto investigaciones, intuiciones y pensamientos sobre ciencia, filosofía, psicología y tecnología.',
+            link: buildUrl('about/presentacion/'),
+            telemetry: telemetryOptions[0]
+        }
+    ];
+
+const waypoints = sections.map((sec, idx) => ({
+    position: predefinedWaypoints[idx % predefinedWaypoints.length],
+    target: new THREE.Vector3(0, 0, 0),
+    section: idx
+}));
+// Adding one final waypoint to loop back
+waypoints.push({
+    position: new THREE.Vector3(0, 0, 180),
+    target: new THREE.Vector3(0, 0, 0),
+    section: sections.length
+});
 
 const techSections = [
     {
