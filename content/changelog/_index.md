@@ -1,4 +1,5 @@
 ---
+weight: 50
 title: "Registro de Cambios"
 linkTitle: "Changelog"
 subtitle: "CHANGELOG"

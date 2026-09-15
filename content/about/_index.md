@@ -1,4 +1,5 @@
 ---
+weight: 60
 title: "Sobre este Proyecto"
 linkTitle: "Acerca de"
 subtitle: "PRESENTACIÓN"
