@@ -103,13 +103,15 @@
             const header = document.querySelector('body > header');
             if (!header) return;
             let lastScroll = 0;
-            header.style.transition = 'transform 0.3s ease';
+            header.style.transition = 'opacity 0.3s ease, pointer-events 0.3s ease';
             window.addEventListener('scroll', function() {
                 const currentScroll = window.scrollY;
                 if (currentScroll > lastScroll && currentScroll > 50) {
-                    header.style.transform = 'translateY(-100%)';
+                    header.style.opacity = '0';
+                    header.style.pointerEvents = 'none';
                 } else {
-                    header.style.transform = 'translateY(0)';
+                    header.style.opacity = '1';
+                    header.style.pointerEvents = 'auto';
                 }
                 lastScroll = currentScroll;
             }, { passive: true });
@@ -117,19 +119,32 @@
         (function() {
             const footer = document.querySelector('#body-footer');
             const toTop = document.querySelector('#to-top');
-            if (!footer || !toTop) return;
+            if (!footer) return;
             let lastScroll = 0;
-            footer.style.transition = 'transform 0.3s ease';
-            toTop.style.position = 'fixed';
-            toTop.style.bottom = '20px';
-            toTop.style.right = '20px';
-            toTop.style.zIndex = '1002';
+            footer.style.transition = 'opacity 0.3s ease, pointer-events 0.3s ease';
+            if (toTop) {
+                toTop.style.position = 'fixed';
+                toTop.style.bottom = '20px';
+                toTop.style.right = '20px';
+                toTop.style.zIndex = '1002';
+                toTop.style.transition = 'opacity 0.3s ease, pointer-events 0.3s ease';
+            }
             window.addEventListener('scroll', function() {
                 const currentScroll = window.scrollY;
                 if (currentScroll > lastScroll && currentScroll > 50) {
-                    footer.style.transform = 'translateY(100%)';
+                    footer.style.opacity = '0';
+                    footer.style.pointerEvents = 'none';
+                    if (toTop) {
+                        toTop.style.opacity = '0';
+                        toTop.style.pointerEvents = 'none';
+                    }
                 } else {
-                    footer.style.transform = 'translateY(0)';
+                    footer.style.opacity = '1';
+                    footer.style.pointerEvents = 'auto';
+                    if (toTop) {
+                        toTop.style.opacity = '1';
+                        toTop.style.pointerEvents = 'auto';
+                    }
                 }
                 lastScroll = currentScroll;
             }, { passive: true });
