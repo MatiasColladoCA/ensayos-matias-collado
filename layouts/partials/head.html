@@ -14,8 +14,8 @@
     {{ with .OutputFormats.Get "rss" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
     {{ end -}}
-    {{ partialCached "head/js.html" . -}}
-    {{ partialCached "head/css.html" . -}}
+    {{ partial "head/js.html" . -}}
+    {{ partial "head/css.html" . -}}
     {{ partial "head/css/inline.html" . -}}
     {{ if eq .Type "test" }}
     <link rel="preload" href="/fonts/ROTHEFIGHT.woff2" as="font" type="font/woff2" crossorigin="anonymous">
@@ -32,4 +32,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     {{ end }}
-{{ end }}
+{{ end }}<style>
+@font-face {
+    font-family: 'base-ui';
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+    src: url('/ensayos-matias-collado/css/fonts/base-ui.woff2') format('woff2');
+}
+</style>

@@ -9,7 +9,7 @@
     {{- $js_files = $js_files | append (resources.Get "js/qrcode.js") }}
 {{- end }}
 
-{{- $hugo_brewm := $js_files | resources.Concat "js/hugo-brewm.js" | minify }}
+{{- $hugo_brewm := $js_files | resources.Concat "js/hugo-brewm-v2.js" | minify | fingerprint }}
 {{- if eq hugo.Environment "development" }}
     <script src="{{ $hugo_brewm.Permalink }}" defer></script>
 {{- else }}
@@ -50,7 +50,7 @@
 
 {{- define "partials/head/js/qrcode.html" -}}
     {{ "<!-- qrcode.html -->" | safeHTML }}
-    {{ $qrcode := resources.Get "js/qrcode.js" | minify }}
+    {{ $qrcode := resources.Get "js/qrcode.js" | minify | fingerprint }}
     {{ if eq hugo.Environment "development" }}
         <script src="{{ $qrcode.Permalink }}" defer></script>
     {{- else }}
@@ -181,3 +181,4 @@
         }
     </script>
 {{- end }}
+<!-- GIANT COMMENT HERE -->

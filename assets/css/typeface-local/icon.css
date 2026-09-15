@@ -4,7 +4,7 @@
     font-weight: normal;
     font-style: normal;
     font-display: block;
-    src: url('/css/fonts/base-ui.woff2') format('woff2');
+    src: url('http://localhost:1313/ensayos-matias-collado/css/fonts/base-ui.woff2') format('woff2');
 }
 
 /* fallback setting for websafefonts */

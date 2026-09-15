@@ -56,9 +56,9 @@ addEvent(document, 'DOMContentLoaded', () => {
 isPage = getElement('page');
 if (isPage) {
     getElement('focusMode').className = '';
-    defocusAuxElement.checked = false;
+    if (typeof defocusAuxElement !== "undefined") defocusAuxElement.checked = false;
     function focusMode() {
-        defocusAuxElement.checked ? bodySty.classList.add('focus') : bodySty.classList.remove('focus');
+        typeof defocusAuxElement !== "undefined" && defocusAuxElement.checked ? bodySty.classList.add('focus') : bodySty.classList.remove('focus');
     };
 }
 

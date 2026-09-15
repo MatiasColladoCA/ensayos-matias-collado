@@ -29,7 +29,7 @@
 {{- $inconsolata  := resources.Get "css/typeface/Inconsolata.css" }}
 {{- $openDyslexic := resources.Get "css/typeface/OpenDyslexic.css" }}
 {{- $lexicaUl     := resources.Get "css/typeface/LexicaUltralegible.css" }}
-{{- $icon         := resources.Get "css/typeface/icon.css" }}
+{{- $icon         := resources.Get "css/typeface-local/icon.css" }}
 {{- $websafe      := resources.Get "css/typeface/websafe.css" }}
 
 {{- if site.Params.Typeface.localHost }}
@@ -110,7 +110,7 @@
     {{- $extrasSty = $extrasSty | append $share }}
 {{- end }}
 
-{{- $hugo_brewm := ($baseFonts | append ($baseSty | append $extrasSty)) | resources.Concat "css/hugo-brewm.css" | minify }}
+{{- $hugo_brewm := ($baseFonts | append ($baseSty | append $extrasSty)) | resources.Concat "css/hugo-brewm-v3.css" | minify | fingerprint }}
 
 {{- if eq hugo.Environment "development" }}
     <link rel="stylesheet" href="{{ $hugo_brewm.Permalink }}">
@@ -155,7 +155,7 @@
 
 {{- define "partials/head/css/verbatim.html" }}
     {{ "<!-- css/verbatim.html -->" | safeHTML }}
-    {{- $verbatimSty := resources.Get "css/typesetting/verbatim.css" | minify }}
+    {{- $verbatimSty := resources.Get "css/typesetting/verbatim.css" | minify | fingerprint }}
     {{- if eq hugo.Environment "development" }}
         <link href="{{ $verbatimSty.Permalink }}" rel="stylesheet" type="text/css">
     {{- else }}

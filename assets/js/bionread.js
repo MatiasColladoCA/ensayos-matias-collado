@@ -1,6 +1,6 @@
 // make sure the switch unchecked on reload
 getElement('useBionRead').className = '';
-bionReadSwitch.checked = false;
+if (typeof bionReadSwitch !== "undefined") bionReadSwitch.checked = false;
 // define the function
 function bionRead() {
     // define capture and restore environment variable
@@ -13,7 +13,7 @@ function bionRead() {
     }
 
     // switch conditioning
-    if (bionReadSwitch.checked) {
+    if (typeof bionReadSwitch !== "undefined" && bionReadSwitch.checked) {
         // capture snapshot
         bionReadSnapshot.innerHTML = bionReadMainContent.innerHTML;
 
