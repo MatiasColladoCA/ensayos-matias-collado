@@ -110,7 +110,7 @@
     {{- $extrasSty = $extrasSty | append $share }}
 {{- end }}
 
-{{- $hugo_brewm := ($baseFonts | append ($baseSty | append $extrasSty)) | resources.Concat "css/hugo-brewm-v3.css" | minify | fingerprint }}
+{{- $hugo_brewm := ($baseFonts | append ($baseSty | append $extrasSty)) | resources.Concat "css/hugo-brewm-v5.css" | minify | fingerprint }}
 
 {{- if eq hugo.Environment "development" }}
     <link rel="stylesheet" href="{{ $hugo_brewm.Permalink }}">
